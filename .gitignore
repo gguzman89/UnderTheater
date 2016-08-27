@@ -2,11 +2,19 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
+*.pyo
+*.pid
+*local_*
+*.log
+*.swp
+
 
 # C extensions
 *.so
 
 # Distribution / packaging
+
 .Python
 env/
 build/
@@ -81,6 +89,10 @@ celerybeat-schedule
 # virtualenv
 venv/
 ENV/
+bin/
+include/
+local/
+
 
 # Spyder project settings
 .spyderproject
