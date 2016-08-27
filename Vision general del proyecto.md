@@ -1,12 +1,16 @@
-# Aplicacion UnderTheater
-## Motivacion
-El proyecto empezo porque el teatro under en la argentina es mal difundido y para buscar una obra o clase todavia se sigue usando(en muchos cosas) el boca a boca. Por este motivo es muy dificil como director de un teatro under difundir  tu arte. El mismo proble lo tiene el espectador para buscar una obra o una clase
+# Aplicación UnderTheater
+## Motivación
+El proyecto empezó porque el teatro under en la Argentina es mal difundido y para buscar una obra o clase de teatro todavia se sigue usando (en muchos casos) el boca a boca. Por este motivo es muy difícil como director de un teatro under difundir  tu arte. El mismo problema lo tiene el espectador para buscar una obra o una clase.
 
-## Objectivo
+## Objetivo
 
-UnderTheater tiene como objectivo principal la difusion de clases, seminarios y obras de teatros 
+**UnderTheater** tiene como objectivo principal la dfusión de clases, seminarios y obras de teatros 
 
-## Casos Generales
+## Circuito general
+TODO
+
+## Casos de Uso principales 
+
 ##### Publicar una obra de teatro
 1. El usuario director del teatro se loggea en la pagina 
 2. Hace click en el boton "publicar una obra"
