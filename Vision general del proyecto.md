@@ -22,33 +22,33 @@ El mismo circuito para buscar un seminario.
 ## Casos de Uso principales  
 
 ##### Publicar una obra de teatro
-1. El usuario director del teatro se loggea en la pagina 
-2. Hace click en el boton "publicar una obra"
-3. Llena el formulario con fotos de la obra, precio, nombre de la obra, syspnosis, cantidad de espacios disponibles, dia de la funcion, lugar donde se exibe
+1. El usuario director del teatro se logea en la pagina 
+2. Hace click en el botón "publicar una obra"
+3. Llena el formulario con fotos de la obra, precio, nombre de la obra, sinopsis, cantidad de espacios disponibles, día de la función, lugar donde se exhibe
 4.  Clickea en guardar
 5.  Se redirige a los detalles de la obra
-6.  Y se ven los datos de la obra con los datos de conctado del teatro. Los datos de contacto son email de teatro, numero de contacto, facebook o twitter
+6.  Y se ven los datos de la obra con los datos de contacto del teatro. Los datos de contacto son email de teatro, numero de contacto, facebook o twitter
 
 ##### Buscar una obra
-1. Un usuario espectador se loggea en la pagina
+1. Un usuario espectador se logea en la pagina
 2. Ingrego en el buscador el nombre de una obra
-3. Se redirige a una pagina con los resultados de la busqueda
+3. Se redirige a una pagina con los resultados de la búsqueda
 4. Elijo una obra y entro a los detalles
-5. Busco el numero de contacto o el email o el facebook y me comunico con el teatro para comprar la entrada. **Aclaracion:** Si no esta logeado podes ver los detalles de la obra pero **NO** podes ver el contacto del teatro
+5. Busco el numero de contacto o el email o el facebook y me comunico con el teatro para comprar la entrada. **Aclaración:** Si no esta logeado podes ver los detalles de la obra pero **NO** podes ver el contacto del teatro
 
-##### Registrarse en la  aplicacion
-1. Un usuario entra a la aplicacion
+##### Registrarse en la  aplicación
+1. Un usuario entra a la aplicación
 2. Clickeo Login/registrarme
-3. Lleno el formnulario de registro con: username(unico), email y password
+3. Lleno el formulario de registro con: username(único), email y password
 4. Clickeo Registrarme
 5. Y el usuario quedo registrado
 
-##### Compartir una publicacion en una red social
+##### Compartir una publicación en una red social
 1. Un usuario se loggea en la pagina 
-2. Busca a una "publicacion"
-3. Entra a los detalles de la publicacion
-4. Clickea en el boton de la red social elegida
-5. Se abre un dialogo para loggearse en al red elejida
+2. Busca a una "publicación"
+3. Entra a los detalles de la publicación
+4. Clickea en el botón de la red social elegida
+5. Se abre un dialogo para logearse en al red elegida
 6. Se comprueba los datos para publicar
-7. Se clickea el boton publicar
-8. Y la publicacion esta en tu perfil de esa red social
+7. Se clickea el botón publicar
+8. Y la publicación esta en tu perfil de esa red social
