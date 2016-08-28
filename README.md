@@ -1,5 +1,9 @@
 # UnderTheater
-![UnderTheater](https://github.com/javierperini/UnderTheater/blob/master/logo/bowler-1295700_1280.redimensionado.png)
+![sombrerito_1][1]  ![sombrerito_2][2]  ![sombrerito_3][3]  ![sombrerito_4][4]
+[1]: https://github.com/javierperini/UnderTheater/blob/master/logo/bowler-1295700_1280.redimensionado.png
+[2]: https://github.com/javierperini/UnderTheater/blob/master/logo/Chapeu%20e%20bigode.redimensionado.png
+[3]: https://github.com/javierperini/UnderTheater/blob/master/logo/hombre-elegante--con-bigote-y-sombrero-de-uno-de-gafas_318-49340.redimensionado.jpg
+[4]: https://github.com/javierperini/UnderTheater/blob/master/logo/img-thing.redimensionado.jpg
 
 ## ¿Que es UnderTheater? 
 Under Theater es una aplicación que se encarga principalmente de la difusión de obras/clases/seminarios de los teatros unders
