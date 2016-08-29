@@ -4,19 +4,25 @@ El proyecto empezó porque el teatro under en la Argentina es mal difundido y pa
 
 ## Objetivo
 
-**UnderTheater** tiene como objectivo principal la dfusión de clases, seminarios y obras de teatros 
+**UnderTheater** tiene como objectivo principal la difusión de clases, seminarios y obras de teatros 
 
 ## Circuito general
-Un teatro con una obra a estrenar, se registrar en la aplicación y crea una publicación de la obra a estrenar.
+### Teatro 
+
+* Un teatro con una obra a estrenar, se registrar en la aplicación y crea una publicación de la obra a estrenar.
 La publicación la crea con el titulo de la obra, el precio, el teatro, la hora de función, la capacidad total del teatro, los actores, una foto y una sinopsis.
-Un teatro con una nueva clase, se registrar en la aplicación, y crea una publicación de la nueva clase.
-La publicación la crea con el titulo de la clase, el precio, el teatro, las horas que se dictan las clases, la cantidad de alumnos que entran en la clase, la cantidad de horas que dura la clase, una foto y una sinopsis.
-Después que se crea la publicación se puede compartir en una red social(facebook o twitter) para generar mayor difusión de la clase. 
-El mismo circuito para un seminario.
-Un usuario cualquiera entra a la aplicación(ya sea porque la vio en una red social o porque el comentaron que esta pagina existía) en busca de una obra. Escribe el titulo de la obra en el buscador, la aplicación devuelve una serie de obras que son el resultado de su búsqueda, va a los detalles de la obra que buscaba y busca el contacto con el publicador(sea email, facebook o numero de teléfono). Una vez que tiene el contacto con el publicador se comunica para coordinar la entrega de la entrada.
-El usuario después de ver la obra entra a la aplicación, busca la obra que ya vio y la califica dependiendo lo que le pareció la obra. Una vez que califico elige compartir en una red social su calificación para que los otro usuario puedan ver esa obra.
-Un actor entra a la aplicación y busca una clase para tomar en el buscador. La aplicación devuelve una cantidad de resultados posibles. El actor entra a los detalles de la clase y busca el contacto con el publicador(sea email, facebook o numero de telefono). Una vez que tiene el contacto con el publicador se comunica para coordinar cuando empieza la clase.
-El mismo circuito para buscar un seminario. 
+Después que se crea la publicación se puede compartir en una red social(facebook o twitter o google+) para generar mayor difusión de la obra. 
+* Un teatro con una nueva clase, se registrar en la aplicación, y crea una publicación de la nueva clase. La publicación la crea con el titulo de la clase, el precio, el teatro, las horas que se dictan las clases, la cantidad de alumnos que entran en la clase, la cantidad de horas que dura la clase, una foto y una sinopsis.
+Después que se crea la publicación se puede compartir en una red social(facebook o twitter o google+) para generar mayor difusión de la clase. 
+* El mismo circuito para un seminario.
+
+### Espectador
+* Un usuario cualquiera entra a la aplicación(ya sea porque vio la publicación en una red social o porque el comentaron que esta pagina existía) en busca de una obra. Escribe el titulo de la obra en el buscador, la aplicación devuelve una serie de obras que son el resultado de su búsqueda, va a los detalles de la obra que buscaba y busca el contacto con el publicador(sea email, facebook o numero de teléfono). Una vez que tiene el contacto con el publicador se comunica para coordinar la entrega de la entrada.
+* El usuario después de ver la obra entra a la aplicación, busca la obra que ya vio y la califica de acuerdo a su gusto, al calificar la obra se genera un registro con todas la obras calificados/vistas por el usuario. Una vez que califico elige compartir su calificación en una red social para recomendar esa obra. 
+
+### Actor
+* Un actor entra a la aplicación y busca una clase para tomar en el buscador. La aplicación devuelve una cantidad de resultados posibles. El actor entra a los detalles de la clase y busca el contacto con el publicador(sea email, facebook o numero de telefono). Una vez que tiene el contacto con el publicador se comunica para coordinar cuando empieza la clase.
+* El mismo circuito para buscar un seminario. 
 
 
 ## Casos de Uso principales  
