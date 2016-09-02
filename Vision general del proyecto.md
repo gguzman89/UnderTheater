@@ -24,6 +24,13 @@ Después que se crea la publicación se puede compartir en una red social(facebo
 * Un actor entra a la aplicación y busca una clase para tomar en el buscador. La aplicación devuelve una cantidad de resultados posibles. El actor entra a los detalles de la clase y busca el contacto con el publicador(sea email, facebook o numero de telefono). Una vez que tiene el contacto con el publicador se comunica para coordinar cuando empieza la clase.
 * El mismo circuito para buscar un seminario. 
 
+### Circuito manual
+* La aplicación no se encarga de vender entrada para las obras, solo hace de comunicador entre teatro y espectador.
+* La aplicación no se encarga de inscribir a los actores a las clases, solo hace de comunicador entre teatro y actor.
+* La aplicación no se encarga de inscribir a los actores a los seminarios, solo hace de comunicador entre teatro y actor.
+* La aplicación no define los criterios de búsqueda.
+* La  aplicación no publica en ninguna cuenta de una red social sin el consentimiento del usuario
+* El criterio de calificación lo define el usuario al calificar la obra.
 
 ## Casos de Uso principales  
 
