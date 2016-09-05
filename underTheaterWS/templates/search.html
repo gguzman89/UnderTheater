@@ -1,8 +1,14 @@
-<h1>Busqueda</h1>
-<ul>
-    {% for play in object_list %}
-    <li>{{ play.name}}</li>
-    {% empty %}
-    <li>No articles yet.</li>
-    {% endfor %}
-</ul>
+{% extends "master.html" %}
+{% block full_page_title %}UnderTheater{% endblock %}
+{% block content %}
+<div id="contenido" class="col-md-7">
+    <h1>Busqueda</h1>
+    <ul>
+        {% for play in object_list %}
+        <li>{{ play.play_name}}</li>
+        {% empty %}
+        <li>No articles yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

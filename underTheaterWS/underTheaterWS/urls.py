@@ -20,5 +20,6 @@ from underTheaterApp import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^home/', views.HomeViews.as_view(), name="home"),
+    url(r'^search/', views.SearchView.as_view(), name="search"),
 
 ]
