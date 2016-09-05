@@ -1,0 +1,8 @@
+<h1>Busqueda</h1>
+<ul>
+    {% for play in object_list %}
+    <li>{{ play.name}}</li>
+    {% empty %}
+    <li>No articles yet.</li>
+    {% endfor %}
+</ul>
