@@ -1,11 +1,21 @@
 {% extends "master.html" %}
+{% load static %}
 {% block full_page_title %}UnderTheater{% endblock %}
 {% block content %}
 <div id="contenido" class="col-md-7">
     <h1>Busqueda</h1>
     <ul>
         {% for play in object_list %}
-        <li>{{ play.play_name}}</li>
+        <div class="row">
+        <div class="col-sm-2">
+                <a href="#">
+                    <img src="{% static play.picture.url %}" class="img-thumbnail"/>
+                </a>
+            </div>
+            <div class="col-sm-10">
+                <li>{{ play.play_name}}</li>
+            </div>
+        </div>
         {% empty %}
         <li>No articles yet.</li>
         {% endfor %}
