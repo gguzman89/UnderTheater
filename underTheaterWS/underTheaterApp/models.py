@@ -18,6 +18,9 @@ class Contact(models.Model):
     def __str__(self):
         return u"%s" % self.pk
 
+    def __unicode__(self):
+        return u"%s" % self.pk
+
 
 class Theater(models.Model):
     name = models.CharField(max_length=200, unique=True)
@@ -47,6 +50,27 @@ class TheaterRoom(models.Model):
         return u"%s" % self.room_name
 
 
+class PlayPrice(models.Model):
+    price_name = models.CharField(max_length=200)
+    price = models.CharField(max_length=200)
+
+    def __str__(self):
+        return u"%s" % self.price_name
+
+    def __unicode__(self):
+        return u"%s" % self.price_name
+
+
+class DateTimeShow(models.Model):
+    datetime_show = models.DateTimeField(verbose_name=u'dia y horario del show')
+
+    def __str__(self):
+        return u"%s" % self.datetime_show.strftime("%y-%m-%d %H:%M")
+
+    def __unicode__(self):
+        return u"%s" % self.datetime_show.strftime("%y-%m-%d %H:%M")
+
+
 class PlayTheater(models.Model):
     play_name = models.CharField(max_length=200)
     synopsis = models.TextField(max_length=500,
@@ -58,35 +82,13 @@ class PlayTheater(models.Model):
                                           related_name='room')
     actors = models.ManyToManyField(Actor, verbose_name=u'actors')
     picture = models.ImageField(upload_to="playImages")
+    datetime_show = models.ManyToManyField(DateTimeShow,
+                                           verbose_name=u'datetime_show')
+    price = models.ManyToManyField(PlayPrice, verbose_name=u'price',
+                                   related_name=u'play_price')
 
     def __str__(self):
         return u"%s" % self.play_name
 
     def __unicode__(self):
         return u"%s" % self.play_name
-
-
-class PlayPrice(models.Model):
-    play = models.ForeignKey(PlayTheater, verbose_name=u'play',
-                             related_name=u'play_price')
-    price_name = models.CharField(max_length=200)
-    price = models.CharField(max_length=200)
-
-    def __str__(self):
-        return u"%s" % self.price_name
-
-    def __unicode__(self):
-        return u"%s" % self.price_name
-
-
-class DateShow(models.Model):
-    play = models.ForeignKey(PlayTheater, verbose_name=u'play',
-                             related_name=u'play_date_show')
-    date_show = models.DateTimeField(auto_now=True,
-                                     verbose_name=u'dia y horario del show')
-
-    def __str__(self):
-        return u"%s" % self.date_show.strftime("%y-%m-%d %H:%M")
-
-    def __unicode__(self):
-        return u"%s" % self.date_show.strftime("%y-%m-%d %H:%M")

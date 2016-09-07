@@ -9,11 +9,16 @@
         <div class="row">
         <div class="col-sm-2">
                 <a href="#">
-                    <img src="{% static play.picture.url %}" class="img-thumbnail"/>
+                    <img src="{% static play.picture.url %}" class="img-thumbnail img-responsive"/>
                 </a>
             </div>
             <div class="col-sm-10">
-                <li>{{ play.play_name}}</li>
+                <p>
+                <a href="{% url 'underTheaterApp:playtheater_detail' pk=play.pk %}">{{ play.play_name }}</a>
+                </p>
+                <p>
+                    {{ play.synopsis }}
+                </p>
             </div>
         </div>
         {% empty %}

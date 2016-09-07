@@ -32,16 +32,16 @@ class PlayTheaterAdmin(admin.ModelAdmin):
 
 @admin.register(models.PlayPrice)
 class PlayPriceAdmin(admin.ModelAdmin):
-    list_display = ('price_name', 'price', 'play')
+    list_display = ('price_name', 'price')
     ordering = ('price_name', )
-    search_fields = ('play', )
+    search_fields = ('', )
 
 
-@admin.register(models.DateShow)
+@admin.register(models.DateTimeShow)
 class DateShowAdmin(admin.ModelAdmin):
-    list_display = ('date_show', )
-    ordering = ('date_show', )
-    search_fields = ('play__play_name', )
+    list_display = ('datetime_show', )
+    ordering = ('datetime_show', )
+    search_fields = ('', )
 
 
 @admin.register(users.Actor)

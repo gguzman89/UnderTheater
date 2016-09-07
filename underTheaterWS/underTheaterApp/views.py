@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 from underTheaterApp.models import PlayTheater
 
 
@@ -15,3 +15,7 @@ class SearchView(ListView):
         self.object_list = PlayTheater.objects.filter(play_name__icontains=search)
         context = super(SearchView, self).get_context_data(**kwargs)
         return context
+
+
+class PlayTheaterDetailView(DetailView):
+        model = PlayTheater
