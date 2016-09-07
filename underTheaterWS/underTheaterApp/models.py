@@ -1,7 +1,7 @@
 # vim: set fileencoding=utf-8 :
 from __future__ import unicode_literals
 from django.db import models
-from address.models import AddressField
+from address.models import Address
 from users import Actor
 
 
@@ -9,7 +9,10 @@ class Contact(models.Model):
     number_phone = models.IntegerField(verbose_name=u'Numero de telefono')
     facebook = models.CharField(max_length=128, blank=True,
                                 verbose_name=u'usuario en Facebook')
-    address = AddressField()
+    address = models.OneToOneField(Address, verbose_name=u'address',
+                                   related_name=u'address_contact',
+                                   )
+
     share_address = models.BooleanField(default=True,
                                         verbose_name=u"Compartir direccion",
                                         blank=False, null=False,

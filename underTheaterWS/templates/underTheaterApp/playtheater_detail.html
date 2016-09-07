@@ -15,7 +15,7 @@
             {% for theater in object.theater.all %}
             <p>{{theater.name}}</p> 
             <p>{{theater.contact.facebook}}</p> 
-            <p>{{theater.contact.address.get_raw}}</p> 
+            <p>{{theater.contact.address.raw}}</p> 
             <p>{{theater.contact.number_phone}}</p> 
             {% endfor %}
             {% for room in object.room_theater.all %}
