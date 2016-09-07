@@ -35,7 +35,7 @@ Después que se crea la publicación se puede compartir en una red social(facebo
 ## Casos de Uso principales  
 
 ##### Publicar una obra de teatro
-1. El usuario director del teatro se logea en la pagina 
+1. El usuario director del teatro se loguea en la pagina 
 2. Hace click en el botón "publicar una obra"
 3. Llena el formulario con fotos de la obra, precio, nombre de la obra, sinopsis, cantidad de espacios disponibles, día de la función, lugar donde se exhibe
 4.  Clickea en guardar
@@ -47,7 +47,7 @@ Después que se crea la publicación se puede compartir en una red social(facebo
 2. Ingrego en el buscador el nombre de una obra
 3. Se redirige a una pagina con los resultados de la búsqueda
 4. Elijo una obra y entro a los detalles
-5. Busco el numero de contacto o el email o el facebook y me comunico con el teatro para comprar la entrada. **Aclaración:** Si no esta logeado podes ver los detalles de la obra pero **NO** podes ver el contacto del teatro
+5. Busco el numero de contacto o el email o el facebook y me comunico con el teatro para comprar la entrada. **Aclaración:** Si no esta logueado podes ver los detalles de la obra pero **NO** podes ver el contacto del teatro
 
 ##### Registrarse en la  aplicación
 1. Un usuario entra a la aplicación
@@ -61,7 +61,7 @@ Después que se crea la publicación se puede compartir en una red social(facebo
 2. Busca a una "publicación"
 3. Entra a los detalles de la publicación
 4. Clickea en el botón de la red social elegida
-5. Se abre un dialogo para logearse en al red elegida
+5. Se abre un diálogo para loguearse en al red elegida
 6. Se comprueba los datos para publicar
 7. Se clickea el botón publicar
 8. Y la publicación esta en tu perfil de esa red social
