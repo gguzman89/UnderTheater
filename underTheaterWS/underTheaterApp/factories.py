@@ -1,9 +1,14 @@
 # vim: set fileencoding=utf-8 :
+import os
 import factory
 from factory.django import DjangoModelFactory
 from underTheaterApp import models
 from datetime import datetime
 from address.models import Address
+from django.core.files import File
+
+
+TEST_IMAGE = os.path.join(os.path.dirname("static/"), 'test.png')
 
 
 class AddressFactory(DjangoModelFactory):
@@ -71,6 +76,6 @@ class PlayTheaterFactory(DjangoModelFactory):
     theater = factory.RelatedFactory(TheaterFactory)
     room_theater = factory.RelatedFactory(RoomTheaterFactory)
     actors = factory.RelatedFactory(ActorFactory)
-    picture = factory.django.ImageField(color='blue')
+    picture = File(open(TEST_IMAGE))
     datetime_show = factory.RelatedFactory(DateTimeShowFactory)
     price = factory.RelatedFactory(PlayPriceFactory)

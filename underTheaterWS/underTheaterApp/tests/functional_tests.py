@@ -4,6 +4,7 @@ from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxWebDriver
 from selenium.webdriver.chrome.webdriver import WebDriver as ChromeWebDriver
 from selenium.webdriver.phantomjs.webdriver import WebDriver as PhatomWebDriver
 from underTheaterApp.factories import PlayTheaterFactory
+from underTheaterApp.models import PlayTheater
 
 
 class BaseSeleniumTests(StaticLiveServerTestCase):
@@ -116,5 +117,7 @@ class SearchViewTestsCase(BaseSeleniumTests):
         # y la tercer obra no aparece en los resultados
         self.assertEqual(len(search_result_3), 0)
 
-
-
+    def tearDown(self):
+        " Borro las imagenes despues de los test"
+        for p in PlayTheater.objects.all():
+            p.picture.delete()
