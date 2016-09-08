@@ -11,7 +11,6 @@ install:
   
 before_script:
   - mysql -e 'create database travisci;'
-  - cd underTheaterWS/
   - python manage.py migrate
 script:
-  - python manage.py test underTheaterApp
+  - python manage.py test underTheaterApp.tests
