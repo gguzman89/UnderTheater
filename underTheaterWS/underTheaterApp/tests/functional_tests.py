@@ -30,7 +30,7 @@ class BaseSeleniumTests(StaticLiveServerTestCase):
 
 
 class SearchViewTestsCase(BaseSeleniumTests):
-    driver_type = "firefox"
+    driver_type = "phatom"
 
     def test_search_a_play_theater(self):
         "Test que prueba la busqueda de obras de teatro"
