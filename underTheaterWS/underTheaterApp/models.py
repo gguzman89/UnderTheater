@@ -84,7 +84,7 @@ class PlayTheater(models.Model):
                                           verbose_name=u'sala de la obra',
                                           related_name='room')
     actors = models.ManyToManyField(Actor, verbose_name=u'actors')
-    picture = models.ImageField(upload_to="playImages")
+    picture = models.ImageField(upload_to="static/playImages")
     datetime_show = models.ManyToManyField(DateTimeShow,
                                            verbose_name=u'datetime_show')
     price = models.ManyToManyField(PlayPrice, verbose_name=u'price',
