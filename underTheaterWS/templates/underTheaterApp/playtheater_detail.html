@@ -2,35 +2,47 @@
 {% block full_page_title %}Detalles de la obra{% endblock %}
 {% load static %}
 {% block content %}
-<div id="contenido" class="col-md-7">
+<div id="contenido">
     <h1>{{object.play_name}}</h1>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-sm-6">
             <a href="#">
                 <img src="{% static object.picture.url %}" class="img-responsive"/>
             </a>
         </div>
         <div class="col-md-6">
-            <p>{{object.synopsis}}</p> 
-            {% for theater in object.theater.all %}
-            <p>{{theater.name}}</p> 
-            <p>{{theater.contact.facebook}}</p> 
-            <p>{{theater.contact.address.raw}}</p> 
-            <p>{{theater.contact.number_phone}}</p> 
-            {% endfor %}
-            {% for room in object.room_theater.all %}
-            <p>{{room.name}}</p> 
-            <p>{{room.capacity}}</p> 
-            {% endfor %}
-            {% for actor in object.actors.all %}
-            <p>{{actor.name}}</p> 
-            {% endfor %}
-            {% for price in object.price.all %}
-            <p>{{price.price_name}} {{price.price}}</p> 
-            {% endfor %}
-            {% for datetime in object.datetime_show.all %}
-            <p>{{datetime}} </p> 
-            {% endfor %}
+            <dl class="dl-horizontal">
+                <dt>Sinopsis</dt>
+                <dd>{{object.synopsis}}</dd> 
+                {% for theater in object.theater.all %}
+                <dt>Nombre del teatro</dt>
+                <dd>{{theater.name}}</dd> 
+                <dt>Facebook del teatro</dt>
+                <dd>{{theater.contact.facebook}}</dd> 
+                <dt>Direccion del teatro</dt>
+                <dd>{{theater.contact.address.raw}}</dd> 
+                <dt>Telefono del teatro</dt>
+                <dd>{{theater.contact.number_phone}}</dd> 
+                {% endfor %}
+                {% for room in object.room_theater.all %}
+                <dt>Nombre de la sala</dt>
+                <dd>{{room.room_name}}</dd> 
+                <dt>Capacidad</dt>
+                <dd>{{room.capacity}}</dd> 
+                {% endfor %}
+                <dt>Actores</dt>
+                {% for actor in object.actors.all %}
+                <dd>{{actor.name}}</dd> 
+                {% endfor %}
+                <dt>Precios</dt>
+                {% for price in object.price.all %}
+                <dd>{{price.price_name}} {{price.price}}</dd> 
+                {% endfor %}
+                <dt>Dias de funcion</dt>
+                {% for datetime in object.datetime_show.all %}
+                <dd>{{datetime}} </dd> 
+                {% endfor %}
+            </dl>
         </div>
 
     </div>
