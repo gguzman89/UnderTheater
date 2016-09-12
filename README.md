@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/javierperini/UnderTheater.svg?branch=search_play_theater)](https://travis-ci.org/javierperini/UnderTheater)
+
 # UnderTheater
 ![sombrerito_1][1]  ![sombrerito_2][2]  ![sombrerito_3][3]  ![sombrerito_4][4]
 [1]: https://github.com/javierperini/UnderTheater/blob/master/logo/bowler-1295700_1280.redimensionado.png

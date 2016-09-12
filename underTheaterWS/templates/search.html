@@ -1,0 +1,31 @@
+{% extends "master.html" %}
+{% load static %}
+{% block full_page_title %}Busqueda{% endblock %}
+{% block content %}
+<div id="contenido">
+    <h1>Resultados de la busqueda</h1>
+    <ul>
+        {% for play in object_list %}
+        <div class="row">
+        <div class="col-sm-2">
+                <a href="{% url 'underTheaterApp:playtheater_detail' pk=play.pk %}">
+                    <img src="{% static play.picture.url %}" class="img-thumbnail img-responsive"/>
+                </a>
+            </div>
+            <div class="col-sm-10">
+                <p>
+                <a href="{% url 'underTheaterApp:playtheater_detail' pk=play.pk %}" name={{ play.pk }}>{{ play.play_name }}</a>
+                </p>
+                <p>
+                    {{ play.synopsis }}
+                </p>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-danger">
+            <strong>No</strong> se encontraron resultados para tu busqueda.
+        </div>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

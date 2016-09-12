@@ -1,0 +1,54 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="alexaVerifyID" content="VnZ_Et-Jpg6HoBQRuWYP1dYWaa0"/>
+{% load static %}
+<link rel="shortcut icon" href="{% static 'img/underlogo.png' %}" type="image/png" />
+
+<title>{% block full_page_title %}{% block page_title %}{% endblock %} | UnderTheater{% endblock %}</title>
+
+<!-- Bootstrap Core CSS -->
+<link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+<link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+<!-- Theme CSS -->
+<link href="{% static 'css/agency.css' %}" rel="stylesheet">
+
+
+{% block inhead %}{% endblock inhead %}
+</head>
+<body id="page-top" class="index">
+{% block main_header %} {% include "main_header.html" %}{% endblock main_header %}
+
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- jQuery -->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+
+<!-- Plugin JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+
+<!-- Contact Form JavaScript -->
+<script src="{% static 'js/jqBootstrapValidation.js' %}"></script>
+<script src="{% static 'js/contact_me.js' %}"></script>
+
+<!-- Theme JavaScript -->
+<script src="{% static 'js/agency.min.js' %}"></script>
+
+</body>
+</html> 
