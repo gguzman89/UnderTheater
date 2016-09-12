@@ -17,10 +17,13 @@ El proyecto **UnderTheater** empezó porque el teatro under en la Argentina es m
 **UnderTheater** tiene como objectivo principal la difusión de clases, seminarios y obras de teatros 
 
 ## Vision General del proyecto
-mas información [aquí](https://github.com/javierperini/UnderTheater/blob/master/Vision%20general%20del%20proyecto.md)
+mas información [aquí](https://github.com/javierperini/UnderTheater/wiki/Vision-general-del-proyecto)
 
 ## ¿Como instalar el entorno?
-mas información [aquí](https://github.com/javierperini/UnderTheater/blob/master/Como%20Instalar%20el%20entorno.md)
+mas información [aquí](https://github.com/javierperini/UnderTheater/wiki/Como-Instalar-el-entorno)
+
+## Wiki
+mas información [aquí](https://github.com/javierperini/UnderTheater/wiki)
 
 ## Link a trello
 [Trello](https://trello.com/b/737KQTM9/unq-tip-undertheater)
