@@ -3,7 +3,7 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxWebDriver
 from selenium.webdriver.chrome.webdriver import WebDriver as ChromeWebDriver
 from selenium.webdriver.phantomjs.webdriver import WebDriver as PhatomWebDriver
-from underTheaterApp.factories import PlayTheaterFactory
+from underTheaterApp.factories import PlayTheaterFactory, UserFactory
 from underTheaterApp.models import PlayTheater
 
 
@@ -118,6 +118,88 @@ class SearchViewTestsCase(BaseSeleniumTests):
         self.assertEqual(len(search_result_3), 0)
 
     def tearDown(self):
-        " Borro las imagenes despues de los test"
+        "Borro las imagenes despues de los test"
         for p in PlayTheater.objects.all():
             p.picture.delete()
+
+
+class LoginAndRegisterViewTestCase(BaseSeleniumTests):
+
+    def _complete_registerform(self, username, email, password, confirm_password=None):
+
+        confirm_password = confirm_password or password
+        register_form = self.selenium.find_element_by_css_selector("#register_form")
+
+        # completa el campo con username con el nombre del usuario que ya existe
+        username_input = register_form.find_element_by_css_selector("#id_username")
+        username_input.clear()
+        username_input.send_keys(username)
+
+        # un email
+        email_input = register_form.find_element_by_css_selector("#id_email")
+        email_input.clear()
+        email_input.send_keys(email)
+
+        # un password
+        password = "mipassword12345seis"
+        password1_input = register_form.find_element_by_css_selector("#id_password1")
+        password1_input.clear()
+        password1_input.send_keys(password)
+
+        # y se le pide que repite el password
+        password2_input = register_form.find_element_by_css_selector("#id_password2")
+        password2_input.clear()
+        password2_input.send_keys(confirm_password)
+
+        # Y por ultimo s e aceptan los cambios
+        register_form.find_element_by_css_selector('button[type="submit"]').click()
+
+    def test_a_user_register_in_app(self):
+        "Test que registra un usuario en la app"
+
+        # Entra a la app
+        self.open()
+
+        # hace click en el boton de loguearse/registrarse
+        self.selenium.find_element_by_css_selector("#login").click()
+        username = "anUser"
+
+        # completo el formulario de registro
+        self._complete_registerform(username, "anUser@dominio.com",
+                                    "mipassword12345seis")
+
+        # Entonces se redirige a la pagina principal
+        login_menu = self.selenium.find_element_by_css_selector("#login_menu")
+        logout_button = self.selenium.find_element_by_css_selector("#logout")
+
+        # con el nombre de usuario en la esquina de la pantalla
+        self.assertTrue(login_menu.is_displayed())
+        self.assertEqual(login_menu.text, username.upper())
+
+        # y boton para desloguearser activo
+        self.assertTrue(logout_button.is_displayed())
+
+    def test_fail_a_user_register_in_app(self):
+        "Test que intenta registrar un usuario y falla"
+        # Se tiene un usuario registrado en la app
+        user = UserFactory.create()
+
+        # Entra a la app
+        self.open()
+
+        # hace click en el boton de loguearse/registrarse
+        self.selenium.find_element_by_css_selector("#login").click()
+
+        # completo el formulario de registro con un username que ya fue usado
+        self._complete_registerform(user.username, user.email,
+                                    "mipassword12345seis", "cualquiererda")
+        errors = self.selenium.find_elements_by_css_selector(".alert-danger")
+        list_errors = [
+            u"A user with that username already exists.",
+            u"This email already used.",
+            u"The two password fields didn't match."
+        ]
+
+        for a in errors:
+            self.assertTrue(a.is_displayed())
+            self.assertTrue(a.text in list_errors)

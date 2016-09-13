@@ -25,8 +25,8 @@
                         </span>
                     </div>
                 </form>
-                <!--
                 <ul class="nav navbar-nav navbar-right">
+                <!--
                     <li class="hidden">
                         <a href="#page-top"></a>
                     </li>
@@ -45,8 +45,23 @@
                     <li>
                         <a class="page-scroll" href="#contact">Contact</a>
                     </li>
-                </ul>
                  -->
+                {% if user.is_authenticated %}
+                    <li>
+                    <a class="page-scroll" id="login_menu" href="#contact">{{user.username}}</a>
+                    </li>
+                    <li>
+                    <a class="page-scroll" id="logout" href="{% url 'underTheaterApp:logout_user' %}">
+                      <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+                    </a>
+                    </li>
+                {% else %}
+                    <li>
+                    <a class="page-scroll" id="login" href="{% url 'underTheaterApp:register_user' %}">Login</a>
+                    </li>
+                {% endif %}
+                  
+                </ul>
             </div>
             <!-- /.navbar-collapse -->
         </div>

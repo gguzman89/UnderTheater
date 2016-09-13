@@ -6,6 +6,8 @@ from underTheaterApp import models
 from datetime import datetime
 from address.models import Address
 from django.core.files import File
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 
 
 TEST_IMAGE = os.path.join(os.path.dirname("static/"), 'test.png')
@@ -14,7 +16,17 @@ TEST_IMAGE = os.path.join(os.path.dirname("static/"), 'test.png')
 class AddressFactory(DjangoModelFactory):
     class Meta:
         model = Address
+
     raw = factory.Sequence(lambda n: 'address %s' % n)
+
+
+class UserFactory(DjangoModelFactory):
+    class Meta:
+        model = User
+
+    email = factory.Sequence(lambda n: 'miEmail%s@midominio.com' % n)
+    username = factory.Sequence(lambda n: 'miusername%s' % n)
+    password = make_password('miPassword')
 
 
 class ContactFactory(DjangoModelFactory):
