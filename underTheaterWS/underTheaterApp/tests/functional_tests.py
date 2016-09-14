@@ -233,7 +233,6 @@ class LoginAndRegisterViewTestCase(BaseSeleniumTests):
 
         # Y por ultimo s e aceptan los cambios
         login_form.find_element_by_css_selector('button[type="submit"]').click()
-        import ipdb;ipdb.set_trace()
 
         time.sleep(1)
 
