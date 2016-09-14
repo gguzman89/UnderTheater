@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.webdriver import WebDriver as ChromeWebDriver
 from selenium.webdriver.phantomjs.webdriver import WebDriver as PhatomWebDriver
 from underTheaterApp.factories import PlayTheaterFactory, UserFactory
 from underTheaterApp.models import PlayTheater
+from django.contrib.auth.hashers import make_password
 
 
 class BaseSeleniumTests(StaticLiveServerTestCase):
@@ -125,12 +126,14 @@ class SearchViewTestsCase(BaseSeleniumTests):
 
 class LoginAndRegisterViewTestCase(BaseSeleniumTests):
 
-    def _complete_registerform(self, username, email, password, confirm_password=None):
+    def _complete_register_form(self, username, email, password, confirm_password=None):
 
         confirm_password = confirm_password or password
+
+        # Completa el formulario de registro
         register_form = self.selenium.find_element_by_css_selector("#register_form")
 
-        # completa el campo con username con el nombre del usuario que ya existe
+        # con un username
         username_input = register_form.find_element_by_css_selector("#id_username")
         username_input.clear()
         username_input.send_keys(username)
@@ -146,7 +149,7 @@ class LoginAndRegisterViewTestCase(BaseSeleniumTests):
         password1_input.clear()
         password1_input.send_keys(password)
 
-        # y se le pide que repite el password
+        # y se le pide que confirme el password
         password2_input = register_form.find_element_by_css_selector("#id_password2")
         password2_input.clear()
         password2_input.send_keys(confirm_password)
@@ -161,12 +164,12 @@ class LoginAndRegisterViewTestCase(BaseSeleniumTests):
         self.open()
 
         # hace click en el boton de loguearse/registrarse
-        self.selenium.find_element_by_css_selector("#login").click()
+        self.selenium.find_element_by_css_selector("#register").click()
         username = "anUser"
 
         # completo el formulario de registro
-        self._complete_registerform(username, "anUser@dominio.com",
-                                    "mipassword12345seis")
+        self._complete_register_form(username, "anUser@dominio.com",
+                                     "mipassword12345seis")
 
         # Entonces se redirige a la pagina principal
         login_menu = self.selenium.find_element_by_css_selector("#login_menu")
@@ -181,6 +184,7 @@ class LoginAndRegisterViewTestCase(BaseSeleniumTests):
 
     def test_fail_a_user_register_in_app(self):
         "Test que intenta registrar un usuario y falla"
+
         # Se tiene un usuario registrado en la app
         user = UserFactory.create()
 
@@ -188,10 +192,10 @@ class LoginAndRegisterViewTestCase(BaseSeleniumTests):
         self.open()
 
         # hace click en el boton de loguearse/registrarse
-        self.selenium.find_element_by_css_selector("#login").click()
+        self.selenium.find_element_by_css_selector("#register").click()
 
         # completo el formulario de registro con un username que ya fue usado
-        self._complete_registerform(user.username, user.email,
+        self._complete_register_form(user.username, user.email,
                                     "mipassword12345seis", "cualquiererda")
         errors = self.selenium.find_elements_by_css_selector(".alert-danger")
         list_errors = [
@@ -203,3 +207,77 @@ class LoginAndRegisterViewTestCase(BaseSeleniumTests):
         for a in errors:
             self.assertTrue(a.is_displayed())
             self.assertTrue(a.text in list_errors)
+
+    def test_a_user_login_in_app(self):
+        "Test que loguea un usuario en la app"
+
+        # Se tiene un usuario registrado en la app
+        user_password = "unPasswordV1lid0"
+        user = UserFactory.create(password=make_password(user_password))
+
+        # Entra a la app
+        self.open()
+
+        # hace click en el boton de loguearse/registrarse
+        self.selenium.find_element_by_css_selector("#login").click()
+
+        # Se llena el formulario de login
+        login_form = self.selenium.find_element_by_css_selector("#login_form")
+
+        # complata con un username
+        username_input = login_form.find_element_by_css_selector("#id_username")
+        username_input.clear()
+        username_input.send_keys(user.username)
+
+        # un password
+        password1_input = login_form.find_element_by_css_selector("#id_password")
+        password1_input.clear()
+        password1_input.send_keys(user_password)
+
+        # Y por ultimo s e aceptan los cambios
+        login_form.find_element_by_css_selector('button[type="submit"]').click()
+
+        # Entonces se redirige a la pagina principal
+        login_menu = self.selenium.find_element_by_css_selector("#login_menu")
+        logout_button = self.selenium.find_element_by_css_selector("#logout")
+
+        # con el nombre de usuario en la esquina de la pantalla
+        self.assertTrue(login_menu.is_displayed())
+        self.assertEqual(login_menu.text, user.username.upper())
+
+        # y boton para desloguearser activo
+        self.assertTrue(logout_button.is_displayed())
+
+    def test_fail_a_user_login_in_app(self):
+        "Test que comprueba el mal logueo en al app"
+
+        # Se tiene un usuario registrado en la app
+        user_password = "unPasswordV1lid0"
+        user = UserFactory.create(password=make_password(user_password))
+
+        # Entra a la app
+        self.open()
+
+        # hace click en el boton de loguearse/registrarse
+        self.selenium.find_element_by_css_selector("#login").click()
+
+        # Se llena el formulario de login
+        login_form = self.selenium.find_element_by_css_selector("#login_form")
+
+        # complata con un username
+        username_input = login_form.find_element_by_css_selector("#id_username")
+        username_input.clear()
+        username_input.send_keys(user.username)
+
+        # un password
+        password1_input = login_form.find_element_by_css_selector("#id_password")
+        password1_input.clear()
+        password1_input.send_keys("cualquier pass")
+
+        # Y por ultimo s e aceptan los cambios
+        login_form.find_element_by_css_selector('button[type="submit"]').click()
+        alert_error = self.selenium.find_element_by_css_selector(".alert-danger")
+
+        self.assertTrue(alert_error.is_displayed())
+        self.assertEqual(alert_error.text,
+                         u"Please enter a correct username and password. Note that both fields may be case-sensitive.")

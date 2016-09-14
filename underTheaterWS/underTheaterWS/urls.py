@@ -18,12 +18,16 @@ from django.contrib import admin
 from underTheaterApp import views, urls
 from django.conf import settings
 from django.conf.urls.static import static
-
-
+from django.contrib.auth import urls as auth_urls
+from django.contrib.auth import views as auth_views
 urlpatterns = [
     url(r'^$', views.HomeViews.as_view(), name="home"),
     url(r'^admin/', admin.site.urls),
     url(r'^search/', views.SearchView.as_view(), name="search"),
     url(r'', include(urls)),
-
+    url(r'', include(auth_urls)),
+    url(r'^accounts/login/$', auth_views.login,
+        {'template_name': 'auth/login.html'}, name="login_user"),
+    url(r'^accounts/logout/$', auth_views.logout, {'next_page': '/'},
+        name="logout_user")
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

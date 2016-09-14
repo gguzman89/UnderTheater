@@ -1,8 +1,9 @@
 {% extends "master.html" %}
 {% load static %}
-{% block full_page_title %}Registrar Usuario{% endblock %}
+{% block full_page_title %}Registro{% endblock %}
 {% block content %}
-<div id="contenido">
+<div id="contenido" class="center_div">
+    <h1>Registrarse</h1>
     <form action="{% url 'underTheaterApp:register_user' %}" id="register_form" method="post"
         enctype="multipart/form-data">
         {% csrf_token %}

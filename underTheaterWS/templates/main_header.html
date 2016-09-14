@@ -51,13 +51,16 @@
                     <a class="page-scroll" id="login_menu" href="#contact">{{user.username}}</a>
                     </li>
                     <li>
-                    <a class="page-scroll" id="logout" href="{% url 'underTheaterApp:logout_user' %}">
+                    <a class="page-scroll" id="logout" href="{% url 'logout_user' %}">
                       <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
                     </a>
                     </li>
                 {% else %}
                     <li>
-                    <a class="page-scroll" id="login" href="{% url 'underTheaterApp:register_user' %}">Login</a>
+                    <a class="page-scroll" id="login" href="{% url 'login_user' %}">Login</a>
+                    </li>
+                    <li>
+                    <a class="page-scroll" id="register" href="{% url 'underTheaterApp:register_user' %}">Registrarse</a>
                     </li>
                 {% endif %}
                   
