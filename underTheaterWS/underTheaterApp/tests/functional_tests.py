@@ -1,4 +1,5 @@
 # vim: set fileencoding=utf-8 :
+import time
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxWebDriver
 from selenium.webdriver.chrome.webdriver import WebDriver as ChromeWebDriver
@@ -6,6 +7,7 @@ from selenium.webdriver.phantomjs.webdriver import WebDriver as PhatomWebDriver
 from underTheaterApp.factories import PlayTheaterFactory, UserFactory
 from underTheaterApp.models import PlayTheater
 from django.contrib.auth.hashers import make_password
+from django.core.cache import cache
 
 
 class BaseSeleniumTests(StaticLiveServerTestCase):
@@ -237,6 +239,8 @@ class LoginAndRegisterViewTestCase(BaseSeleniumTests):
         # Y por ultimo s e aceptan los cambios
         login_form.find_element_by_css_selector('button[type="submit"]').click()
 
+        time.sleep(1)
+
         # Entonces se redirige a la pagina principal
         login_menu = self.selenium.find_element_by_css_selector("#login_menu")
         logout_button = self.selenium.find_element_by_css_selector("#logout")
@@ -281,3 +285,7 @@ class LoginAndRegisterViewTestCase(BaseSeleniumTests):
         self.assertTrue(alert_error.is_displayed())
         self.assertEqual(alert_error.text,
                          u"Please enter a correct username and password. Note that both fields may be case-sensitive.")
+
+    def tearDown(self):
+        cache.clear()
+
