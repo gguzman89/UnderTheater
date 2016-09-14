@@ -16,17 +16,12 @@ class BaseSeleniumTests(StaticLiveServerTestCase):
                    "firefox": FirefoxWebDriver}
     driver_type = "phatom"
 
-    @classmethod
-    def setUpClass(cls):
-        super(BaseSeleniumTests, cls).setUpClass()
-        cls.selenium = cls.webs_driver[cls.driver_type]()
-        cls.selenium.set_window_size(1024, 768)
-        cls.selenium.implicitly_wait(10)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.selenium.quit()
-        super(BaseSeleniumTests, cls).tearDownClass()
+    def setUp(self):
+        super(BaseSeleniumTests, self).setUp()
+        self.selenium = self.webs_driver[self.driver_type]()
+        self.addCleanup(self.selenium.quit)
+        self.selenium.set_window_size(1024, 768)
+        self.selenium.implicitly_wait(10)
 
     def open(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/'))
@@ -238,6 +233,7 @@ class LoginAndRegisterViewTestCase(BaseSeleniumTests):
 
         # Y por ultimo s e aceptan los cambios
         login_form.find_element_by_css_selector('button[type="submit"]').click()
+        import ipdb;ipdb.set_trace()
 
         time.sleep(1)
 
@@ -288,4 +284,3 @@ class LoginAndRegisterViewTestCase(BaseSeleniumTests):
 
     def tearDown(self):
         cache.clear()
-
