@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '$_=2hqfge73+44^_^8l5s@qt^9(sz8o%v2srkphnd44gl+c#%2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -74,23 +74,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'underTheaterWS.wsgi.application'
 
-
-
-
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
     'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'underTheater',
-            'USER': 'root',
-            'PASSWORD': 'root',
+            'ENGINE': '',
+            'NAME': '',
+            'USER': '',
+            'PASSWORD': '',
             'HOST': '',
             'PORT': '',
-            'OPTIONS': {
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            }
+            'OPTIONS': {}
         }
 }
 
@@ -137,3 +132,8 @@ STATIC_ROOT = os.path.join(SETTINGS_DIR, '../local_static/')
 
 # Login
 LOGIN_REDIRECT_URL = "/"
+
+try:
+    from my_local_settings import *
+except ImportError:
+        pass
