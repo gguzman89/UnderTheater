@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SETTINGS_DIR = os.path.abspath(os.path.dirname(__file__))
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -72,23 +73,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'underTheaterWS.wsgi.application'
 
 
-
-
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-
 DATABASES = {
     'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'travisci',
-            'USER': 'travis',
-            'PASSWORD': '',
-            'HOST': 'localhost',
-            'PORT': '',
-            'OPTIONS': {
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            }
-        }
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'test',
+        'USER': os.environ.get('MYSQL_USER'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+        'HOST': '127.0.0.1',
+    }
 }
 
 # Password validation
