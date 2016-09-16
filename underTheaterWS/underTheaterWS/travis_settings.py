@@ -9,6 +9,9 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
