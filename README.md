@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/javierperini/UnderTheater.svg?branch=search_play_theater)](https://travis-ci.org/javierperini/UnderTheater)
+[ ![Codeship Status for javierperini/UnderTheater](https://codeship.com/projects/bce799c0-5c51-0134-262f-7200b3d29332/status?branch=master)](https://codeship.com/projects/173663) 
+
+
 
 # UnderTheater
 ![sombrerito_1][1]  ![sombrerito_2][2]  ![sombrerito_3][3]  ![sombrerito_4][4]
