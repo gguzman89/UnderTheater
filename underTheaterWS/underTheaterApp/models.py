@@ -74,21 +74,23 @@ class DateTimeShow(models.Model):
         return u"%s" % self.datetime_show.strftime("%y-%m-%d %H:%M")
 
 
+class DayFunction(models.Model):
+    theater = models.ForeignKey(Theater, verbose_name=u'teatro',
+                                related_name=u'day_function_theater')
+    room_theater = models.ForeignKey(TheaterRoom,
+                                     verbose_name=u'sala de la obra',
+                                     related_name='day_function_room')
+    datetime_show = models.DateTimeField(verbose_name=u'dia y horario de la funcion')
+    price = models.ManyToManyField(PlayPrice, verbose_name=u'price',
+                                   related_name=u'day_function_price')
+
+
 class PlayTheater(models.Model):
     play_name = models.CharField(max_length=200)
     synopsis = models.TextField(max_length=500,
                                 verbose_name="Sinopsis de la obra")
-    theater = models.ManyToManyField(Theater, verbose_name=u'theater',
-                                     related_name=u'play_theater')
-    room_theater = models.ManyToManyField(TheaterRoom,
-                                          verbose_name=u'sala de la obra',
-                                          related_name='room')
     actors = models.ManyToManyField(Actor, verbose_name=u'actors')
     picture = models.ImageField(upload_to="static/playImages")
-    datetime_show = models.ManyToManyField(DateTimeShow,
-                                           verbose_name=u'datetime_show')
-    price = models.ManyToManyField(PlayPrice, verbose_name=u'price',
-                                   related_name=u'play_price')
 
     def __str__(self):
         return u"%s" % self.play_name
