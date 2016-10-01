@@ -26,10 +26,13 @@
                     </div>
                 </form>
                 <ul class="nav navbar-nav navbar-right">
-                <!--
-                    <li class="hidden">
-                        <a href="#page-top"></a>
+
+                {% if user.is_authenticated %}
+                    <li>
+                        <a  class="page-scroll"href="{% url 'underTheaterApp:create_playtheater' %}">Crear obra</a>
                     </li>
+                {% endif %}
+                    <!--
                     <li>
                         <a class="page-scroll" href="#services">Services</a>
                     </li>

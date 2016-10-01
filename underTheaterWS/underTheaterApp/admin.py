@@ -30,10 +30,10 @@ class PlayTheaterAdmin(admin.ModelAdmin):
     search_fields = ('play_name',)
 
 
-@admin.register(models.PlayPrice)
+@admin.register(models.Ticket)
 class PlayPriceAdmin(admin.ModelAdmin):
-    list_display = ('price_name', 'price')
-    ordering = ('price_name', )
+    list_display = ('ticket_name', 'price')
+    ordering = ('ticket_name', )
     search_fields = ('', )
 
 
@@ -49,3 +49,8 @@ class ActorAdmin(admin.ModelAdmin):
     list_display = ('name', )
     ordering = ('name', )
     search_fields = ('name', )
+
+
+@admin.register(models.DayFunction)
+class ActorAdmin(admin.ModelAdmin):
+    list_display = ('theater', )

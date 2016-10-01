@@ -9,7 +9,7 @@
         <div class="row">
         <div class="col-sm-2">
                 <a href="{% url 'underTheaterApp:playtheater_detail' pk=play.pk %}">
-                    <img src="{% static play.picture.url %}" class="img-thumbnail img-responsive"/>
+                    <img src="{{ play.picture_url }}" class="img-thumbnail img-responsive"/>
                 </a>
             </div>
             <div class="col-sm-10">

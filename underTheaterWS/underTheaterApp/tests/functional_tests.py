@@ -1,5 +1,6 @@
 # vim: set fileencoding=utf-8 :
 import time
+import os
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxWebDriver
 from selenium.webdriver.chrome.webdriver import WebDriver as ChromeWebDriver
@@ -25,6 +26,32 @@ class BaseSeleniumTests(StaticLiveServerTestCase):
 
     def open(self):
         self.selenium.get('%s%s' % (self.live_server_url, '/'))
+
+    def login_user(self, user_login=None, password=None):
+
+        # Se tiene un usuario registrado en la app
+        user_password = password if password else "unPasswordV1lid0"
+        user = user_login if user_login else UserFactory.create(password=make_password(user_password))
+        # Entra a la app
+        self.open("/accounts/login/")
+
+        # Se llena el formulario de login
+        login_form = self.selenium.find_element_by_css_selector("#login_form")
+
+        # complata con un username
+        username_input = login_form.find_element_by_css_selector("#id_username")
+        username_input.clear()
+        username_input.send_keys(user.username)
+
+        # un password
+        password1_input = login_form.find_element_by_css_selector("#id_password")
+        password1_input.clear()
+        password1_input.send_keys(user_password)
+
+        # Y por ultimo s e aceptan los cambios
+        login_form.find_element_by_css_selector('button[type="submit"]').click()
+
+        return user
 
 
 class SearchViewTestsCase(BaseSeleniumTests):
@@ -283,3 +310,84 @@ class LoginAndRegisterViewTestCase(BaseSeleniumTests):
 
     def tearDown(self):
         cache.clear()
+
+
+class CreatePublicationViewTestsCase(BaseSeleniumTests):
+    driver_type = "phatom"
+
+    def _test_createa_a_new_play_publication(self):
+
+        user = self.login_user()
+        """
+        play_name
+        synopsis
+        picture
+        theater
+        room_theater
+        datetime_show
+        price
+        """
+
+        # hace click en el boton para crear obra
+        self.selenium.find_element_by_css_selector("#create_play").click()
+        create_play_form = self.selenium.find_element_by_css_selector("#create_play_form")
+
+        # completa con nombre de obra
+        play_name_input = create_play_form.find_element_by_css_selector("#id_play_name")
+        play_name_input.clear()
+        play_name_input.send_keys("Juan baila")
+
+        # una sypnosis
+        synopsis_input = create_play_form.find_element_by_css_selector("#id_synopsis")
+        synopsis_input.clear()
+        synopsis_input.send_keys("Una obra muy entretenida")
+
+        # una sypnosis
+        synopsis_input = create_play_form.find_element_by_css_selector("#id_synopsis")
+        synopsis_input.clear()
+        synopsis_input.send_keys("Una obra muy entretenida")
+
+        TEST_IMAGE = os.path.join(os.path.dirname("static/"), 'test.png')
+        create_play_form.find_element_by_id("#id_picture").click()
+        input_picture = self.selenium.find_element_by_css_selector('input[type="file"]').clear()
+        input_picture.send_keys(TEST_IMAGE)
+
+        # seleccionar una teatro
+        """
+
+        element = driver.find_element_by_xpath("//select[@name='name']")
+        all_options = element.find_elements_by_tag_name("option")
+        for option in all_options:
+            print("Value is: %s" % option.get_attribute("value"))
+            option.click()
+        """
+
+        # seleccionar una sala
+        """
+
+        element = driver.find_element_by_xpath("//select[@name='name']")
+        all_options = element.find_elements_by_tag_name("option")
+        for option in all_options:
+            print("Value is: %s" % option.get_attribute("value"))
+            option.click()
+        """
+        # seleccionar una dia
+        """
+
+        element = driver.find_element_by_xpath("//select[@name='name']")
+        all_options = element.find_elements_by_tag_name("option")
+        for option in all_options:
+            print("Value is: %s" % option.get_attribute("value"))
+            option.click()
+        """
+        # selecciona una dia
+        price_name_input = create_play_form.find_element_by_css_selector("#id_price_name")
+        price_name_input.clear()
+        price_name_input.send_keys("Jubilados")
+
+        price_input = create_play_form.find_element_by_css_selector("#id_price")
+        price_input.clear()
+        price_input.send_keys("200")
+
+        # Y por ultimo s e aceptan los cambios
+        create_play_form.find_element_by_css_selector('button[type="submit"]').click()

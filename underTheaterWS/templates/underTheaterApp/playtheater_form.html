@@ -1,0 +1,62 @@
+{% extends "master.html" %}
+{% block full_page_title %}Creacion de obra{% endblock %}
+{% load static %}
+{% block content %}
+<div id="contenido">
+    <h1>Creacion de obra</h1>
+    <form enctype="multipart/form-data" method="post" id="create_play_form" novalidate>
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    {{form.play_name.label_tag}}
+                    {{form.play_name}}
+                    <div class="help-block">{{form.play_name.help_text}}</div>
+                    {% if form.play_name.errors %}<div class="alert alert-danger">{{form.play_name.errors}}</div>{% endif %}
+                </div>
+                <div class="form-group">
+                    {{form.picture.label_tag}}
+                    {{form.picture}}
+                    <div class="help-block">{{form.picture.help_text}}</div>
+                    {% if form.picture.errors %}<div class="alert alert-danger">{{form.picture.errors}}</div>{% endif %}
+                </div>
+                <div class="form-group">
+                    {{form.actors.label_tag}}
+                    {{form.actors}}
+                    <div class="help-block">{{form.actors.help_text}}</div>
+                    {% if form.actors.errors %}<div class="alert alert-danger">{{form.actors.errors}}</div>{% endif %}
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group">
+                    {{form.synopsis.label_tag}}
+                    {{form.synopsis}}
+                    <div class="help-block">{{form.synopsis.help_text}}</div>
+                    {% if form.synopsis.errors %}<div class="alert alert-danger">{{form.synopsis.errors}}</div>{% endif %}
+                </div>
+            </div>
+        </div>
+        {% include "underTheaterApp/day_function_formset.html" with day_function_form=form.day_function %}
+        {% if form.has_errors %}
+        {{form.get_errors}}
+        {% endif %}
+        <div class="row">
+            <div class="form-group">
+                <button type="submit" class="btn btn-success"/> Guardar</button>
+            </div> 
+        </div> 
+    </form> 
+</div>
+{% endblock %}
+{% block main_scripts %}
+<script type="text/javascript">
+$("#id_actors").select2();
+/*
+$('.day_function_formset').formset(
+        {addText: '', deleteText: '', 
+         addCssClass: 'btn btn-success glyphicon glyphicon-plus text-aling-right',
+         deleteCssClass: 'btn btn-danger glyphicon glyphicon-minus '}
+);
+*/
+</script>
+{% endblock %}

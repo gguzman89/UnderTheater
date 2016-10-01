@@ -1,7 +1,9 @@
 # vim: set fileencoding=utf-8 :
 from __future__ import unicode_literals
 from django.db import models
+from django.conf import settings
 from address.models import Address
+from django.core.urlresolvers import reverse
 from users import Actor
 
 
@@ -53,17 +55,6 @@ class TheaterRoom(models.Model):
         return u"%s" % self.room_name
 
 
-class PlayPrice(models.Model):
-    price_name = models.CharField(max_length=200)
-    price = models.CharField(max_length=200)
-
-    def __str__(self):
-        return u"%s" % self.price_name
-
-    def __unicode__(self):
-        return u"%s" % self.price_name
-
-
 class DateTimeShow(models.Model):
     datetime_show = models.DateTimeField(verbose_name=u'dia y horario del show')
 
@@ -74,6 +65,31 @@ class DateTimeShow(models.Model):
         return u"%s" % self.datetime_show.strftime("%y-%m-%d %H:%M")
 
 
+class PlayTheater(models.Model):
+    play_name = models.CharField(max_length=200)
+    synopsis = models.TextField(max_length=500,
+                                verbose_name="Sinopsis de la obra")
+    actors = models.ManyToManyField(Actor, verbose_name=u'actors')
+    picture = models.FileField(upload_to="static/playImages")
+
+    @property
+    def day_function(self):
+        return self.dayfunction_set
+
+    @property
+    def picture_url(self):
+        return "%s%s" % (settings.MEDIA_URL, self.picture)
+
+    def get_absolute_url(self):
+        return reverse('underTheaterApp:playtheater_detail', args=[self.pk])
+
+    def __str__(self):
+        return u"%s" % self.play_name
+
+    def __unicode__(self):
+        return u"%s" % self.play_name
+
+
 class DayFunction(models.Model):
     theater = models.ForeignKey(Theater, verbose_name=u'teatro',
                                 related_name=u'day_function_theater')
@@ -81,19 +97,26 @@ class DayFunction(models.Model):
                                      verbose_name=u'sala de la obra',
                                      related_name='day_function_room')
     datetime_show = models.DateTimeField(verbose_name=u'dia y horario de la funcion')
-    price = models.ManyToManyField(PlayPrice, verbose_name=u'price',
-                                   related_name=u'day_function_price')
 
-
-class PlayTheater(models.Model):
-    play_name = models.CharField(max_length=200)
-    synopsis = models.TextField(max_length=500,
-                                verbose_name="Sinopsis de la obra")
-    actors = models.ManyToManyField(Actor, verbose_name=u'actors')
-    picture = models.ImageField(upload_to="static/playImages")
-
-    def __str__(self):
-        return u"%s" % self.play_name
+    play_theater = models.ForeignKey(PlayTheater, verbose_name=u'obra')
 
     def __unicode__(self):
-        return u"%s" % self.play_name
+        return u"%s %s %s" % (self.theater.name, self.room_theater.room_name,
+                              self.datetime_show.strftime("%y-%m-%d %H:%M"))
+
+    @property
+    def tickets(self):
+        return self.day_function_ticket
+
+
+class Ticket(models.Model):
+    ticket_name = models.CharField(max_length=200)
+    price = models.CharField(max_length=200)
+    day_function = models.ForeignKey(DayFunction, verbose_name=u'day_function',
+                                     related_name=u'day_function_ticket')
+
+    def __str__(self):
+        return u"%s" % self.ticket_name
+
+    def __unicode__(self):
+        return u"%s" % self.ticket_name

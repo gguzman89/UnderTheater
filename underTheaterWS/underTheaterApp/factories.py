@@ -73,9 +73,9 @@ class DateTimeShowFactory(DjangoModelFactory):
 
 class PlayPriceFactory(DjangoModelFactory):
     class Meta:
-        model = models.PlayPrice
+        model = models.Ticket
 
-    price_name = factory.Sequence(lambda n: 'price_name %s' % n)
+    ticket_name = factory.Sequence(lambda n: 'price_name %s' % n)
     price = factory.Sequence(lambda n: '$ %s' % n)
 
 

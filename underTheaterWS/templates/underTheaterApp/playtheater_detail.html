@@ -7,44 +7,45 @@
     <div class="row">
         <div class="col-sm-6">
             <a href="#">
-                <img src="{% static object.picture.url %}" class="img-responsive"/>
+                <img src="{{ object.picture_url }}" class="img-responsive"/>
             </a>
         </div>
         <div class="col-md-6">
-            <dl class="dl-horizontal">
-                <dt>Sinopsis</dt>
-                <dd>{{object.synopsis}}</dd> 
-                {% for theater in object.theater.all %}
-                <dt>Nombre del teatro</dt>
-                <dd>{{theater.name}}</dd> 
-                <dt>Facebook del teatro</dt>
-                <dd>{{theater.contact.facebook}}</dd> 
-                <dt>Direccion del teatro</dt>
-                <dd>{{theater.contact.address.raw}}</dd> 
-                <dt>Telefono del teatro</dt>
-                <dd>{{theater.contact.number_phone}}</dd> 
-                {% endfor %}
-                {% for room in object.room_theater.all %}
-                <dt>Nombre de la sala</dt>
-                <dd>{{room.room_name}}</dd> 
-                <dt>Capacidad</dt>
-                <dd>{{room.capacity}}</dd> 
-                {% endfor %}
-                <dt>Actores</dt>
+                <h3>Sinopsis</h5>
+                <p>{{object.synopsis}}</p> 
+                <h3>Actores</h5>
+                <ul class="list-inline">
                 {% for actor in object.actors.all %}
-                <dd>{{actor.name}}</dd> 
+                    <li>{{actor.name}} </li>
                 {% endfor %}
-                <dt>Precios</dt>
-                {% for price in object.price.all %}
-                <dd>{{price.price_name}} {{price.price}}</dd> 
-                {% endfor %}
-                <dt>Dias de funcion</dt>
-                {% for datetime in object.datetime_show.all %}
-                <dd>{{datetime}} </dd> 
-                {% endfor %}
+                </ul>
             </dl>
+            {% for day_function in object.day_function.all %}
+            <div class="well">
+                <h4 class="align-left">{{day_function.theater.name}}</h4>
+                <h5 class="align-right">{{day_function.datetime_show |date:"SHORT_DATE_FORMAT" }} {{day_function.datetime_show |time:"H:i"}} hs</h5>
+            <hr style="clear:both;"/> 
+                <p class="align-left">
+                <strong>Direccion:</strong> {{day_function.theater.contact.address.raw}}, 
+                </p>
+                <p class="align-right">
+                <strong>Telefono:</strong> {{day_function.theater.contact.number_phone}} 
+                </p>
+                <p class="align-left">
+                <strong>Nombre de la sala:</strong> {{day_function.room_theater.room_name}},
+                </p>
+                <p class="align-right">
+                <strong>Capacidad:</strong> {{day_function.room_theater.capacity}}
+                </p>
+                <p class="align-right">
+                <strong>Entradas:</strong> 
+                {% for ticket in day_function.tickets.all %}
+                {{ticket.ticket_name}} {{ticket.price}}
+                {% endfor %}
+                </p>
+            </div>
+            {% endfor %}
         </div>
-
     </div>
 </div>
 {% endblock %}
