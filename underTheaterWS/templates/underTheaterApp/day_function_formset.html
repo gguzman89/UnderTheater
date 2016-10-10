@@ -17,7 +17,9 @@
         <div class="col-sm-4">
             <div class="form-group">
                 {{ form.room_theater.label_tag }}
-                {{ form.room_theater }}
+                <select class="form-control" id="id_undertheaterapp_dayfunction_related-0-room_theater" name="undertheaterapp_dayfunction_related-0-room_theater" style="width: 100%;">
+                    <option value="" selected="selected">---------</option>
+                </select>
                 {% if form.room_theater.errors %}
                 <div class="alert alert-danger">{{ form.room_theater.errors }}</div>
                 {% endif %}
@@ -25,11 +27,11 @@
         </div> 
         <div class="col-sm-4">
             <div class="form-group">
-                <label for="select_datefunction">Selecciona el tipo de dia:</label>
+                <label for="select_datefunction">Selecciona el tipo de fecha:</label>
                 <select name="select_date_function" class="form-control" id="select_datefunction">
                     <option></option>
-                    <option value="periodic">Dia periodico</option>
-                    <option value="only">Dia unico</option>
+                    <option value="periodic">Fecha periódica</option>
+                    <option value="only">Fecha única</option>
                 </select>
             </div> 
         </div> 
@@ -40,12 +42,16 @@
                 <div class="form-group hour hidden">
                     {{ form.datetime_form.hour.label_tag }}
                     {{ form.datetime_form.hour }}
+                    <div class="help-block">{{form.datetime_form.hour.help_text}}</div>
+                    {% if form.datetime_form.hour.errors %}<div class="alert alert-danger">{{form.datetime_form.hour.errors}}</div>{% endif %}
                 </div> 
             </div> 
             <div class="col-xs-6">
                 <div class="form-group since hidden">
                     {{ form.datetime_form.since.label_tag }}
                     {{ form.datetime_form.since }}
+                    <div class="help-block">{{form.datetime_form.since.help_text}}</div>
+                    {% if form.datetime_form.since.errors %}<div class="alert alert-danger">{{form.datetime_form.since.errors}}</div>{% endif %}
                 </div>
             </div> 
         </div> 
@@ -54,12 +60,17 @@
                 <div class="form-group perdiodic_date hidden">
                     {{ form.datetime_form.periodic_date.label_tag }}
                     {{ form.datetime_form.periodic_date }}
+                    <div class="help-block">{{form.datetime_form.periodic_date.help_text}}</div>
+                    {% if form.datetime_form.periodic_date.errors %}<div class="alert alert-danger">{{form.datetime_form.periodic_date.errors}}</div>{% endif %}
+
                 </div>
             </div>
             <div class="col-xs-6">
                 <div class="form-group until hidden">
                     {{ form.datetime_form.until.label_tag }}
                     {{ form.datetime_form.until }}
+                    <div class="help-block">{{form.datetime_form.until.help_text}}</div>
+                    {% if form.datetime_form.until.errors %}<div class="alert alert-danger">{{form.datetime_form.until.errors}}</div>{% endif %}
                 </div>
             </div>
         </div>

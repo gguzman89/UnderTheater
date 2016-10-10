@@ -29,3 +29,10 @@ class PlayTheaterUpdateView(UpdateView):
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         return super(PlayTheaterUpdateView, self).post(request, *args, **kwargs)
+
+
+def all_room_theaters(self, pk):
+    theater = get_object_or_404(Theater, pk=pk)
+    rooms = theater.theater_room.all()
+    data = serializers.serialize('json', rooms)
+    return HttpResponse(data, content_type="application/json")

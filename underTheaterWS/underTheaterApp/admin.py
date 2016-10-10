@@ -46,7 +46,7 @@ class ActorAdmin(admin.ModelAdmin):
 
 @admin.register(models.DateTimeFunction)
 class PeriodicDateAdmin(admin.ModelAdmin):
-    list_display = ('periodic_date', 'since', 'until')
+    list_display = ('id', 'since', 'periodic_date', 'until')
 
 
 @admin.register(models.DayFunction)

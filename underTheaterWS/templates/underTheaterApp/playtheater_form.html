@@ -72,14 +72,19 @@
 
 <script type="text/javascript">
 $("#id_actors").select2();
+$("#id_undertheaterapp_dayfunction_related-0-theater").select2({placeholder: "Selecciona el teatro", allowClear: false});
+$("#id_undertheaterapp_dayfunction_related-0-room_theater").select2({placeholder: "Selecciona la sala", allowClear: false}).attr('disabled','disabled');
 $("#id_hour").select2();
 $("#id_periodic_date").select2();
-$("#id_since").datepicker();
-$("#id_until").datepicker();
+var date_format ={ dateFormat: 'dd/mm/yy' };
+$("#id_since").datepicker(date_format);
+$("#id_until").datepicker(date_format);
 $(".inline.{{ form.ticket.prefix }}").formset({
     prefix: "{{ form.ticket.prefix}}",
 }); 
-$("#select_datefunction").select2( {placeholder: "Select a  state", minimumResultsForSearch: -1, allowClear: false});
+
+$("#select_datefunction").select2( {placeholder: "Selecciona el tipo de fecha", minimumResultsForSearch: -1, allowClear: false});
+
 $("#select_datefunction").change(
         function(e){
         var date_option = $(this).val();
@@ -88,15 +93,34 @@ $("#select_datefunction").change(
             $(".datetime_form .since").removeClass("hidden");
             $(".datetime_form .until").addClass("hidden");
             $(".datetime_form .perdiodic_date").addClass("hidden");
-            $("#id_periodic_date").select2("val", " ")
+            $("#id_periodic_date").select2("val", "")
             $("#id_until").val("");
          }else{
             $(".datetime_form .since").removeClass("hidden");
             $(".datetime_form .until").removeClass("hidden");
             $(".datetime_form .perdiodic_date").removeClass("hidden");
          }
-        
 });
+
+$("#id_undertheaterapp_dayfunction_related-0-theater").change(
+        function(e){
+        var theater_pk = $(this).val(),
+        url = "/theater/"+ theater_pk +"/all_room_theater";        
+        if(theater_pk){
+            $.get(url, function(data){
+                var select_data = [],
+                rooms_select = $("#id_undertheaterapp_dayfunction_related-0-room_theater");
+                _.map(data,function(object){ select_data.push({"id":object.pk, "text":object.fields.room_name });
+                    });  
+                $(rooms_select).removeAttr('disabled');
+                $(rooms_select).empty()
+                $(rooms_select).select2({data:select_data});
+                });
+            }else{
+                $("#id_undertheaterapp_dayfunction_related-0-room_theater").attr('disabled','disabled');
+            }
+        
+        });
 
 
 /*

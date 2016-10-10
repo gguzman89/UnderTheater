@@ -85,6 +85,10 @@ class DayFunctionForm(forms.ModelForm):
     class Meta:
         model = DayFunction
         fields = ("theater", "room_theater")
+        widgets = {"theater": forms.Select(attrs={'class': 'form-control',
+                                                  'style': 'width: 100%;'}),
+                   "room_theater": forms.Select(attrs={'class': 'form-control',
+                                                       'style': 'width: 100%;'})}
 
     def __init__(self, *args, **kwargs):
         super(DayFunctionForm, self).__init__(*args, **kwargs)
@@ -93,8 +97,6 @@ class DayFunctionForm(forms.ModelForm):
                                           instance=self.instance)
         """
         self.datetime_form = DateTimeFunctionForm(data=kwargs.get('data', None))
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
 
     def is_valid(self):
         return super(DayFunctionForm, self).is_valid()\
@@ -166,7 +168,10 @@ Hour = tuple([("%d:%s" % (x / 60, "00" if x % 60 == 0 else x % 60),
 
 
 class DateTimeFunctionForm(forms.ModelForm):
-    since = forms.DateField(initial=timezone.now().date())
+    date_format = '%d/%m/%Y'
+    since = forms.DateField(initial=timezone.now().date().strftime(date_format),
+                            input_formats=[date_format])
+    until = forms.DateField(input_formats=[date_format])
 
     class Meta:
         model = DateTimeFunction
@@ -184,6 +189,7 @@ class DateTimeFunctionForm(forms.ModelForm):
             field.widget.attrs['class'] = 'form-control'
 
     def is_valid(self):
+        import ipdb;ipdb.set_trace()
         return super(DateTimeFunctionForm, self).is_valid()
 
 

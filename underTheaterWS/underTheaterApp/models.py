@@ -79,21 +79,25 @@ class PlayTheater(Ticketeable):
 
 
 class DateTimeFunction(models.Model):
+    date_format = '%d/%m/%Y'
     hour = models.CharField(max_length=300)
-    until = models.DateField()
+    until = models.DateField(null=True, blank=True)
     since = models.DateField()
     periodic_date = models.CharField(max_length=200,
                                      validators=[periodic_date_validator],
                                      null=True, blank=True)
 
     def clean(self):
-        if self.since == self.until and self.periodic_date:
+        if not self.until and self.periodic_date:
             raise ValidationError('No podes tener un dia periodico si la fecha es unica')
 
-        if self.since > self.until:
+        if self.until and self.since > self.until:
             raise ValidationError('%(since)s no puede ser mayor que %(until)s',
                                   params={'since': self.since,
                                           'until': self.until})
+
+    def __unicode__(self):
+        return u"%s %s" % (self.id, self.since.strftime("%d-%m-%Y"))
 
 
 class DayFunction(Ticketeable):
