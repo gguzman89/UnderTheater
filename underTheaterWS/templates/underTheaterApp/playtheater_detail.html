@@ -16,7 +16,7 @@
                 <h3>Actores</h5>
                 <ul class="list-inline">
                 {% for actor in object.actors.all %}
-                    <li>{{actor.name}} </li>
+                <li><span class="badge">{{actor.name}}</span></li>
                 {% endfor %}
                 </ul>
             </dl>
@@ -38,13 +38,14 @@
                 <strong>Capacidad:</strong> {{day_function.room_theater.capacity}}
                 </p>
                 <p class="align-right">
-                <strong>Entradas:</strong> 
-                {% for ticket in day_function.tickets.all %}
-                {{ticket.ticket_name}} {{ticket.price}}
-                {% endfor %}
-                </p>
+
             </div>
             {% endfor %}
+            <strong>Entradas:</strong> 
+            {% for ticket in object.play_tickets.all %}
+             nombre: {{ticket.ticket_name}}  precio:{{ticket.price}}
+            {% endfor %}
+            </p>
         </div>
     </div>
 </div>

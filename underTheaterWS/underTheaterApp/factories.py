@@ -98,4 +98,4 @@ class TicketFactory(DjangoModelFactory):
 
     ticket_name = factory.Sequence(lambda n: 'play_theater %s' % n)
     price = factory.Sequence(lambda n: 'play_theater %s' % n)
-    day_function = factory.SubFactory(DayFunctionFactory)
+    play_theater = factory.SubFactory(PlayTheaterFactory)

@@ -24,8 +24,9 @@ class BaseSeleniumTests(StaticLiveServerTestCase):
         self.selenium.set_window_size(1024, 768)
         self.selenium.implicitly_wait(10)
 
-    def open(self):
-        self.selenium.get('%s%s' % (self.live_server_url, '/'))
+    def open(self, url=None):
+        url = url if url else '/'
+        self.selenium.get('%s%s' % (self.live_server_url, url))
 
     def login_user(self, user_login=None, password=None):
 
@@ -313,7 +314,7 @@ class LoginAndRegisterViewTestCase(BaseSeleniumTests):
 
 
 class CreatePublicationViewTestsCase(BaseSeleniumTests):
-    driver_type = "phatom"
+    driver_type = "firefox"
 
     def _test_createa_a_new_play_publication(self):
 
@@ -342,11 +343,6 @@ class CreatePublicationViewTestsCase(BaseSeleniumTests):
         synopsis_input.clear()
         synopsis_input.send_keys("Una obra muy entretenida")
 
-        # una sypnosis
-        synopsis_input = create_play_form.find_element_by_css_selector("#id_synopsis")
-        synopsis_input.clear()
-        synopsis_input.send_keys("Una obra muy entretenida")
-
         TEST_IMAGE = os.path.join(os.path.dirname("static/"), 'test.png')
         create_play_form.find_element_by_id("#id_picture").click()
         input_picture = self.selenium.find_element_by_css_selector('input[type="file"]').clear()
@@ -354,7 +350,6 @@ class CreatePublicationViewTestsCase(BaseSeleniumTests):
 
         # seleccionar una teatro
         """
-
         element = driver.find_element_by_xpath("//select[@name='name']")
         all_options = element.find_elements_by_tag_name("option")
         for option in all_options:

@@ -37,13 +37,6 @@ class PlayPriceAdmin(admin.ModelAdmin):
     search_fields = ('', )
 
 
-@admin.register(models.DateTimeShow)
-class DateShowAdmin(admin.ModelAdmin):
-    list_display = ('datetime_show', )
-    ordering = ('datetime_show', )
-    search_fields = ('', )
-
-
 @admin.register(users.Actor)
 class ActorAdmin(admin.ModelAdmin):
     list_display = ('name', )
@@ -51,6 +44,11 @@ class ActorAdmin(admin.ModelAdmin):
     search_fields = ('name', )
 
 
+@admin.register(models.DateTimeFunction)
+class PeriodicDateAdmin(admin.ModelAdmin):
+    list_display = ('periodic_date', 'since', 'until')
+
+
 @admin.register(models.DayFunction)
-class ActorAdmin(admin.ModelAdmin):
+class DayFunctionAdmin(admin.ModelAdmin):
     list_display = ('theater', )

@@ -1,36 +1,11 @@
 # vim: set fileencoding=utf-8 :
 from django import forms
+from django.utils import timezone
+from django.forms.models import inlineformset_factory
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from underTheaterApp.models import PlayTheater, DayFunction, Ticket
-from django.utils import timezone
-from django.conf import settings
-
-
-class UserCreateForm(UserCreationForm):
-    email = forms.EmailField(required=True)
-
-    class Meta:
-        model = User
-        fields = ("username", "email", "password1", "password2")
-
-    def __init__(self, *args, **kwargs):
-        super(UserCreateForm, self).__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
-
-    def clean_email(self):
-        data = self.cleaned_data['email']
-        if User.objects.filter(email=data).exists():
-            raise forms.ValidationError(u"This email already used.")
-        return data
-
-    def save(self, commit=True):
-        user = super(UserCreateForm, self).save(commit=False)
-        user.email = self.cleaned_data["email"]
-        if commit:
-            user.save()
-        return user
+from underTheaterApp.models import PlayTheater, DayFunction, Ticket,\
+    Ticketeable, DateTimeFunction
 
 
 class BaseDayFuntionFormSet(forms.models.BaseInlineFormSet):
@@ -44,15 +19,13 @@ class BaseDayFuntionFormSet(forms.models.BaseInlineFormSet):
 
         if any(self.errors):
             return
-
         for form in self.forms:
             if form.cleaned_data:
                 theater = form.cleaned_data['theater']
                 room_theater = form.cleaned_data['room_theater']
-                datetime_show = form.cleaned_data['datetime_show']
                 dic_day_function = {"theater": theater,
                                     "room_theater": room_theater,
-                                    "datetime_show": datetime_show}
+                                    }
                 duplicate = dic_day_function in dayFuntions
                 dayFuntions.append(dic_day_function)
 
@@ -107,44 +80,111 @@ class TicketForm(forms.ModelForm):
         return new_play
 
 
-TicketInlineFormSet = forms.models.inlineformset_factory(DayFunction,
-                                                         Ticket,
-                                                         form=TicketForm,
-                                                         formset=BaseTicketFormSet,
-                                                         extra=1,
-                                                         max_num=1,
-                                                         can_order=False,
-                                                         can_delete=True)
-
-
 class DayFunctionForm(forms.ModelForm):
-    datetime_show = forms.DateTimeField(initial=timezone.now(),
-                                        input_formats=settings.DATETIME_INPUT_FORMATS)
 
     class Meta:
         model = DayFunction
-        fields = ("theater", "room_theater", "datetime_show")
+        fields = ("theater", "room_theater")
 
     def __init__(self, *args, **kwargs):
         super(DayFunctionForm, self).__init__(*args, **kwargs)
-        self.ticket = TicketInlineFormSet(data=kwargs.get('data', None),
+        """
+        self.ticket = TicketFormSet(data=kwargs.get('data', None),
                                           instance=self.instance)
+        """
+        self.datetime_form = DateTimeFunctionForm(data=kwargs.get('data', None))
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
     def is_valid(self):
-        return super(DayFunctionForm, self).is_valid() and\
-            self.ticket.is_valid()
+        return super(DayFunctionForm, self).is_valid()\
+            and self.datetime_form.is_valid()
+
+    def set_topic(self):
+        self.instance.topic = "%s-%s" % (self.instance, self.instance.pk)
+
+    def save(self, *args, **kwargs):
+        self.instance.datetime_function = self.datetime_form.save()
+        self.set_topic()
+        return super(DayFunctionForm, self).save(*args, **kwargs)
+
+TicketFormSet = inlineformset_factory(Ticketeable, Ticket,
+                                      form=TicketForm,
+                                      formset=BaseTicketFormSet,
+                                      extra=1, can_order=False,
+                                      can_delete=True)
+
+DayFunctionFormSet = inlineformset_factory(PlayTheater,
+                                           DayFunction,
+                                           fk_name='play_theater',
+                                           form=DayFunctionForm,
+                                           formset=BaseDayFuntionFormSet,
+                                           extra=1,
+                                           can_order=False,
+                                           can_delete=True)
 
 
-DayFunctionInlineFormSet = forms.models.inlineformset_factory(PlayTheater,
-                                                              DayFunction,
-                                                              form=DayFunctionForm,
-                                                              formset=BaseDayFuntionFormSet,
-                                                              extra=1,
-                                                              max_num=1,
-                                                              can_order=False,
-                                                              can_delete=True)
+class UserCreateForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
+
+    def __init__(self, *args, **kwargs):
+        super(UserCreateForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+    def clean_email(self):
+        data = self.cleaned_data['email']
+        if User.objects.filter(email=data).exists():
+            raise forms.ValidationError(u"This email already used.")
+        return data
+
+    def save(self, commit=True):
+        user = super(UserCreateForm, self).save(commit=False)
+        user.email = self.cleaned_data["email"]
+        if commit:
+            user.save()
+        return user
+
+
+DayOfWeek = (
+    ('Lunes', 'Lunes'),
+    ('Martes', 'Martes'),
+    ('Miercoles', 'Miercoles'),
+    ('Jueves', 'Jueves'),
+    ('Viernes', 'Viernes'),
+    ('Sabado', 'Sabado'),
+    ('Domingo', 'Domingo'),
+)
+
+Hour = tuple([("%d:%s" % (x / 60, "00" if x % 60 == 0 else x % 60),
+               "%d:%s" % (x / 60, "00" if x % 60 == 0 else x % 60))
+              for x in range(0, 96 * 15, 15)])
+
+
+class DateTimeFunctionForm(forms.ModelForm):
+    since = forms.DateField(initial=timezone.now().date())
+
+    class Meta:
+        model = DateTimeFunction
+        fields = ("hour", "until", "since", "periodic_date")
+        widgets = {"periodic_date": forms.SelectMultiple(attrs={'class': 'form-control',
+                                                                'style': 'width: 100%;'},
+                                                         choices=DayOfWeek),
+                   "hour": forms.SelectMultiple(attrs={'class': 'form-control',
+                                                       'style': 'width: 100%;'},
+                                                choices=Hour)}
+
+    def __init__(self, *args, **kwargs):
+        super(DateTimeFunctionForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+    def is_valid(self):
+        return super(DateTimeFunctionForm, self).is_valid()
 
 
 class PlayTheaterForm(forms.ModelForm):
@@ -156,7 +196,7 @@ class PlayTheaterForm(forms.ModelForm):
         play_name_placeholder = "Nombre de la obra"
         fields = ("play_name", "synopsis", "picture", "actors")
         widgets = {'synopsis': forms.Textarea(attrs={'class': 'form-control',
-                                                     'rows': 5, 'col': 2,
+                                                     'rows': 3, 'col': 2,
                                                      'placeholder': synopsis_placeholder}),
                    'play_name': forms.TextInput(attrs={'size': 25,
                                                        'class': 'form-control',
@@ -165,18 +205,15 @@ class PlayTheaterForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PlayTheaterForm, self).__init__(*args, **kwargs)
-        self.day_function = DayFunctionInlineFormSet(data=kwargs.get('data', None),
-                                                     instance=self.instance)
+        self.day_function = DayFunctionFormSet(data=kwargs.get('data', None),
+                                               instance=self.instance)
+        self.ticket = TicketFormSet(data=kwargs.get('data', None),
+                                    instance=self.instance)
         self.fields["play_name"].widget.attrs['class'] = 'form-control'
 
     def is_valid(self):
-        return super(PlayTheaterForm, self).is_valid() and\
-            self.day_function.is_valid()
-
-    def save_tickets(self):
-        for form in self.day_function.forms:
-            form.ticket.instance = form.instance
-            form.ticket.save()
+        return super(PlayTheaterForm, self).is_valid()\
+            and self.ticket.is_valid() and self.day_function.is_valid()
 
     @property
     def get_errors(self):
@@ -192,9 +229,17 @@ class PlayTheaterForm(forms.ModelForm):
         self._check_error()
         return any(self.form_errors)
 
-    def save(self, *args, **kwargs):
-        new_play = super(PlayTheaterForm, self).save(*args, **kwargs)
+    def set_topic(self):
+        self.instance.topic = "%s-%s" % (self.instance, self.instance.pk)
+
+    def save_formsets(self, new_play):
+        self.ticket.instance = new_play
         self.day_function.instance = new_play
+        self.ticket.save()
         self.day_function.save()
-        self.save_tickets()
+
+    def save(self, *args, **kwargs):
+        self.set_topic()
+        new_play = super(PlayTheaterForm, self).save(*args, **kwargs)
+        self.save_formsets(new_play)
         return new_play

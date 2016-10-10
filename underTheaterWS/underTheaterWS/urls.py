@@ -31,7 +31,8 @@ urlpatterns = [
     url(r'^accounts/login/$', auth_views.login,
         {'template_name': 'auth/login.html'}, name="login_user"),
     url(r'^accounts/logout/$', auth_views.logout, {'next_page': '/'},
-        name="logout_user")
+        name="logout_user"),
+    url(r'^chaining/', include('smart_selects.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

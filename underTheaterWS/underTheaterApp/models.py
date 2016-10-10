@@ -2,9 +2,12 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from address.models import Address
 from django.core.urlresolvers import reverse
 from users import Actor
+from underTheaterApp.validators import periodic_date_validator
+from polymorphic.models import PolymorphicModel
 
 
 class Contact(models.Model):
@@ -35,9 +38,6 @@ class Theater(models.Model):
                                    related_name=u'theater_contact',
                                    primary_key=True)
 
-    def __str__(self):
-        return u"%s" % self.name
-
     def __unicode__(self):
         return u"%s" % self.name
 
@@ -48,24 +48,15 @@ class TheaterRoom(models.Model):
     capacity = models.IntegerField(verbose_name=u'cantidad de asientos libres')
     room_name = models.CharField(max_length=200)
 
-    def __str__(self):
-        return u"%s" % self.room_name
-
     def __unicode__(self):
         return u"%s" % self.room_name
 
 
-class DateTimeShow(models.Model):
-    datetime_show = models.DateTimeField(verbose_name=u'dia y horario del show')
-
-    def __str__(self):
-        return u"%s" % self.datetime_show.strftime("%y-%m-%d %H:%M")
-
-    def __unicode__(self):
-        return u"%s" % self.datetime_show.strftime("%y-%m-%d %H:%M")
+class Ticketeable(PolymorphicModel):
+    topic = models.CharField(max_length=30)
 
 
-class PlayTheater(models.Model):
+class PlayTheater(Ticketeable):
     play_name = models.CharField(max_length=200)
     synopsis = models.TextField(max_length=500,
                                 verbose_name="Sinopsis de la obra")
@@ -74,7 +65,7 @@ class PlayTheater(models.Model):
 
     @property
     def day_function(self):
-        return self.dayfunction_set
+        return self.undertheaterapp_dayfunction_related
 
     @property
     def picture_url(self):
@@ -83,40 +74,54 @@ class PlayTheater(models.Model):
     def get_absolute_url(self):
         return reverse('underTheaterApp:playtheater_detail', args=[self.pk])
 
-    def __str__(self):
-        return u"%s" % self.play_name
-
     def __unicode__(self):
         return u"%s" % self.play_name
 
 
-class DayFunction(models.Model):
+class DateTimeFunction(models.Model):
+    hour = models.CharField(max_length=300)
+    until = models.DateField()
+    since = models.DateField()
+    periodic_date = models.CharField(max_length=200,
+                                     validators=[periodic_date_validator],
+                                     null=True, blank=True)
+
+    def clean(self):
+        if self.since == self.until and self.periodic_date:
+            raise ValidationError('No podes tener un dia periodico si la fecha es unica')
+
+        if self.since > self.until:
+            raise ValidationError('%(since)s no puede ser mayor que %(until)s',
+                                  params={'since': self.since,
+                                          'until': self.until})
+
+
+class DayFunction(Ticketeable):
     theater = models.ForeignKey(Theater, verbose_name=u'teatro',
                                 related_name=u'day_function_theater')
     room_theater = models.ForeignKey(TheaterRoom,
                                      verbose_name=u'sala de la obra',
                                      related_name='day_function_room')
-    datetime_show = models.DateTimeField(verbose_name=u'dia y horario de la funcion')
+    datetime_function = models.OneToOneField(DateTimeFunction,
+                                             verbose_name=u'dia y horario de la funcion')
 
-    play_theater = models.ForeignKey(PlayTheater, verbose_name=u'obra')
+    play_theater = models.ForeignKey(PlayTheater, related_name="%(app_label)s_%(class)s_related", verbose_name=u'obra')
 
     def __unicode__(self):
-        return u"%s %s %s" % (self.theater.name, self.room_theater.room_name,
-                              self.datetime_show.strftime("%y-%m-%d %H:%M"))
+        return u"%s %s" % (self.theater.name, self.room_theater.room_name)
 
     @property
     def tickets(self):
-        return self.day_function_ticket
+        tickets = self.function_tickets
+        if tickets.count() == 0:
+            tickets = self.play_theater.play_tickets
+        return tickets.all()
 
 
 class Ticket(models.Model):
     ticket_name = models.CharField(max_length=200)
     price = models.CharField(max_length=200)
-    day_function = models.ForeignKey(DayFunction, verbose_name=u'day_function',
-                                     related_name=u'day_function_ticket')
-
-    def __str__(self):
-        return u"%s" % self.ticket_name
+    ticketeable = models.ForeignKey(Ticketeable, related_name="%(app_label)s_%(class)s_related", verbose_name=u'ticketeable')
 
     def __unicode__(self):
         return u"%s" % self.ticket_name
