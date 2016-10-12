@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'underTheaterApp',
     'address',
     'polymorphic',
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [

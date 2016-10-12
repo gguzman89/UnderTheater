@@ -8,7 +8,7 @@
         {% csrf_token %}
         <div class="row">
             <h2>Datos del la obra </h2>
-        {{ form.non_field_errors }} 
+            {{ form.non_field_errors }} 
             <div class="form-group">
                 {{form.play_name.label_tag}}
                 {{form.play_name}}
@@ -75,6 +75,7 @@ $("#id_actors").select2();
 $("#id_undertheaterapp_dayfunction_related-0-theater").select2({placeholder: "Selecciona el teatro", allowClear: false});
 $("#id_undertheaterapp_dayfunction_related-0-room_theater").select2({placeholder: "Selecciona la sala", allowClear: false}).attr('disabled','disabled');
 $("#id_hour").select2();
+$("#id_picture").filestyle({buttonName: "btn-primary", "input":false, "iconName":"fa fa-camera-retro",'buttonText':"Elegir foto"});
 $("#id_periodic_date").select2();
 var date_format ={ dateFormat: 'dd/mm/yy' };
 $("#id_since").datepicker(date_format);
@@ -91,14 +92,12 @@ $("#select_datefunction").change(
         $(".datetime_form .hour").removeClass("hidden");
         if (date_option =="only"){
             $(".datetime_form .since").removeClass("hidden");
-            $(".datetime_form .until").addClass("hidden");
-            $(".datetime_form .perdiodic_date").addClass("hidden");
-            $("#id_periodic_date").select2("val", "")
-            $("#id_until").val("");
+            $(".datetime_form .until").addClass("hidden").removeProp("required").val("");
+            $(".datetime_form .perdiodic_date").addClass("hidden").removeProp("required").select2("val", "");
          }else{
-            $(".datetime_form .since").removeClass("hidden");
-            $(".datetime_form .until").removeClass("hidden");
-            $(".datetime_form .perdiodic_date").removeClass("hidden");
+            $(".datetime_form .since").removeClass("hidden").prop('required', true);
+            $(".datetime_form .until").removeClass("hidden").prop('required', true);
+            $(".datetime_form .perdiodic_date").removeClass("hidden").prop('required', true);
          }
 });
 

@@ -7,6 +7,7 @@ from address.models import Address
 from django.core.urlresolvers import reverse
 from users import Actor
 from underTheaterApp.validators import periodic_date_validator
+from underTheaterApp.utils import convert_list_string
 from polymorphic.models import PolymorphicModel
 
 
@@ -22,6 +23,7 @@ class Contact(models.Model):
                                         verbose_name=u"Compartir direccion",
                                         blank=False, null=False,
                                         help_text=u"Compartir la direccion")
+    email = models.EmailField()
 
     def __str__(self):
         return u"%s" % self.pk
@@ -74,6 +76,9 @@ class PlayTheater(Ticketeable):
     def get_absolute_url(self):
         return reverse('underTheaterApp:playtheater_detail', args=[self.pk])
 
+    def tickets(self):
+        return self.undertheaterapp_ticket_related.all()
+
     def __unicode__(self):
         return u"%s" % self.play_name
 
@@ -95,6 +100,12 @@ class DateTimeFunction(models.Model):
             raise ValidationError('%(since)s no puede ser mayor que %(until)s',
                                   params={'since': self.since,
                                           'until': self.until})
+
+    def hours(self):
+        return convert_list_string(self.hour)
+
+    def periodic_dates(self):
+        return convert_list_string(self.periodic_date or "[]")
 
     def __unicode__(self):
         return u"%s %s" % (self.id, self.since.strftime("%d-%m-%Y"))

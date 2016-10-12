@@ -61,6 +61,7 @@ class TicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
         fields = ("ticket_name", "price")
+        labels = {'ticket_name': 'Nombre de la entrada', 'price': 'Precio'}
         widgets = {'ticket_name': forms.TextInput(attrs={'class': 'form-control',
                                                          'rows': 5, 'col': 2,
                                                          'placeholder': "nombre de la entrada",
@@ -170,12 +171,14 @@ Hour = tuple([("%d:%s" % (x / 60, "00" if x % 60 == 0 else x % 60),
 class DateTimeFunctionForm(forms.ModelForm):
     date_format = '%d/%m/%Y'
     since = forms.DateField(initial=timezone.now().date().strftime(date_format),
-                            input_formats=[date_format])
-    until = forms.DateField(input_formats=[date_format])
+                            input_formats=[date_format], label="Desde")
+    until = forms.DateField(input_formats=[date_format], required=False, label="Hasta")
 
     class Meta:
         model = DateTimeFunction
         fields = ("hour", "until", "since", "periodic_date")
+        labels = {'hour': 'Horas', 'until': 'Hasta', 'since': 'Desde',
+                  'periodic_date': 'Dias de la semana'}
         widgets = {"periodic_date": forms.SelectMultiple(attrs={'class': 'form-control',
                                                                 'style': 'width: 100%;'},
                                                          choices=DayOfWeek),
@@ -189,18 +192,19 @@ class DateTimeFunctionForm(forms.ModelForm):
             field.widget.attrs['class'] = 'form-control'
 
     def is_valid(self):
-        import ipdb;ipdb.set_trace()
         return super(DateTimeFunctionForm, self).is_valid()
 
 
 class PlayTheaterForm(forms.ModelForm):
-    picture = forms.ImageField()
+    picture = forms.ImageField(label="Foto de la obra")
 
     class Meta:
         model = PlayTheater
         synopsis_placeholder = "Una breve descripcion de lo que va a tratar la obra"
         play_name_placeholder = "Nombre de la obra"
         fields = ("play_name", "synopsis", "picture", "actors")
+        labels = {'play_name': 'Nombre de la obra', 'synopsis': 'Sinopsis',
+                  'actors': "Actores", 'picture': 'Foto de la obra'}
         widgets = {'synopsis': forms.Textarea(attrs={'class': 'form-control',
                                                      'rows': 3, 'col': 2,
                                                      'placeholder': synopsis_placeholder}),

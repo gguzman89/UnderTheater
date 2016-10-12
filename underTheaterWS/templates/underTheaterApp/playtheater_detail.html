@@ -5,47 +5,89 @@
 <div id="contenido">
     <h1>{{object.play_name}}</h1>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-md-4">
             <a href="#">
-                <img src="{{ object.picture_url }}" class="img-responsive"/>
+                <img src="{{ object.picture_url }}" class="img-thumbnail-custom"/>
             </a>
         </div>
-        <div class="col-md-6">
-                <h3>Sinopsis</h5>
-                <p>{{object.synopsis}}</p> 
-                <h3>Actores</h5>
-                <ul class="list-inline">
+        <div class="col-md-8">
+            <h3>Sinopsis</h5>
+            <p>{{object.synopsis}}</p> 
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Entradas</h3>
+            <div class="well">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for ticket in object.tickets %}
+                    <tr>
+                        <td>{{ticket.ticket_name}}</td>
+                        <td>{{ticket.price}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <h3>Actores</h5>
+            <ul class="list-inline">
                 {% for actor in object.actors.all %}
                 <li><span class="badge">{{actor.name}}</span></li>
                 {% endfor %}
-                </ul>
-            </dl>
+            </ul>
+        </div>
+        <div class="col-md-8">
+            <h3>Funciones</h5>
             {% for day_function in object.day_function.all %}
             <div class="well">
-                <h4 class="align-left">{{day_function.theater.name}}</h4>
-                <h5 class="align-right">{{day_function.datetime_show |date:"SHORT_DATE_FORMAT" }} {{day_function.datetime_show |time:"H:i"}} hs</h5>
-            <hr style="clear:both;"/> 
-                <p class="align-left">
-                <strong>Direccion:</strong> {{day_function.theater.contact.address.raw}}, 
-                </p>
-                <p class="align-right">
-                <strong>Telefono:</strong> {{day_function.theater.contact.number_phone}} 
-                </p>
-                <p class="align-left">
-                <strong>Nombre de la sala:</strong> {{day_function.room_theater.room_name}},
-                </p>
-                <p class="align-right">
-                <strong>Capacidad:</strong> {{day_function.room_theater.capacity}}
-                </p>
-                <p class="align-right">
-
+                <h4 class="aling-left">{{day_function.theater.name}}</h4>
+                <hr style="clear:both;"/> 
+                    <div class="row">
+                        <div class="col-sm-4">
+                        <h4 class="thumbnail-title"><i class="fa fa-suitcase" aria-hidden="true"></i> Teatro</h4>
+                        <p>
+                        <strong>Teatro:</strong> {{day_function.theater.name}},
+                        </p>
+                        <p>
+                        <strong>Nombre de la sala:</strong> {{day_function.room_theater.room_name}},
+                        </p>
+                        <p>
+                        <strong>Capacidad:</strong> {{day_function.room_theater.capacity}}
+                        </p>
+                        </div>
+                        <div class="col-sm-4">
+                            <h4 class="thumbnail-title"> <i class="fa fa-phone-square" aria-hidden="true"></i> Contacto</h4>
+                        <p>
+                        <strong>Direccion:</strong> {{day_function.theater.contact.address.raw}}, 
+                        </p>
+                        <p>
+                        <strong>Telefono:</strong> {{day_function.theater.contact.number_phone}} 
+                        </p>
+                        <p>
+                        <strong>Email:</strong> {{day_function.theater.contact.email|urlize}} 
+                        </p>
+                       
+                    </div>
+                    <div class="col-sm-4">
+                        {% with datetime_function=day_function.datetime_function %}
+                        <h4 class="thumbnail-title"><i class="fa fa-calendar" aria-hidden="true"></i> Dias y horarios</h4>
+                        {% if datetime_function.periodic_date %}
+                        <p> <strong>Dias:</strong>{{datetime_function.periodic_dates}}</p>
+                        {% endif %}
+                        <p> <strong>Horarios:</strong> {{datetime_function.hours}}</p>
+                        <p> <strong>Desde:</strong> {{datetime_function.since|date:"SHORT_DATE_FORMAT"}} {% if until %}<strong>hasta:</strong> {{datetime_function.until|date:"SHORT_DATE_FORMAT"}}{% endif %}</p>
+                        {% endwith %}
+                    </div>
+                </div>
             </div>
             {% endfor %}
-            <strong>Entradas:</strong> 
-            {% for ticket in object.play_tickets.all %}
-             nombre: {{ticket.ticket_name}}  precio:{{ticket.price}}
-            {% endfor %}
-            </p>
         </div>
     </div>
 </div>
