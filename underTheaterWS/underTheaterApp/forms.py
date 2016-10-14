@@ -6,13 +6,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from underTheaterApp.models import PlayTheater, DayFunction, Ticket,\
     Ticketeable, DateTimeFunction
+from underTheaterApp.constant import DayOfWeek, Hour
 
 
 class BaseDayFuntionFormSet(forms.models.BaseInlineFormSet):
     def clean(self):
         """
-        Adds validation to check that no two links have the same anchor or URL
-        and that all links have both an anchor and URL.
+         Validaciones del form set de DayFunction
         """
         duplicate = False
         dayFuntions = []
@@ -36,14 +36,16 @@ class BaseDayFuntionFormSet(forms.models.BaseInlineFormSet):
 class BaseTicketFormSet(forms.models.BaseInlineFormSet):
     def clean(self):
         """
-        Adds validation to check that no two links have the same anchor or URL
-        and that all links have both an anchor and URL.
+        Validaciones de los formularios de tickets
         """
         duplicate = False
         tickets = []
 
         if any(self.errors):
             return
+
+        if len(self.forms):
+            raise forms.ValidationError('Tiene que haber al menos una entrada')
 
         for form in self.forms:
             if form.cleaned_data:
@@ -68,13 +70,6 @@ class TicketForm(forms.ModelForm):
                    'price': forms.TextInput(attrs={'class': 'form-control-ticket',
                                                    'placeholder': "2x1 o $200 o %50",
                                                    'required': 'true'})}
-
-    def __init__(self, *args, **kwargs):
-        super(TicketForm, self).__init__(*args, **kwargs)
-
-    def save(self, *args, **kwargs):
-        new_play = super(TicketForm, self).save(*args, **kwargs)
-        return new_play
 
 
 class DayFunctionForm(forms.ModelForm):
@@ -147,21 +142,6 @@ class UserCreateForm(UserCreationForm):
         if commit:
             user.save()
         return user
-
-
-DayOfWeek = (
-    ('Lunes', 'Lunes'),
-    ('Martes', 'Martes'),
-    ('Miercoles', 'Miercoles'),
-    ('Jueves', 'Jueves'),
-    ('Viernes', 'Viernes'),
-    ('Sabado', 'Sabado'),
-    ('Domingo', 'Domingo'),
-)
-
-Hour = tuple([("%d:%s" % (x / 60, "00" if x % 60 == 0 else x % 60),
-               "%d:%s" % (x / 60, "00" if x % 60 == 0 else x % 60))
-              for x in range(0, 96 * 15, 15)])
 
 
 class DateTimeFunctionForm(forms.ModelForm):
