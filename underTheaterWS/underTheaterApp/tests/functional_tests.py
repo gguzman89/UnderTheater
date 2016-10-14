@@ -56,7 +56,7 @@ class BaseSeleniumTests(StaticLiveServerTestCase):
 
 
 class SearchViewTestsCase(BaseSeleniumTests):
-    driver_type = "phatom"
+    driver_type = "firefox"
 
     def test_search_a_play_theater(self):
         "Test que prueba la busqueda de obras de teatro"
@@ -78,7 +78,7 @@ class SearchViewTestsCase(BaseSeleniumTests):
 
         # Entonces deberia mostrar la obra a buscar
         self.assertTrue(search_result.is_displayed())
-        self.assertEqual(search_result.text, play_theater.play_name)
+        self.assertEqual(search_result.text, play_theater.play_name.upper())
 
     def test_search_but_not_find_any_play_theater(self):
         """
@@ -135,10 +135,10 @@ class SearchViewTestsCase(BaseSeleniumTests):
 
         # Entonces deberia las 2 obras en pantalla
         self.assertTrue(search_result_1.is_displayed())
-        self.assertEqual(search_result_1.text, play_theater_1.play_name)
+        self.assertEqual(search_result_1.text, play_theater_1.play_name.upper())
 
         self.assertTrue(search_result_2.is_displayed())
-        self.assertEqual(search_result_2.text, play_theater_2.play_name)
+        self.assertEqual(search_result_2.text, play_theater_2.play_name.upper())
 
         # y la tercer obra no aparece en los resultados
         self.assertEqual(len(search_result_3), 0)
@@ -171,7 +171,6 @@ class LoginAndRegisterViewTestCase(BaseSeleniumTests):
         # un password
         password = "mipassword12345seis"
         password1_input = register_form.find_element_by_css_selector("#id_password1")
-        password1_input.clear()
         password1_input.send_keys(password)
 
         # y se le pide que confirme el password

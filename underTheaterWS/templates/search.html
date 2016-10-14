@@ -1,6 +1,5 @@
 {% extends "master.html" %}
 {% load static %}
-{% load thumbnail %}
 {% block full_page_title %}Busqueda{% endblock %}
 {% block content %}
 <div id="contenido">
@@ -13,7 +12,7 @@
                     <img src="{{ play.picture_url }}" class="img-thumbnail-custom" style="height:200px"/>
                 </a>
                 <div class="caption">
-                    <h4 class="thumbnail-title">{{ play.play_name }}</h4>
+                    <h4 class="thumbnail-title" name="{{play.pk}}">{{ play.play_name }}</h4>
                     <p class="thumbnail-text">{{ play.synopsis }}</p>
                 </div>
             </div>
