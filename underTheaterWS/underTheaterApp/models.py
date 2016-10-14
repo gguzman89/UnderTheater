@@ -126,11 +126,10 @@ class DayFunction(Ticketeable):
     def __unicode__(self):
         return u"%s %s" % (self.theater.name, self.room_theater.room_name)
 
-    @property
     def tickets(self):
-        tickets = self.function_tickets
+        tickets = self.ticket_related
         if tickets.count() == 0:
-            tickets = self.play_theater.play_tickets
+            tickets = self.play_theater.ticket_related
         return tickets.all()
 
 

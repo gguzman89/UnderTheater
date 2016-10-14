@@ -64,14 +64,6 @@ class ActorFactory(DjangoModelFactory):
     name = factory.Sequence(lambda n: 'actor%s' % n)
 
 
-class PlayPriceFactory(DjangoModelFactory):
-    class Meta:
-        model = models.Ticket
-
-    ticket_name = factory.Sequence(lambda n: 'price_name %s' % n)
-    price = factory.Sequence(lambda n: '$ %s' % n)
-
-
 class PlayTheaterFactory(DjangoModelFactory):
     class Meta:
         model = models.PlayTheater
@@ -88,7 +80,7 @@ class DayFunctionFactory(DjangoModelFactory):
 
     theater = factory.SubFactory(TheaterFactory)
     room_theater = factory.SubFactory(RoomTheaterFactory)
-    datetime_show = datetime.today()
+    datetime_function = datetime.today()
     play_theater = factory.SubFactory(PlayTheaterFactory)
 
 
@@ -98,4 +90,3 @@ class TicketFactory(DjangoModelFactory):
 
     ticket_name = factory.Sequence(lambda n: 'play_theater %s' % n)
     price = factory.Sequence(lambda n: 'play_theater %s' % n)
-    play_theater = factory.SubFactory(PlayTheaterFactory)
