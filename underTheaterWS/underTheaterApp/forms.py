@@ -65,8 +65,7 @@ class TicketForm(forms.ModelForm):
         widgets = {'ticket_name': forms.TextInput(attrs={'class': 'form-control width-custom',
                                                          'placeholder': "nombre de la entrada",
                                                          'required': 'true'}),
-                   'price': forms.TextInput(attrs={
-                                                   'class': 'form-control-ticket',
+                   'price': forms.TextInput(attrs={'class': 'form-control-ticket',
                                                    'placeholder': "2x1 o $200 o %50",
                                                    'required': 'true'})}
 
@@ -203,7 +202,7 @@ class PlayTheaterForm(forms.ModelForm):
         labels = {'play_name': 'Nombre de la obra', 'synopsis': 'Sinopsis',
                   'actors': "Actores", 'picture': 'Foto de la obra'}
         widgets = {'synopsis': forms.Textarea(attrs={'class': 'form-control',
-                                                     'rows': 3, 'col': 2,
+                                                     'rows': 5, 'col': 2,
                                                      'placeholder': synopsis_placeholder}),
                    'play_name': forms.TextInput(attrs={'size': 25,
                                                        'class': 'form-control',
@@ -222,16 +221,12 @@ class PlayTheaterForm(forms.ModelForm):
         return super(PlayTheaterForm, self).is_valid()\
             and self.ticket.is_valid() and self.day_function.is_valid()
 
-    @property
     def get_errors(self):
         return self.form_errors
 
     def _check_error(self):
-        errors = self.day_function.non_form_errors()
-        errors += [f1.ticket.non_form_errors() for f1 in self.day_function.forms]
-        self.form_errors = errors
+        self.form_errors = self.ticket.non_form_errors()
 
-    @property
     def has_errors(self):
         self._check_error()
         return any(self.form_errors)

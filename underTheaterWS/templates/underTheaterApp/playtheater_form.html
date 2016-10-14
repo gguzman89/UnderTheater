@@ -8,28 +8,32 @@
         {% csrf_token %}
         <div class="row">
             <h2>Datos del la obra </h2>
-            {{ form.non_field_errors }} 
-            <div class="form-group">
-                {{form.play_name.label_tag}}
-                {{form.play_name}}
-                <div class="help-block">{{form.play_name.help_text}}</div>
-                {% if form.play_name.errors %}<div class="alert alert-danger">{{form.play_name.errors}}</div>{% endif %}
+            <div class="col-md-6">
+                {{ form.non_field_errors }} 
+                <div class="form-group">
+                    {{form.play_name.label_tag}}
+                    {{form.play_name}}
+                    <div class="help-block">{{form.play_name.help_text}}</div>
+                    {% if form.play_name.errors %}<div class="alert alert-danger">{{form.play_name.errors}}</div>{% endif %}
+                </div>
+                <div class="form-group">
+                    {{form.actors.label_tag}}
+                    {{form.actors}}
+                    <div class="help-block">{{form.actors.help_text}}</div>
+                    {% if form.actors.errors %}<div class="alert alert-danger">{{form.actors.errors}}</div>{% endif %}
+                </div>
+                <div class="form-group">
+                    {{form.picture}}
+                    {% if form.picture.errors %}<div class="alert alert-danger">{{form.picture.errors}}</div>{% endif %}
+                </div>
             </div>
-            <div class="form-group">
-                {{form.picture}}
-                {% if form.picture.errors %}<div class="alert alert-danger">{{form.picture.errors}}</div>{% endif %}
-            </div>
-            <div class="form-group">
-                {{form.synopsis.label_tag}}
-                {{form.synopsis}}
-                <div class="help-block">{{form.synopsis.help_text}}</div>
-                {% if form.synopsis.errors %}<div class="alert alert-danger">{{form.synopsis.errors}}</div>{% endif %}
-            </div>
-            <div class="form-group">
-                {{form.actors.label_tag}}
-                {{form.actors}}
-                <div class="help-block">{{form.actors.help_text}}</div>
-                {% if form.actors.errors %}<div class="alert alert-danger">{{form.actors.errors}}</div>{% endif %}
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form.synopsis.label_tag}}
+                    {{form.synopsis}}
+                    <div class="help-block">{{form.synopsis.help_text}}</div>
+                    {% if form.synopsis.errors %}<div class="alert alert-danger">{{form.synopsis.errors}}</div>{% endif %}
+                </div>
             </div>
         </div>
         <div class="row">
@@ -48,29 +52,50 @@
 {% endblock %}
 {% block main_scripts %}
 <script type="text/javascript">
-$("#id_actors").select2();
-$("#id_undertheaterapp_dayfunction_related-0-theater").select2({placeholder: "Selecciona el teatro", allowClear: false});
-$("#id_undertheaterapp_dayfunction_related-0-room_theater").select2({placeholder: "Selecciona la sala", allowClear: false}).attr('disabled','disabled');
-$("#id_hour").select2();
+var  theaterSelect = $("#id_dayfunction_related-0-theater").select2({placeholder: "Selecciona el teatro", allowClear: false}),
+     rooms_select = $("#id_undertheaterapp_dayfunction_related-0-room_theater").select2({placeholder: "selecciona la sala", allowClear: false});
+function getTheaterRooms(e){
+    var theater_pk = $("#id_dayfunction_related-0-theater").val(),
+        url = "/theater/"+ theater_pk +"/all_room_theater";        
+       console.log(theater_pk)
+    if(theater_pk){
+        $.get(url, function(data){
+                var select_data = [],
+                rooms_select = $("#id_undertheaterapp_dayfunction_related-0-room_theater");
+                _.map(data,function(object){ select_data.push({"id":object.pk, "text":object.fields.room_name });
+                    });  
+                $(rooms_select).removeAttr('disabled');
+                $(rooms_select).empty()
+                $(rooms_select).select2({data:select_data});
+                });
+    }else{
+        $("#id_undertheaterapp_dayfunction_related-0-room_theater").attr('disabled','disabled');
+    }
+
+}
+
+if(!$(theaterSelect).val()){
+    $(rooms_select).attr('disabled','disabled');
+}else{
+    getTheaterRooms();
+}
+
+
+$("#id_actors").select2({placeholder: "Ingrese los nombres de los actores"});
+$("#id_hour").select2({placeholder: "hh:mm"});
 $("#id_picture").filestyle({buttonName: "btn-blue", "input":false, "iconName":"fa fa-camera-retro",'buttonText':"Elegir foto"});
-$("#id_periodic_date").select2();
+$("#id_periodic_date").select2({placeholder: "Ejemplo: Lunes Martes"});
 var date_format ={ dateFormat: 'dd/mm/yy' };
 $("#id_since").datepicker(date_format);
 $("#id_until").datepicker(date_format);
 $('#id_ticket_table tbody tr').formset({
-prefix: "{{ form.ticket.prefix }}",
+            prefix: "{{ form.ticket.prefix }}",
             formCssClass: 'dynamic-contact-form',
             addCssClass: 'glyphicon glyphicon-plus add-row  btn btn-success ',
             deleteCssClass: 'glyphicon glyphicon-remove del-row btn btn-danger ',
             addText: '',
             deleteText: '',
 });
-/*
-$(".inline.{{ form.ticket.prefix }}").formset({
-    prefix: "{{ form.ticket.prefix}}",
-}); 
-
-*/
 $("#select_datefunction").select2( {placeholder: "Selecciona el tipo de fecha", minimumResultsForSearch: -1, allowClear: false});
 
 $("#select_datefunction").change(
@@ -88,25 +113,7 @@ $("#select_datefunction").change(
          }
 });
 
-$("#id_undertheaterapp_dayfunction_related-0-theater").change(
-        function(e){
-        var theater_pk = $(this).val(),
-        url = "/theater/"+ theater_pk +"/all_room_theater";        
-        if(theater_pk){
-            $.get(url, function(data){
-                var select_data = [],
-                rooms_select = $("#id_undertheaterapp_dayfunction_related-0-room_theater");
-                _.map(data,function(object){ select_data.push({"id":object.pk, "text":object.fields.room_name });
-                    });  
-                $(rooms_select).removeAttr('disabled');
-                $(rooms_select).empty()
-                $(rooms_select).select2({data:select_data});
-                });
-            }else{
-                $("#id_undertheaterapp_dayfunction_related-0-room_theater").attr('disabled','disabled');
-            }
-        
-        });
+$(theaterSelect).change(getTheaterRooms);
 
 
 /*

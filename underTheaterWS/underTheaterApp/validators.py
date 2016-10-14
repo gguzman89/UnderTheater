@@ -24,3 +24,9 @@ def periodic_date_validator(value):
             raise ValidationError('%(value)s  no podes agregar dos veces el mismo dia',
                                   params={'value': date})
         list_date.append(date)
+
+
+def min_words_validator(value):
+    words = value.split(" ")
+    if len(words) < 3:
+        raise ValidationError('Tiene que escribir una sinopsis mas descriptiva')

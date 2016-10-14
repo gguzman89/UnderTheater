@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from address.models import Address
 from django.core.urlresolvers import reverse
 from users import Actor
-from underTheaterApp.validators import periodic_date_validator
+from underTheaterApp.validators import periodic_date_validator, min_words_validator
 from underTheaterApp.utils import convert_list_string
 from polymorphic.models import PolymorphicModel
 
@@ -60,14 +60,15 @@ class Ticketeable(PolymorphicModel):
 
 class PlayTheater(Ticketeable):
     play_name = models.CharField(max_length=200)
-    synopsis = models.TextField(max_length=500,
-                                verbose_name="Sinopsis de la obra")
+    synopsis = models.TextField(max_length=1000,
+                                verbose_name="Sinopsis de la obra",
+                                validators=[min_words_validator])
     actors = models.ManyToManyField(Actor, verbose_name=u'actors')
     picture = models.FileField(upload_to="static/playImages")
 
     @property
     def day_function(self):
-        return self.undertheaterapp_dayfunction_related
+        return self.dayfunction_related
 
     @property
     def picture_url(self):
@@ -77,7 +78,7 @@ class PlayTheater(Ticketeable):
         return reverse('underTheaterApp:playtheater_detail', args=[self.pk])
 
     def tickets(self):
-        return self.undertheaterapp_ticket_related.all()
+        return self.ticket_related.all()
 
     def __unicode__(self):
         return u"%s" % self.play_name
@@ -120,7 +121,7 @@ class DayFunction(Ticketeable):
     datetime_function = models.OneToOneField(DateTimeFunction,
                                              verbose_name=u'dia y horario de la funcion')
 
-    play_theater = models.ForeignKey(PlayTheater, related_name="%(app_label)s_%(class)s_related", verbose_name=u'obra')
+    play_theater = models.ForeignKey(PlayTheater, related_name="%(class)s_related", verbose_name=u'obra')
 
     def __unicode__(self):
         return u"%s %s" % (self.theater.name, self.room_theater.room_name)
@@ -136,7 +137,7 @@ class DayFunction(Ticketeable):
 class Ticket(models.Model):
     ticket_name = models.CharField(max_length=200)
     price = models.CharField(max_length=200)
-    ticketeable = models.ForeignKey(Ticketeable, related_name="%(app_label)s_%(class)s_related", verbose_name=u'ticketeable')
+    ticketeable = models.ForeignKey(Ticketeable, related_name="%(class)s_related", verbose_name=u'ticketeable')
 
     def __unicode__(self):
         return u"%s" % self.ticket_name
