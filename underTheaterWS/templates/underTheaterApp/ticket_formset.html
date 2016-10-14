@@ -1,36 +1,22 @@
 <h2>Entradas </h2>
-<div class="col-md-6 well">
-    {{ticket_form.management_form}}
-    <div class="row">
-        <div class="col-md-6">
-            {{ ticket_form.0.ticket_name.label_tag }}
-        </div> 
-        <div class="col-md-6">
-            {{ticket_form.0.price.label_tag }}
-        </div> 
-    </div> 
-    <div class="row">
+<div class="col-md-6">
+    <div class="well">
+    <table id="id_ticket_table">
+        {{ticket_form.management_form}}
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Precio</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for ticket_form in ticket_form %}
-        {{ ticket_form.id }}
-        <div class="errors">{{ticket_form.non_field_errors}}</div>
-        <div class="inline {{ form.ticket.prefix }}">
-            <div class="col-md-6">
-                <div class="form-group">
-                    {{ ticket_form.ticket_name}}
-                    {% if ticket_form.ticket_name.errors %}
-                    <div class="alert alert-danger">{{ticket_form.ticket_name.errors}}</div>
-                    {% endif %}
-                </div> 
-            </div> 
-            <div class="col-md-6">
-                <div class="form-group">
-                    {{ ticket_form.price}}
-                    {% if ticket_form.price.errors %}
-                    <div class="alert alert-danger">{{ticket_form.price.errors}}</div>
-                    {% endif %}
-                </div> 
-            </div> 
-        </div> 
+        <tr id="{{ ticket_form.prefix }}-row" class="form-container">
+            <td>{{ ticket_form.ticket_name}}</td>
+            <td>{{ticket_form.price}}</td>
+        </tr>
         {% endfor %}
-    </div> 
+        </tbody>
+    </table>
+</div>
 </div>

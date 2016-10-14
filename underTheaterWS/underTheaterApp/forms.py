@@ -62,19 +62,16 @@ class TicketForm(forms.ModelForm):
         model = Ticket
         fields = ("ticket_name", "price")
         labels = {'ticket_name': 'Nombre de la entrada', 'price': 'Precio'}
-        widgets = {'ticket_name': forms.TextInput(attrs={'class': 'form-control',
-                                                         'rows': 5, 'col': 2,
+        widgets = {'ticket_name': forms.TextInput(attrs={'class': 'form-control width-custom',
                                                          'placeholder': "nombre de la entrada",
                                                          'required': 'true'}),
-                   'price': forms.TextInput(attrs={'size': 25,
-                                                   'class': 'form-control',
+                   'price': forms.TextInput(attrs={
+                                                   'class': 'form-control-ticket',
                                                    'placeholder': "2x1 o $200 o %50",
                                                    'required': 'true'})}
 
     def __init__(self, *args, **kwargs):
         super(TicketForm, self).__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
 
     def save(self, *args, **kwargs):
         new_play = super(TicketForm, self).save(*args, **kwargs)

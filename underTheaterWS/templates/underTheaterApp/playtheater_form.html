@@ -16,9 +16,7 @@
                 {% if form.play_name.errors %}<div class="alert alert-danger">{{form.play_name.errors}}</div>{% endif %}
             </div>
             <div class="form-group">
-                {{form.picture.label_tag}}
                 {{form.picture}}
-                <div class="help-block">{{form.picture.help_text}}</div>
                 {% if form.picture.errors %}<div class="alert alert-danger">{{form.picture.errors}}</div>{% endif %}
             </div>
             <div class="form-group">
@@ -49,41 +47,30 @@
 </div>
 {% endblock %}
 {% block main_scripts %}
-<style type="text/css">
-    .add-row {
-        padding-left:18px;
-        float:left;
-        display:block;
-        margin:5px 0 0 5px;
-        width:100;
-        height:16px;
-
-    }
-    .delete-row {
-        padding-left:18px;
-        float:right;
-        display:block;
-        margin:5px 0 0 5px;
-        text-indent:-60px;
-        width:16px;
-        height:16px;
-    }
-</style>
-
 <script type="text/javascript">
 $("#id_actors").select2();
 $("#id_undertheaterapp_dayfunction_related-0-theater").select2({placeholder: "Selecciona el teatro", allowClear: false});
 $("#id_undertheaterapp_dayfunction_related-0-room_theater").select2({placeholder: "Selecciona la sala", allowClear: false}).attr('disabled','disabled');
 $("#id_hour").select2();
-$("#id_picture").filestyle({buttonName: "btn-primary", "input":false, "iconName":"fa fa-camera-retro",'buttonText':"Elegir foto"});
+$("#id_picture").filestyle({buttonName: "btn-blue", "input":false, "iconName":"fa fa-camera-retro",'buttonText':"Elegir foto"});
 $("#id_periodic_date").select2();
 var date_format ={ dateFormat: 'dd/mm/yy' };
 $("#id_since").datepicker(date_format);
 $("#id_until").datepicker(date_format);
+$('#id_ticket_table tbody tr').formset({
+prefix: "{{ form.ticket.prefix }}",
+            formCssClass: 'dynamic-contact-form',
+            addCssClass: 'glyphicon glyphicon-plus add-row  btn btn-success ',
+            deleteCssClass: 'glyphicon glyphicon-remove del-row btn btn-danger ',
+            addText: '',
+            deleteText: '',
+});
+/*
 $(".inline.{{ form.ticket.prefix }}").formset({
     prefix: "{{ form.ticket.prefix}}",
 }); 
 
+*/
 $("#select_datefunction").select2( {placeholder: "Selecciona el tipo de fecha", minimumResultsForSearch: -1, allowClear: false});
 
 $("#select_datefunction").change(
