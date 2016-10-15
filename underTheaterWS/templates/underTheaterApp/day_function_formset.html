@@ -3,7 +3,7 @@
 {% for form in day_function_form %}
 {{form.id}}
 <div class="errors">{{form.non_field_errors}}</div>
-<div class="{{ day_function_form.prefix }}">
+<div class="{{ day_function_form.prefix }}" id="day_function_form">
     <div class="row">
         <div class="col-md-4">
             <div class="form-group">
@@ -17,9 +17,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 {{ form.room_theater.label_tag }}
-                <select class="form-control" id="id_undertheaterapp_dayfunction_related-0-room_theater" name="undertheaterapp_dayfunction_related-0-room_theater" style="width: 100%;">
-                    <option value="" selected="selected">---------</option>
-                </select>
+                {{ form.room_theater}}
                 {% if form.room_theater.errors %}
                 <div class="alert alert-danger">{{ form.room_theater.errors }}</div>
                 {% endif %}
@@ -56,24 +54,34 @@
             </div> 
         </div> 
         <div class="row">
+            {% with datetime_form=form.datetime_form %}
             <div class="col-xs-6">
                 <div class="form-group perdiodic_date hidden">
-                    {{ form.datetime_form.periodic_date.label_tag }}
-                    {{ form.datetime_form.periodic_date }}
+                    {{ datetime_form.periodic_date.label_tag }}
+                    {{ datetime_form.periodic_date }}
                     <div class="help-block">{{form.datetime_form.periodic_date.help_text}}</div>
-                    {% if form.datetime_form.periodic_date.errors %}<div class="alert alert-danger">{{form.datetime_form.periodic_date.errors}}</div>{% endif %}
+                    {% if datetime_form.periodic_date.errors %}<div class="alert alert-danger">{{datetime_form.periodic_date.errors}}</div>{% endif %}
 
                 </div>
             </div>
             <div class="col-xs-6">
                 <div class="form-group until hidden">
-                    {{ form.datetime_form.until.label_tag }}
-                    {{ form.datetime_form.until }}
-                    <div class="help-block">{{form.datetime_form.until.help_text}}</div>
-                    {% if form.datetime_form.until.errors %}<div class="alert alert-danger">{{form.datetime_form.until.errors}}</div>{% endif %}
+                    {{ datetime_form.until.label_tag }}
+                    {{ datetime_form.until }}
+                    <div class="help-block">{{datetime_form.until.help_text}}</div>
+                    {% if datetime_form.until.errors %}<div class="alert alert-danger">{{datetime_form.until.errors}}</div>{% endif %}
                 </div>
             </div>
         </div>
+        {% if datetime_form.data.select_date_function %}
+        <input type="hidden" id="select_date_value" value="{{datetime_form.data.select_date_function}}">
+        {% endif %}
+        {% if datetime_form.non_field_errors %}
+        <div class="row">
+            <div class="alert alert-danger">{{datetime_form.non_field_errors}}</div>
+        </div>
+        {% endif %}
+        {% endwith %}
     </div> 
 </div> 
 {% endfor %}

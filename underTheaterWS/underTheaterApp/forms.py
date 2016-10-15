@@ -44,7 +44,7 @@ class BaseTicketFormSet(forms.models.BaseInlineFormSet):
         if any(self.errors):
             return
 
-        if len(self.forms):
+        if len(self.forms) < 1:
             raise forms.ValidationError('Tiene que haber al menos una entrada')
 
         for form in self.forms:
@@ -52,6 +52,8 @@ class BaseTicketFormSet(forms.models.BaseInlineFormSet):
                 ticket_name = form.cleaned_data['ticket_name']
                 duplicate = ticket_name in tickets
                 tickets.append(ticket_name)
+            elif len(self.forms) == 1:
+                raise forms.ValidationError('Tiene que haber al menos una entrada')
 
         if duplicate:
             raise forms.ValidationError('No se puede agregar dos veces la misma'
@@ -195,7 +197,6 @@ class PlayTheaterForm(forms.ModelForm):
                                                instance=self.instance)
         self.ticket = TicketFormSet(data=kwargs.get('data', None),
                                     instance=self.instance)
-        self.fields["play_name"].widget.attrs['class'] = 'form-control'
 
     def is_valid(self):
         return super(PlayTheaterForm, self).is_valid()\

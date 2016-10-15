@@ -98,9 +98,10 @@ class DateTimeFunction(models.Model):
             raise ValidationError('No podes tener un dia periodico si la fecha es unica')
 
         if self.until and self.since > self.until:
-            raise ValidationError('%(since)s no puede ser mayor que %(until)s',
-                                  params={'since': self.since,
-                                          'until': self.until})
+            date_format = '%d/%m/%Y'
+            raise ValidationError('Desde "%(since)s" no puede ser mayor que hasta "%(until)s"',
+                                  params={'since': self.since.strftime(date_format),
+                                          'until': self.until.strftime(date_format)})
 
     def hours(self):
         return convert_list_string(self.hour)

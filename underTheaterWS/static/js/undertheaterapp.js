@@ -6,7 +6,7 @@ var utApp = utApp  || {};
     function getTheaterRooms(e){
         var theater_pk = $("#id_dayfunction_related-0-theater").val(),
         url = "/theater/"+ theater_pk +"/all_room_theater",
-        rooms_select= $("#id_undertheaterapp_dayfunction_related-0-room_theater");
+        rooms_select= $("#id_dayfunction_related-0-room_theater");
 
         if(theater_pk){
             $.get(url, function(data){
@@ -62,15 +62,25 @@ var utApp = utApp  || {};
         }
     }
 
+    function init_datefunction_select(form){
+        var errors = $(form).find(".alert-danger"),
+            val = $("#select_date_value").val();
+        if (errors.length > 0){
+            $("#select_datefunction").select2("val", [val]);
+        }
+    }
+
     ns.on_dom_ready = function on_dom_ready() {
         var theater_select = $("#id_dayfunction_related-0-theater"),
-            rooms_select = $("#id_undertheaterapp_dayfunction_related-0-room_theater"),
+            rooms_select = $("#id_dayfunction_related-0-room_theater"),
             hour_select = $("#id_hour"),
             actors_select = $("#id_actors"),
             periodic_select = $("#id_periodic_date"),
             date_select = $("#select_datefunction");
 
 
+
+        $(rooms_select).empty();
         set_select2(rooms_select, {placeholder: "selecciona la sala", allowClear: false});
         set_select2(theater_select, {placeholder: "Selecciona el teatro", allowClear: false});
         set_select2(actors_select, {placeholder: "Ingrese los nombres de los actores"});
@@ -88,8 +98,11 @@ var utApp = utApp  || {};
 
         $("#id_picture").filestyle({buttonName: "btn-blue", "input":false, "iconName":"fa fa-camera-retro",
                                     'buttonText':"Elegir foto"});
+
         
         $("#select_datefunction").change(change_type_date_select);
+
+        init_datefunction_select($("#day_function_form"));
 
         $(theater_select).change(getTheaterRooms);
     };

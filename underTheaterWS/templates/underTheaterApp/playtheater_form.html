@@ -42,6 +42,11 @@
         <div class="row">
             {% include "underTheaterApp/ticket_formset.html" with ticket_form=form.ticket %}
         </div>
+        {% if form.has_errors %}
+        <div class="row">
+            <div class="alert alert-danger">{{form.get_errors}}</div>
+        </div>
+        {% endif %}
         <div class="row">
             <div class="form-group">
                 <button type="submit" class="btn btn-success"/> Guardar</button>
