@@ -17,6 +17,7 @@ class SearchView(ListView):
         search = self.request.GET.get("search_term", None)
         self.object_list = PlayTheater.objects.filter(play_name__icontains=search)
         context = super(SearchView, self).get_context_data(**kwargs)
+        context["search"] = search
         return context
 
 

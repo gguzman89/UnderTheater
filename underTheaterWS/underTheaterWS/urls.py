@@ -20,6 +20,7 @@ from underTheaterWS import views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
+
 urlpatterns = [
     url(r'^$', views.HomeViews.as_view(), name="home"),
     url(r'^admin/', admin.site.urls),
@@ -30,5 +31,7 @@ urlpatterns = [
     url(r'^accounts/login/$', auth_views.login,
         {'template_name': 'auth/login.html'}, name="login_user"),
     url(r'^accounts/logout/$', auth_views.logout, {'next_page': '/'},
-        name="logout_user")
+        name="logout_user"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

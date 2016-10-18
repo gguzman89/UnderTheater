@@ -1,0 +1,62 @@
+{% extends "master.html" %}
+{% block full_page_title %}Creacion de obra{% endblock %}
+{% load static %}
+{% block content %}
+<div id="contenido">
+    <h1>Creacion de obra</h1>
+    <form enctype="multipart/form-data" method="post" id="create_play_form" novalidate>
+        {% csrf_token %}
+        <div class="row">
+            <h2>Datos del la obra </h2>
+            <div class="col-md-6">
+                {{ form.non_field_errors }} 
+                <div class="form-group">
+                    {{form.play_name.label_tag}}
+                    {{form.play_name}}
+                    <div class="help-block">{{form.play_name.help_text}}</div>
+                    {% if form.play_name.errors %}<div class="alert alert-danger">{{form.play_name.errors}}</div>{% endif %}
+                </div>
+                <div class="form-group">
+                    {{form.actors.label_tag}}
+                    {{form.actors}}
+                    <div class="help-block">{{form.actors.help_text}}</div>
+                    {% if form.actors.errors %}<div class="alert alert-danger">{{form.actors.errors}}</div>{% endif %}
+                </div>
+                <div class="form-group">
+                    {{form.picture}}
+                    {% if form.picture.errors %}<div class="alert alert-danger">{{form.picture.errors}}</div>{% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{form.synopsis.label_tag}}
+                    {{form.synopsis}}
+                    <div class="help-block">{{form.synopsis.help_text}}</div>
+                    {% if form.synopsis.errors %}<div class="alert alert-danger">{{form.synopsis.errors}}</div>{% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% include "underTheaterApp/day_function_formset.html" with day_function_form=form.day_function %}
+        </div>
+        <div class="row">
+            {% include "underTheaterApp/ticket_formset.html" with ticket_form=form.ticket %}
+        </div>
+        {% if form.has_errors %}
+        <div class="row">
+            <div class="alert alert-danger">{{form.get_errors}}</div>
+        </div>
+        {% endif %}
+        <div class="row">
+            <div class="form-group">
+                <button type="submit" class="btn btn-success"/> Guardar</button>
+            </div> 
+        </div>
+</form> 
+</div>
+{% endblock %}
+{% block main_scripts %}
+<script type="text/javascript">
+    utApp.init_ticket_formset("{{ form.ticket.prefix }}");
+</script>
+{% endblock %}

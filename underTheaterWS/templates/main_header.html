@@ -19,17 +19,21 @@
                         </select>
                     </div>
                     <div class="input-group">
-                        <input type="text" class="form-control search_term"name="search_term">
+                        <input type="text" class="form-control search_term"name="search_term" 
+                        value="{% if search %}{{search}}{% endif %}">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-default"> <span class="glyphicon glyphicon-search"></span></button>
                         </span>
                     </div>
                 </form>
                 <ul class="nav navbar-nav navbar-right">
-                <!--
-                    <li class="hidden">
-                        <a href="#page-top"></a>
+
+                {% if user.is_authenticated %}
+                    <li>
+                        <a  class="page-scroll" id="create_play" href="{% url 'underTheaterApp:create_playtheater' %}">Crear obra</a>
                     </li>
+                {% endif %}
+                    <!--
                     <li>
                         <a class="page-scroll" href="#services">Services</a>
                     </li>

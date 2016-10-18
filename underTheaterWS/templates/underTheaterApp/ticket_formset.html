@@ -1,0 +1,22 @@
+<h2>Entradas </h2>
+<div class="col-md-6">
+    <div class="well">
+    <table id="id_ticket_table">
+        {{ticket_form.management_form}}
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Precio</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ticket_form in ticket_form %}
+        <tr id="{{ ticket_form.prefix }}-row" class="form-container">
+            <td>{{ ticket_form.ticket_name}}</td>
+            <td>{{ticket_form.price}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>

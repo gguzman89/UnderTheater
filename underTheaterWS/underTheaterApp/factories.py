@@ -64,30 +64,29 @@ class ActorFactory(DjangoModelFactory):
     name = factory.Sequence(lambda n: 'actor%s' % n)
 
 
-class DateTimeShowFactory(DjangoModelFactory):
-    class Meta:
-        model = models.DateTimeShow
-
-    datetime_show = datetime.today()
-
-
-class PlayPriceFactory(DjangoModelFactory):
-    class Meta:
-        model = models.PlayPrice
-
-    price_name = factory.Sequence(lambda n: 'price_name %s' % n)
-    price = factory.Sequence(lambda n: '$ %s' % n)
-
-
 class PlayTheaterFactory(DjangoModelFactory):
     class Meta:
         model = models.PlayTheater
 
     play_name = factory.Sequence(lambda n: 'play_theater %s' % n)
     synopsis = "This isn't a synopsis"
-    theater = factory.RelatedFactory(TheaterFactory)
-    room_theater = factory.RelatedFactory(RoomTheaterFactory)
     actors = factory.RelatedFactory(ActorFactory)
     picture = File(open(TEST_IMAGE))
-    datetime_show = factory.RelatedFactory(DateTimeShowFactory)
-    price = factory.RelatedFactory(PlayPriceFactory)
+
+
+class DayFunctionFactory(DjangoModelFactory):
+    class Meta:
+        model = models.DayFunction
+
+    theater = factory.SubFactory(TheaterFactory)
+    room_theater = factory.SubFactory(RoomTheaterFactory)
+    datetime_function = datetime.today()
+    play_theater = factory.SubFactory(PlayTheaterFactory)
+
+
+class TicketFactory(DjangoModelFactory):
+    class Meta:
+        model = models.Ticket
+
+    ticket_name = factory.Sequence(lambda n: 'play_theater %s' % n)
+    price = factory.Sequence(lambda n: 'play_theater %s' % n)
