@@ -149,3 +149,9 @@ td, th {
     text-transform: uppercase;
     font-weight: 700;
 }
+
+#owl-demo .item img{
+    display: block;
+    width: 100%;
+    height: 500px;
+}

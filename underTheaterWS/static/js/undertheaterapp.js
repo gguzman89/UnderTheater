@@ -105,6 +105,8 @@ var utApp = utApp  || {};
         init_datefunction_select($("#day_function_form"));
 
         $(theater_select).change(getTheaterRooms);
+        $("#owl-demo").owlCarousel({ items:"4", navigation : true, autoPlay: true, slideSpeed : 300, 
+                                     paginationSpeed : 400, singleItem:true});
     };
 
     $(function () {

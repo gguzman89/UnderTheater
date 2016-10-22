@@ -8,20 +8,27 @@
             <div class="intro-heading">Under Theater</div>
         </div>
     </div>
-    <div id="owl-demo">
-        {% for play in obras %}
-        <div class="item">
-            <a href="{% url 'underTheaterApp:playtheater_detail' pk=play.pk %}">
-                <img src="{{ play.picture_url }}" alt="Touch"class="img-thumbnail-custom" style="height:200px">
-            </a>
-            <h3><a href="{% url 'underTheaterApp:playtheater_detail' pk=play.pk %}">
-                    {{play.play_name}}
-            </a></h3>
-            <h4>Can touch this</h4>
-
-        </div>
-        {% endfor%}
-    </div>
-
 </header>
+<section id="services">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="section-heading">Estrenos</h1>
+        </div>
+        <div id="owl-demo">
+            {% for play in plays %}
+            <div class="owl-item" style="width: 241px;">
+                <div class="item text-center">
+                    <a href="{% url 'underTheaterApp:playtheater_detail' pk=play.pk %}">
+                        <img src="{{ play.picture_url }}" alt="Touch">
+                    </a>
+                    <h3><a href="{% url 'underTheaterApp:playtheater_detail' pk=play.pk %}">
+                            {{play.play_name}}
+                    </a></h3>
+                    <h4>Can touch this</h4>
+                </div>
+            </div>
+            {% endfor%}
+        </div>
+    </div>
+</section>
 {% endblock %}
