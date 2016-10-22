@@ -5,8 +5,13 @@ from underTheaterApp.models import PlayTheater
 from underTheaterApp.forms import UserCreateForm
 
 
-class HomeViews(TemplateView):
+class HomeView(TemplateView):
     template_name = 'home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(HomeView, self).get_context_data(**kwargs)
+        context["obras"] = PlayTheater.objects.all()
+        return context
 
 
 class SearchView(ListView):

@@ -2,14 +2,35 @@
 from django.test import TestCase
 from datetime import date, time, timedelta
 from underTheaterApp.factories import TheaterFactory, RoomTheaterFactory,\
-    PlayTheaterFactory, TicketFactory
-from underTheaterApp.models import DayFunction, DateTimeFunction
+    PlayTheaterFactory, TicketFactory, DateTimeFunctionFactory, DayFunctionFactory
+from underTheaterApp.models import DayFunction, DateTimeFunction, PlayTheater
 
 
 class PlayTheaterTestCase(TestCase):
 
     def test_play_theater_creation(self):
         self.assertTrue(True)
+
+    def _create_n_play_theaters(self, n, since=None):
+        list_play = []
+        kwargs = {"since": since} if since else {}
+        for x in range(0, n):
+            play_theater = PlayTheaterFactory.create()
+            date = DateTimeFunctionFactory.create(**kwargs)
+            DayFunctionFactory(play_theater=play_theater, datetime_function=date)
+            list_play.append(play_theater)
+        return list_play
+
+    def test_get_next_releases_plays(self):
+        list_plays = self._create_n_play_theaters(5)
+        old_plays = self._create_n_play_theaters(3, date(2015, 11, 03))
+
+        next_releases_play = PlayTheater.objects.next_releases()
+
+        self.assertEqual(next_releases_play.count(), len(list_plays))
+        for play in list_plays:
+            self.assertTrue(play in next_releases_play)
+        self.assertFalse(old_plays in next_releases_play)
 
 
 class DayFunctionTest(TestCase):

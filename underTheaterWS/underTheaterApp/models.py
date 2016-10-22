@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from users import Actor
 from underTheaterApp.validators import periodic_date_validator, min_words_validator
 from underTheaterApp.utils import convert_list_string
+from underTheaterApp.managers import PlayTheaterManager
 from polymorphic.models import PolymorphicModel
 
 
@@ -65,6 +66,7 @@ class PlayTheater(Ticketeable):
                                 validators=[min_words_validator])
     actors = models.ManyToManyField(Actor, verbose_name=u'actors')
     picture = models.FileField(upload_to="static/playImages")
+    objects = PlayTheaterManager()
 
     @property
     def day_function(self):
