@@ -97,7 +97,7 @@ class DayFunctionForm(forms.ModelForm):
             and self.datetime_form.is_valid()
 
     def set_topic(self):
-        self.instance.topic = "%s-%s" % (self.instance, self.instance.pk)
+        self.instance.topic = "%s-%s" % (self.instance.since.strftime("%d-%m-%Y"), self.instance.__class__.__name__)
 
     def save(self, *args, **kwargs):
         self.instance.datetime_function = self.datetime_form.save()
@@ -213,7 +213,10 @@ class PlayTheaterForm(forms.ModelForm):
         return any(self.form_errors)
 
     def set_topic(self):
-        self.instance.topic = "%s-%s" % (self.instance, self.instance.pk)
+        topic = "%s-%s" % (self.instance.play_name, self.instance.__class__.__name__)
+        if len(topic) > 250:
+            topic = "%s-%s" % (self.instance.play_name[:100], self.instance.__class__.__name__)
+        self.instance.topic = topic
 
     def save_formsets(self, new_play):
         self.ticket.instance = new_play

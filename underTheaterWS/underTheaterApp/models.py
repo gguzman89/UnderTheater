@@ -56,7 +56,7 @@ class TheaterRoom(models.Model):
 
 
 class Ticketeable(PolymorphicModel):
-    topic = models.CharField(max_length=30)
+    topic = models.CharField(max_length=250)
 
 
 class PlayTheater(Ticketeable):

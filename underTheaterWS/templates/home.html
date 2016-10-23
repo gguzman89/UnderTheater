@@ -1,34 +1,41 @@
 {% extends "master.html" %}
+{% load static %}
 {% block full_page_title %}UnderTheater{% endblock %}
 {% block content %}
 <header>
     <div class="container">
-        <div class="intro-text">
+        <div class="intro-text" id="presentation">
             <div class="intro-lead-in">Bienvenidos a</div>
             <div class="intro-heading">Under Theater</div>
         </div>
-    </div>
-</header>
-<section id="services">
-    <div class="container">
-        <div class="text-center">
-            <h1 class="section-heading">Estrenos</h1>
-        </div>
-        <div id="owl-demo">
-            {% for play in plays %}
-            <div class="owl-item" style="width: 241px;">
+        <div class="intro-text hidden" id="premier">
+            <div class="intro-heading">Estrenos</div>
+            <div id="owl-demo">
+                {% for play in plays %}
+                <div class="owl-item owl-card">
+                    <div class="item text-center">
+                        <a href="{% url 'underTheaterApp:playtheater_detail' pk=play.pk %}">
+                            <img src="{{ play.picture_url }}" alt="Touch">
+                        </a>
+                        <h3><a href="{% url 'underTheaterApp:playtheater_detail' pk=play.pk %}">
+                                {{play.play_name}}
+                        </a></h3>
+                        {% for day_function in play.day_function.all %}
+                        <h4>Fecha: {{day_function.datetime_function.since|date:"j/n/Y"}}</h4>
+                        <h5>Horario: {{day_function.datetime_function.hours}}</h5>
+                        {% endfor%}
+                    </div>
+                </div>
+            {% empty %}
+            <div class="owl-item owl-card">
                 <div class="item text-center">
-                    <a href="{% url 'underTheaterApp:playtheater_detail' pk=play.pk %}">
-                        <img src="{{ play.picture_url }}" alt="Touch">
-                    </a>
-                    <h3><a href="{% url 'underTheaterApp:playtheater_detail' pk=play.pk %}">
-                            {{play.play_name}}
-                    </a></h3>
-                    <h4>Can touch this</h4>
+                    <img src="{% static 'img/underlogo.png' %}" class="background-white"alt="Touch">
+                    <h3>No hay estrenos esta semana</h3>
                 </div>
             </div>
             {% endfor%}
+            </div>
         </div>
     </div>
-</section>
+</header>
 {% endblock %}
