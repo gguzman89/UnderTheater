@@ -70,7 +70,21 @@ var utApp = utApp  || {};
         }
     }
 
+    function init_home(){
+        $("#presentation").delay(1000)
+            .fadeOut('slow', function() { 
+                $(this).addClass("hidden");
+                $("#premier").fadeIn('fast', function() { 
+                     $(this).removeClass("hidden");
+                 })
+        });  
+
+        $("#owl-demo").owlCarousel({ items:"4", navigation : true, autoPlay: true, slideSpeed : 300, center: true, 
+                                     paginationSpeed : 400});
+    }
+
     ns.on_dom_ready = function on_dom_ready() {
+
         var theater_select = $("#id_dayfunction_related-0-theater"),
             rooms_select = $("#id_dayfunction_related-0-room_theater"),
             hour_select = $("#id_hour"),
@@ -78,7 +92,7 @@ var utApp = utApp  || {};
             periodic_select = $("#id_periodic_date"),
             date_select = $("#select_datefunction");
 
-
+        init_home();
 
         $(rooms_select).empty();
         set_select2(rooms_select, {placeholder: "selecciona la sala", allowClear: false});
@@ -105,6 +119,7 @@ var utApp = utApp  || {};
         init_datefunction_select($("#day_function_form"));
 
         $(theater_select).change(getTheaterRooms);
+       
     };
 
     $(function () {

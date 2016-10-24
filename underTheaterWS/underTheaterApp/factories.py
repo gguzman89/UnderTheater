@@ -3,7 +3,7 @@ import os
 import factory
 from factory.django import DjangoModelFactory
 from underTheaterApp import models
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from address.models import Address
 from django.core.files import File
 from django.contrib.auth.models import User
@@ -64,6 +64,15 @@ class ActorFactory(DjangoModelFactory):
     name = factory.Sequence(lambda n: 'actor%s' % n)
 
 
+class DateTimeFunctionFactory(DjangoModelFactory):
+    class Meta:
+        model = models.DateTimeFunction
+    hour = "8:30"
+    until = date.today() + timedelta(days=3)
+    since = date.today()
+    periodic_date = ["Lunes", "Martes"]
+
+
 class PlayTheaterFactory(DjangoModelFactory):
     class Meta:
         model = models.PlayTheater
@@ -80,7 +89,6 @@ class DayFunctionFactory(DjangoModelFactory):
 
     theater = factory.SubFactory(TheaterFactory)
     room_theater = factory.SubFactory(RoomTheaterFactory)
-    datetime_function = datetime.today()
     play_theater = factory.SubFactory(PlayTheaterFactory)
 
 
