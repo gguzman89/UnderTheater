@@ -178,3 +178,18 @@ td, th {
 .background-white{
     background: white;
 }
+
+.background-sky{
+    background-color: #5897fb !important;
+    border: 4px solid black !important;
+}
+
+.background-green{
+    background-color: #48CC4A !important;
+    border: 4px solid black !important;
+}
+
+.background-red{
+    background-color: rgb(255, 0, 21) !important;
+    border: 4px solid black !important;
+}
