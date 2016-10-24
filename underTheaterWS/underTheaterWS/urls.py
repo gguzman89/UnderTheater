@@ -27,6 +27,8 @@ urlpatterns = [
     url(r'^search/', views.SearchView.as_view(), name="search"),
     url(r'^register/$', views.RegisterView.as_view(),
         name='register_user'),
+    url(r'^create_profile/$', views.CreateProfileView.as_view(),
+        name='create_profile'),
     url(r'', include(urls)),
     url(r'^accounts/login/$', auth_views.login,
         {'template_name': 'auth/login.html'}, name="login_user"),

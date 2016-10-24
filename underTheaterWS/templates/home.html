@@ -26,14 +26,14 @@
                         {% endfor%}
                     </div>
                 </div>
-            {% empty %}
-            <div class="owl-item owl-card">
-                <div class="item text-center">
-                    <img src="{% static 'img/underlogo.png' %}" class="background-white"alt="Touch">
-                    <h3>No hay estrenos esta semana</h3>
+                {% empty %}
+                <div class="owl-item owl-card">
+                    <div class="item text-center">
+                        <img src="{% static 'img/underlogo.png' %}" class="background-white"alt="Touch">
+                        <h3>No hay estrenos esta semana</h3>
+                    </div>
                 </div>
-            </div>
-            {% endfor%}
+                {% endfor%}
             </div>
         </div>
     </div>

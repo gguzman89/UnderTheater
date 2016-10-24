@@ -14,6 +14,10 @@ class HomeView(TemplateView):
         return context
 
 
+class CreateProfileView(TemplateView):
+    template_name = 'create_profile.html'
+
+
 class SearchView(ListView):
     model = PlayTheater
     template_name = 'search.html'

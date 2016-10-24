@@ -101,3 +101,5 @@ share/
 # Rope project settings
 .ropeproject
 
+underTheaterWS/media/*
+*.orig
