@@ -9,11 +9,32 @@ class TheaterAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-@admin.register(models.Contact)
+@admin.register(users.Contact)
 class ContactAdmin(admin.ModelAdmin):
     list_display = ('number_phone', 'facebook', 'address')
     ordering = ('number_phone', )
     search_fields = ('number_phone',)
+
+
+@admin.register(users.OwnerTheater)
+class OwnerTheaterAdmin(admin.ModelAdmin):
+    list_display = ('user', 'name', 'surname')
+    ordering = ('name', )
+    search_fields = ('name',)
+
+
+@admin.register(users.Spectators)
+class SpectatorsAdmin(admin.ModelAdmin):
+    list_display = ('user', 'name', 'surname')
+    ordering = ('name', )
+    search_fields = ('name',)
+
+
+@admin.register(users.Actor)
+class ActorAdmin(admin.ModelAdmin):
+    list_display = ('name', )
+    ordering = ('name', )
+    search_fields = ('name', )
 
 
 @admin.register(models.TheaterRoom)
@@ -36,12 +57,6 @@ class PlayPriceAdmin(admin.ModelAdmin):
     ordering = ('ticket_name', )
     search_fields = ('', )
 
-
-@admin.register(users.Actor)
-class ActorAdmin(admin.ModelAdmin):
-    list_display = ('name', )
-    ordering = ('name', )
-    search_fields = ('name', )
 
 
 @admin.register(models.DateTimeFunction)

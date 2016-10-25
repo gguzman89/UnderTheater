@@ -10,6 +10,10 @@ from underTheaterApp.constant import DayOfWeek, Hour
 
 
 class BaseDayFuntionFormSet(forms.models.BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        self.extra = 0 if kwargs["instance"] else 1
+        super(BaseDayFuntionFormSet, self).__init__(*args, **kwargs)
+
     def clean(self):
         """
          Validaciones del form set de DayFunction
@@ -34,6 +38,10 @@ class BaseDayFuntionFormSet(forms.models.BaseInlineFormSet):
 
 
 class BaseTicketFormSet(forms.models.BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        self.extra = 0 if kwargs["instance"] else 1
+        super(BaseTicketFormSet, self).__init__(*args, **kwargs)
+
     def clean(self):
         """
         Validaciones de los formularios de tickets
@@ -90,14 +98,19 @@ class DayFunctionForm(forms.ModelForm):
         self.ticket = TicketFormSet(data=kwargs.get('data', None),
                                           instance=self.instance)
         """
-        self.datetime_form = DateTimeFunctionForm(data=kwargs.get('data', None))
+        instance = kwargs.get('instance', None)
+        if self.instance:
+            instance = self.instance.datetime_function
+
+        self.datetime_form = DateTimeFunctionForm(data=kwargs.get('data', None),
+                                                  instance=instance)
 
     def is_valid(self):
         return super(DayFunctionForm, self).is_valid()\
             and self.datetime_form.is_valid()
 
     def set_topic(self):
-        self.instance.topic = "%s-%s" % (self.instance.since.strftime("%d-%m-%Y"), self.instance.__class__.__name__)
+        self.instance.topic = "%s-%s" % (self.instance, self.instance.__class__.__name__)
 
     def save(self, *args, **kwargs):
         self.instance.datetime_function = self.datetime_form.save()
@@ -107,7 +120,7 @@ class DayFunctionForm(forms.ModelForm):
 TicketFormSet = inlineformset_factory(Ticketeable, Ticket,
                                       form=TicketForm,
                                       formset=BaseTicketFormSet,
-                                      extra=1, can_order=False,
+                                      can_order=False,
                                       can_delete=True)
 
 DayFunctionFormSet = inlineformset_factory(PlayTheater,
@@ -115,7 +128,6 @@ DayFunctionFormSet = inlineformset_factory(PlayTheater,
                                            fk_name='play_theater',
                                            form=DayFunctionForm,
                                            formset=BaseDayFuntionFormSet,
-                                           extra=1,
                                            can_order=False,
                                            can_delete=True)
 

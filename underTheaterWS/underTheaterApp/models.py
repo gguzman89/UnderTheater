@@ -3,34 +3,12 @@ from __future__ import unicode_literals
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from address.models import Address
 from django.core.urlresolvers import reverse
-from users import Actor
+from users import Actor, Contact, OwnerTheater
 from underTheaterApp.validators import periodic_date_validator, min_words_validator
 from underTheaterApp.utils import convert_list_string
 from underTheaterApp.managers import PlayTheaterManager
 from polymorphic.models import PolymorphicModel
-
-
-class Contact(models.Model):
-    number_phone = models.IntegerField(verbose_name=u'Numero de telefono')
-    facebook = models.CharField(max_length=128, blank=True,
-                                verbose_name=u'usuario en Facebook')
-    address = models.OneToOneField(Address, verbose_name=u'address',
-                                   related_name=u'address_contact',
-                                   )
-
-    share_address = models.BooleanField(default=True,
-                                        verbose_name=u"Compartir direccion",
-                                        blank=False, null=False,
-                                        help_text=u"Compartir la direccion")
-    email = models.EmailField()
-
-    def __str__(self):
-        return u"%s" % self.pk
-
-    def __unicode__(self):
-        return u"%s" % self.pk
 
 
 class Theater(models.Model):
@@ -38,7 +16,9 @@ class Theater(models.Model):
     review = models.TextField(max_length=500,
                               verbose_name=u"reseña del teatro")
     contact = models.OneToOneField(Contact, verbose_name=u'contacto',
-                                   related_name=u'theater_contact',
+                                   related_name=u'theater_contact')
+    owner = models.OneToOneField(OwnerTheater, verbose_name=u'dueño',
+                                   related_name=u'owner',
                                    primary_key=True)
 
     def __unicode__(self):
