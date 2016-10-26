@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-md-4">
             <div class="thumbnail-custom background-green">
-                <a href="">
+                <a href="{% url "create_profile"%}?profile=spectator">
                     <img src="{% static 'img/espectador.png' %}" class="img-thumbnail-custom background-green"/>
                 </a>
                 <div class="caption text-center">
@@ -18,7 +18,7 @@
         </div>
         <div class="col-md-4">
             <div class="thumbnail-custom background-sky">
-                <a href="">
+                <a href="{% url "create_profile"%}?profile=actor">
                     <img src="{% static 'img/Actor.png'%}" class="img-thumbnail-custom background-sky"/>
                 </a>
                 <div class="caption text-center">
@@ -29,7 +29,7 @@
         </div>
         <div class="col-md-4">
             <div class="thumbnail-custom background-red">
-                <a href="">
+                <a href="{% url "create_profile"%}?profile=theater">
                     <img src="{% static 'img/teatro.png'%}" class="img-thumbnail-custom background-red"/>
                 </a>
                 <div class="caption text-center">

@@ -26,11 +26,6 @@ class PlayTheaterUpdateView(UpdateView):
     form_class = PlayTheaterForm
     template_name = "underTheaterApp/playtheater_form.html"
 
-    def get_context_data(self, **kwargs):
-        context = super(PlayTheaterUpdateView, self).get_context_data(**kwargs)
-        context["search"] = True
-        return context
-
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         return super(PlayTheaterUpdateView, self).post(request, *args, **kwargs)

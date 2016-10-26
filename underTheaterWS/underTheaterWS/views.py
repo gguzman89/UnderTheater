@@ -2,7 +2,7 @@ from django.views.generic import TemplateView, ListView, CreateView
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from underTheaterApp.models import PlayTheater
-from underTheaterApp.forms import UserCreateForm
+from underTheaterApp.forms import UserCreateForm, TheaterCreateForm, ActorCreateForm, SpectatorCreateForm
 
 
 class HomeView(TemplateView):
@@ -14,7 +14,7 @@ class HomeView(TemplateView):
         return context
 
 
-class CreateProfileView(TemplateView):
+class SelectProfileView(TemplateView):
     template_name = 'create_profile.html'
 
 
@@ -42,3 +42,16 @@ class RegisterView(CreateView):
         if self.object:
             login(request, self.object)
         return response
+
+
+class ProfileCreateView(CreateView):
+    "Creates a new profile"
+
+    template_name = "profile_create.html"
+    success_url = '/'
+    model_dict = {"actor": ActorCreateForm, "spectator": SpectatorCreateForm, "theater": TheaterCreateForm}
+
+    def get_form_class(self):
+        profile = self.request.GET.get('profile', None)
+        form = self.model_dict.get(profile)
+        return form

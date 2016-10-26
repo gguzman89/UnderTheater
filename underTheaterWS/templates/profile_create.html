@@ -1,0 +1,44 @@
+{% extends "master.html" %}
+{% load static %}
+{% block full_page_title %}Create Profile{% endblock %}
+{% block content %}
+<div id="contenido">
+    <h1>Completa tu perfil</h1>
+    <form enctype="multipart/form-data" method="post" id="create_play_form" novalidate>
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.non_field_errors }} 
+                <div class="form-group">
+                    {{form.name.label_tag}}
+                    {{form.name}}
+                    <div class="help-block">{{form.name.help_text}}</div>
+                    {% if form.name.errors %}<div class="alert alert-danger">{{form.name.errors}}</div>{% endif %}
+                </div>
+                <div class="form-group">
+                    {{form.surname.label_tag}}
+                    {{form.surname}}
+                    <div class="help-block">{{form.surname.help_text}}</div>
+                    {% if form.surname.errors %}<div class="alert alert-danger">{{form.surname.errors}}</div>{% endif %}
+                </div>
+                <div class="form-group">
+                    {{form.facebook.label_tag}}
+                    {{form.facebook}}
+                    <div class="help-block">{{form.facebook.help_text}}</div>
+                    {% if form.facebook.errors %}<div class="alert alert-danger">{{form.facebook.errors}}</div>{% endif %}
+                </div>
+                <div class="form-group">
+                    {{form.twitter.label_tag}}
+                    {{form.twitter}}
+                    <div class="help-block">{{form.twitter.help_text}}</div>
+                    {% if form.twitter.errors %}<div class="alert alert-danger">{{form.twitter.errors}}</div>{% endif %}
+                </div>
+                <input type="hidden" name="user" value="{{user.id}}" id="id_user">
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success"/> Guardar</button>
+        </div> 
+    </div>
+</div>
+{% endblock %}

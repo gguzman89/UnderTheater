@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from underTheaterApp.models import PlayTheater, DayFunction, Ticket,\
     Ticketeable, DateTimeFunction
 from underTheaterApp.constant import DayOfWeek, Hour
+from underTheaterApp.users import Actor, OwnerTheater, Spectators
 
 
 class BaseDayFuntionFormSet(forms.models.BaseInlineFormSet):
@@ -130,6 +131,33 @@ DayFunctionFormSet = inlineformset_factory(PlayTheater,
                                            formset=BaseDayFuntionFormSet,
                                            can_order=False,
                                            can_delete=True)
+
+
+class ProfileCreateForm(forms.ModelForm):
+
+    class Meta:
+        fields = ("user", "name", "surname", "facebook", "twitter")
+        widgets = {'user': forms.HiddenInput()}
+
+    def __init__(self, *args, **kwargs):
+        super(ProfileCreateForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+
+class ActorCreateForm(ProfileCreateForm):
+    class Meta(ProfileCreateForm.Meta):
+        model = Actor
+
+
+class TheaterCreateForm(ProfileCreateForm):
+    class Meta(ProfileCreateForm.Meta):
+        model = OwnerTheater
+
+
+class SpectatorCreateForm(ProfileCreateForm):
+    class Meta(ProfileCreateForm.Meta):
+        model = Spectators
 
 
 class UserCreateForm(UserCreationForm):
