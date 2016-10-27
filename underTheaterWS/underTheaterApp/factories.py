@@ -8,6 +8,7 @@ from address.models import Address
 from django.core.files import File
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
+from underTheaterApp.users import OwnerTheater
 
 
 TEST_IMAGE = os.path.join(os.path.dirname("static/"), 'test.png')
@@ -29,6 +30,17 @@ class UserFactory(DjangoModelFactory):
     password = make_password('miPassword')
 
 
+class OwnerTheaterFactory(DjangoModelFactory):
+
+    class Meta:
+        model = OwnerTheater
+
+    name = factory.Sequence(lambda n: 'name%s' % n)
+    suername = factory.Sequence(lambda n: 'surname%s' % n)
+    twitter = factory.Sequence(lambda n: 'twitter%s' % n)
+    facebook = factory.Sequence(lambda n: 'facebook%s' % n)
+
+
 class ContactFactory(DjangoModelFactory):
     class Meta:
         model = models.Contact
@@ -46,6 +58,7 @@ class TheaterFactory(DjangoModelFactory):
     name = factory.Sequence(lambda n: 'name-theater%s' % n)
     review = "This isn't a review"
     contact = factory.SubFactory(ContactFactory)
+    owner = factory.SubFactory(OwnerTheaterFactory)
 
 
 class RoomTheaterFactory(DjangoModelFactory):

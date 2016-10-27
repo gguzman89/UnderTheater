@@ -1,3 +1,4 @@
+# vim: set fileencoding=utf-8 :
 from django.views.generic import TemplateView, ListView, CreateView
 from django.contrib.auth.models import User
 from django.contrib.auth import login
@@ -17,13 +18,14 @@ class HomeView(TemplateView):
 
 
 class SelectProfileView(TemplateView):
-    template_name = 'create_profile.html'
+    template_name = 'select_profile.html'
 
     def dispatch(self, *args, **kwargs):
         if hasattr(self.request.user, "profile"):
             messages.add_message(self.request, messages.WARN, 'No puedes crear el perfil dos veces')
             return redirect("/")
         return super(SelectProfileView, self).dispatch(*args, **kwargs)
+
 
 class SearchView(ListView):
     model = PlayTheater
@@ -57,6 +59,7 @@ class ProfileCreateView(CreateView):
     template_name = "profile_create.html"
     success_url = '/'
     model_dict = {"actor": ActorCreateForm, "spectator": SpectatorCreateForm, "theater": TheaterCreateForm}
+    name_dict = {"actor": u"actor", "spectator": u"espectador", "theater": u"dueño de teatro"}
 
     def dispatch(self, *args, **kwargs):
         if hasattr(self.request.user, "profile"):
@@ -68,3 +71,8 @@ class ProfileCreateView(CreateView):
         profile = self.request.GET.get('profile', None)
         form = self.model_dict.get(profile)
         return form
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ProfileCreateView, self).get_context_data(*args, **kwargs)
+        context["profile"] = self.name_dict[self.request.GET.get('profile', None)]
+        return context

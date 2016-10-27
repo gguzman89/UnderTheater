@@ -3,7 +3,7 @@
 {% block full_page_title %}Create Profile{% endblock %}
 {% block content %}
 <div id="contenido">
-    <h1>Completa tu perfil</h1>
+    <h1>Completa tu perfil como {{profile}}</h1>
     <form enctype="multipart/form-data" method="post" id="create_play_form" novalidate>
         {% csrf_token %}
         <div class="row">
@@ -40,7 +40,7 @@
         </div>
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-success"/> Guardar</button>
+            <button type="submit" class="btn btn-xl btn-block"/> Guardar</button>
         </div> 
     </div>
 </div>
