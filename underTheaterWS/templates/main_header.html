@@ -27,6 +27,11 @@
                     </div>
                 </form>
                 <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated and not user.profile %}
+                    <li>
+                        <a  class="page-scroll" id="select_profile" href="{% url 'select_profile' %}">Completa tu perfil</a>
+                    </li>
+                {% endif %}
 
                 {% if user.is_authenticated %}
                     <li>

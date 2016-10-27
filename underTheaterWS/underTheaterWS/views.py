@@ -19,6 +19,11 @@ class HomeView(TemplateView):
 class SelectProfileView(TemplateView):
     template_name = 'create_profile.html'
 
+    def dispatch(self, *args, **kwargs):
+        if hasattr(self.request.user, "profile"):
+            messages.add_message(self.request, messages.WARN, 'No puedes crear el perfil dos veces')
+            return redirect("/")
+        return super(SelectProfileView, self).dispatch(*args, **kwargs)
 
 class SearchView(ListView):
     model = PlayTheater
@@ -55,7 +60,7 @@ class ProfileCreateView(CreateView):
 
     def dispatch(self, *args, **kwargs):
         if hasattr(self.request.user, "profile"):
-            messages.add_message(self.request, messages.INFO, 'No puedes crear el perfil dos veces')
+            messages.add_message(self.request, messages.WARN, 'No puedes crear el perfil dos veces')
             return redirect("/")
         return super(ProfileCreateView, self).dispatch(*args, **kwargs)
 
