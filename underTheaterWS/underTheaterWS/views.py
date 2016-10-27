@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login
 from underTheaterApp.models import PlayTheater
 from underTheaterApp.forms import UserCreateForm, TheaterCreateForm, ActorCreateForm, SpectatorCreateForm
+from django.contrib import messages
+from django.shortcuts import redirect
 
 
 class HomeView(TemplateView):
@@ -50,6 +52,12 @@ class ProfileCreateView(CreateView):
     template_name = "profile_create.html"
     success_url = '/'
     model_dict = {"actor": ActorCreateForm, "spectator": SpectatorCreateForm, "theater": TheaterCreateForm}
+
+    def dispatch(self, *args, **kwargs):
+        if hasattr(self.request.user, "profile"):
+            messages.add_message(self.request, messages.INFO, 'No puedes crear el perfil dos veces')
+            return redirect("/")
+        return super(ProfileCreateView, self).dispatch(*args, **kwargs)
 
     def get_form_class(self):
         profile = self.request.GET.get('profile', None)

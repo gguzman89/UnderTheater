@@ -193,3 +193,8 @@ td, th {
     background-color: rgb(255, 0, 21) !important;
     border: 4px solid black !important;
 }
+
+header .title-text{
+    padding-top: 100px;
+    padding-bottom: 200px;
+}

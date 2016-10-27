@@ -12,7 +12,7 @@ from underTheaterApp.users import Actor, OwnerTheater, Spectators
 
 class BaseDayFuntionFormSet(forms.models.BaseInlineFormSet):
     def __init__(self, *args, **kwargs):
-        self.extra = 0 if kwargs["instance"] else 1
+        self.extra = 0 if kwargs["instance"].id else 1
         super(BaseDayFuntionFormSet, self).__init__(*args, **kwargs)
 
     def clean(self):
@@ -40,7 +40,7 @@ class BaseDayFuntionFormSet(forms.models.BaseInlineFormSet):
 
 class BaseTicketFormSet(forms.models.BaseInlineFormSet):
     def __init__(self, *args, **kwargs):
-        self.extra = 0 if kwargs["instance"] else 1
+        self.extra = 0 if kwargs["instance"].id else 1
         super(BaseTicketFormSet, self).__init__(*args, **kwargs)
 
     def clean(self):
@@ -99,12 +99,7 @@ class DayFunctionForm(forms.ModelForm):
         self.ticket = TicketFormSet(data=kwargs.get('data', None),
                                           instance=self.instance)
         """
-        instance = kwargs.get('instance', None)
-        if self.instance:
-            instance = self.instance.datetime_function
-
-        self.datetime_form = DateTimeFunctionForm(data=kwargs.get('data', None),
-                                                  instance=instance)
+        self.datetime_form = DateTimeFunctionForm(data=kwargs.get('data', None))
 
     def is_valid(self):
         return super(DayFunctionForm, self).is_valid()\

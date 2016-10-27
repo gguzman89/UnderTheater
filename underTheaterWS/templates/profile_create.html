@@ -21,6 +21,8 @@
                     <div class="help-block">{{form.surname.help_text}}</div>
                     {% if form.surname.errors %}<div class="alert alert-danger">{{form.surname.errors}}</div>{% endif %}
                 </div>
+            </div>
+            <div class="col-md-6">
                 <div class="form-group">
                     {{form.facebook.label_tag}}
                     {{form.facebook}}
@@ -33,8 +35,9 @@
                     <div class="help-block">{{form.twitter.help_text}}</div>
                     {% if form.twitter.errors %}<div class="alert alert-danger">{{form.twitter.errors}}</div>{% endif %}
                 </div>
-                <input type="hidden" name="user" value="{{user.id}}" id="id_user">
             </div>
+            <input type="hidden" name="user" value="{{user.id}}" id="id_user">
+        </div>
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-success"/> Guardar</button>
