@@ -8,6 +8,7 @@ from underTheaterApp.models import PlayTheater, DayFunction, Ticket,\
     Ticketeable, DateTimeFunction
 from underTheaterApp.constant import DayOfWeek, Hour
 from underTheaterApp.users import Actor, OwnerTheater, Spectators
+from underTheaterWS.utils import regex_account_twitter, regex_url_facebook
 
 
 class BaseDayFuntionFormSet(forms.models.BaseInlineFormSet):
@@ -129,15 +130,31 @@ DayFunctionFormSet = inlineformset_factory(PlayTheater,
 
 
 class ProfileCreateForm(forms.ModelForm):
+    photo = forms.ImageField(label="Foto de perfil")
 
     class Meta:
-        fields = ("user", "name", "surname", "facebook", "twitter")
+        fields = ("user", "name", "surname", "facebook", "twitter", "photo")
         widgets = {'user': forms.HiddenInput()}
+        labels = {'name': 'Nombre', 'surname': 'Apellido'}
 
     def __init__(self, *args, **kwargs):
         super(ProfileCreateForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+
+    def clean_twitter(self):
+        if self.cleaned_data["twitter"]:
+            self.cleaned_data["twitter"] = regex_account_twitter(self.cleaned_data["twitter"])
+            if self.cleaned_data["twitter"] is None:
+                raise forms.ValidationError('El usuario de twitter no es valido')
+        return self.cleaned_data["twitter"]
+
+    def clean_facebook(self):
+        if self.cleaned_data["facebook"]:
+            self.cleaned_data["facebook"] = regex_url_facebook(self.cleaned_data["facebook"])
+            if self.cleaned_data["facebook"] is None:
+                raise forms.ValidationError('El usuario de facebook no es valido')
+        return self.cleaned_data["facebook"]
 
 
 class ActorCreateForm(ProfileCreateForm):

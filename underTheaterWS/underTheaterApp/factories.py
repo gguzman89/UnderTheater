@@ -3,7 +3,7 @@ import os
 import factory
 from factory.django import DjangoModelFactory
 from underTheaterApp import models
-from datetime import datetime, date, timedelta
+from datetime import date, timedelta
 from address.models import Address
 from django.core.files import File
 from django.contrib.auth.models import User
@@ -36,9 +36,10 @@ class OwnerTheaterFactory(DjangoModelFactory):
         model = OwnerTheater
 
     name = factory.Sequence(lambda n: 'name%s' % n)
-    suername = factory.Sequence(lambda n: 'surname%s' % n)
+    surname = factory.Sequence(lambda n: 'surname%s' % n)
     twitter = factory.Sequence(lambda n: 'twitter%s' % n)
     facebook = factory.Sequence(lambda n: 'facebook%s' % n)
+    user = factory.SubFactory(UserFactory)
 
 
 class ContactFactory(DjangoModelFactory):

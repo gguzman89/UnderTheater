@@ -7,8 +7,8 @@
     <form enctype="multipart/form-data" method="post" id="create_play_form" novalidate>
         {% csrf_token %}
         <div class="row">
+            {{ form.non_field_errors }} 
             <div class="col-md-6">
-                {{ form.non_field_errors }} 
                 <div class="form-group">
                     {{form.name.label_tag}}
                     {{form.name}}
@@ -21,16 +21,20 @@
                     <div class="help-block">{{form.surname.help_text}}</div>
                     {% if form.surname.errors %}<div class="alert alert-danger">{{form.surname.errors}}</div>{% endif %}
                 </div>
+                <div class="form-group">
+                    {{form.photo}}
+                    {% if form.photo.errors %}<div class="alert alert-danger">{{form.photo.errors}}</div>{% endif %}
+                </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    {{form.facebook.label_tag}}
+                    <label for="id_facebook"><i class="fa fa-facebook" aria-hidden="true"></i> Facebook:</label>
                     {{form.facebook}}
                     <div class="help-block">{{form.facebook.help_text}}</div>
                     {% if form.facebook.errors %}<div class="alert alert-danger">{{form.facebook.errors}}</div>{% endif %}
                 </div>
                 <div class="form-group">
-                    {{form.twitter.label_tag}}
+                    <label for="id_twitter"><i class="fa fa-twitter" aria-hidden="true"></i> Twitter:</label>
                     {{form.twitter}}
                     <div class="help-block">{{form.twitter.help_text}}</div>
                     {% if form.twitter.errors %}<div class="alert alert-danger">{{form.twitter.errors}}</div>{% endif %}

@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from address.models import Address
 from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class Contact(models.Model):
@@ -32,18 +33,33 @@ class Profile(models.Model):
                                 verbose_name=u'usuario en Facebook')
     twitter = models.CharField(max_length=128, blank=True,
                                 verbose_name=u'twitter')
+    photo = models.FileField(upload_to="static/profileImages",
+                             default='static/logo.png')
+
+    @property
+    def photo_url(self):
+        return "%s%s" % (settings.MEDIA_URL, self.photo)
+
+    def facebook_url(self):
+        return "//facebook.com/%s" % self.facebook
+
+    def twitter_url(self):
+        return "//twitter.com/%s" % self.twitter
 
     def __unicode__(self):
         return u"%s %s" % (self.name, self.surname)
 
 
 class Actor(Profile):
-    pass
+    def get_role(self):
+        return u"Actor"
 
 
 class OwnerTheater(Profile):
-    pass
+    def get_role(self):
+        return u"Dueño del teatro"
 
 
 class Spectators(Profile):
-    pass
+    def get_role(self):
+        return u"Espectador"

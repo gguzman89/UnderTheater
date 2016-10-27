@@ -1,8 +1,9 @@
 # vim: set fileencoding=utf-8 :
-from django.views.generic import TemplateView, ListView, CreateView
+from django.views.generic import TemplateView, ListView, CreateView, DetailView
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from underTheaterApp.models import PlayTheater
+from underTheaterApp.users import Profile
 from underTheaterApp.forms import UserCreateForm, TheaterCreateForm, ActorCreateForm, SpectatorCreateForm
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -76,3 +77,8 @@ class ProfileCreateView(CreateView):
         context = super(ProfileCreateView, self).get_context_data(*args, **kwargs)
         context["profile"] = self.name_dict[self.request.GET.get('profile', None)]
         return context
+
+
+class ProfileDetailView(DetailView):
+    model = Profile
+    template_name = 'profile_detail.html'

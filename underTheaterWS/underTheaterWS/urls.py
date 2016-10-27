@@ -31,6 +31,8 @@ urlpatterns = [
         name='select_profile'),
     url(r'^create_profile/$', views.ProfileCreateView.as_view(),
         name='create_profile'),
+    url(r'^profile/(?P<pk>\d+)/$', views.ProfileDetailView.as_view(),
+        name='profile_detail'),
     url(r'', include(urls)),
     url(r'^accounts/login/$', auth_views.login,
         {'template_name': 'auth/login.html'}, name="login_user"),

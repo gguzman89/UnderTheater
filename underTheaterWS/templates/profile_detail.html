@@ -1,0 +1,39 @@
+{% extends "master.html" %}
+{% load static %}
+{% block full_page_title %}Mi perfil{% endblock %}
+{% block content %}
+<div id="contenido">
+    <h1>El perfil de {{object.name}}</h1>
+    <div class="row">
+        <div class="col-md-3">
+            <img src="{{ object.photo_url }}" class="img-thumbnail-custom" style="width: 90%;"/>
+        </div>
+        <div class="col-md-6">
+            <div class="well">
+                <dl class="dl-horizontal">
+                    <dt>Username</dt>
+                    <dd>{{object.user.username}}</dd>
+                    <dt>Nombre</dt>
+                    <dd>{{object.name}}</dd>
+                    <dt>Apellido</dt>
+                    <dd>{{object.surname}}</dd>
+
+                    {% if object.user.email %}
+                    <dt>Email</dt>
+                    <dd>{{object.user.email|urlize}}</dd>
+                    {% endif %}
+                    {% if object.twitter %}
+                    <dt><i class="fa fa-twitter" aria-hidden="true"></i> Twitter</dt>
+                    <dd><a href="{{object.twitter_url}}">{{object.twitter}}</a></dd>
+                    {% endif %}
+                    {% if object.facebook %}
+                    <dt><i class="fa fa-facebook" aria-hidden="true"></i> Facebook</dt>
+                    <dd><a href="{{object.facebook_url}}">{{object.facebook}}</a></dd>
+                    {% endif %}
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
