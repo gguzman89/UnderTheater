@@ -93,7 +93,8 @@ background-color: #5897fb !important;
 }
 .thumbnail-text{
     color: #fcf8e3;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
 }
 
 .form-control-ticket{
@@ -157,6 +158,7 @@ td, th {
     font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-transform: uppercase;
     font-weight: 700;
+    color: #f5f5f5;
 }
 
 #owl-demo .item{
@@ -177,4 +179,24 @@ td, th {
 
 .background-white{
     background: white;
+}
+
+.background-sky{
+    background-color: #5897fb !important;
+    border: 4px solid black !important;
+}
+
+.background-green{
+    background-color: #48CC4A !important;
+    border: 4px solid black !important;
+}
+
+.background-red{
+    background-color: rgb(255, 0, 21) !important;
+    border: 4px solid black !important;
+}
+
+header .title-text{
+    padding-top: 100px;
+    padding-bottom: 200px;
 }

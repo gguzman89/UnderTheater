@@ -7,9 +7,15 @@ from django.contrib.auth.forms import UserCreationForm
 from underTheaterApp.models import PlayTheater, DayFunction, Ticket,\
     Ticketeable, DateTimeFunction
 from underTheaterApp.constant import DayOfWeek, Hour
+from underTheaterApp.users import Actor, OwnerTheater, Spectators
+from underTheaterWS.utils import regex_account_twitter, regex_url_facebook
 
 
 class BaseDayFuntionFormSet(forms.models.BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        self.extra = 0 if kwargs["instance"].id else 1
+        super(BaseDayFuntionFormSet, self).__init__(*args, **kwargs)
+
     def clean(self):
         """
          Validaciones del form set de DayFunction
@@ -34,6 +40,10 @@ class BaseDayFuntionFormSet(forms.models.BaseInlineFormSet):
 
 
 class BaseTicketFormSet(forms.models.BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        self.extra = 0 if kwargs["instance"].id else 1
+        super(BaseTicketFormSet, self).__init__(*args, **kwargs)
+
     def clean(self):
         """
         Validaciones de los formularios de tickets
@@ -97,7 +107,7 @@ class DayFunctionForm(forms.ModelForm):
             and self.datetime_form.is_valid()
 
     def set_topic(self):
-        self.instance.topic = "%s-%s" % (self.instance.since.strftime("%d-%m-%Y"), self.instance.__class__.__name__)
+        self.instance.topic = "%s-%s" % (self.instance, self.instance.__class__.__name__)
 
     def save(self, *args, **kwargs):
         self.instance.datetime_function = self.datetime_form.save()
@@ -107,7 +117,7 @@ class DayFunctionForm(forms.ModelForm):
 TicketFormSet = inlineformset_factory(Ticketeable, Ticket,
                                       form=TicketForm,
                                       formset=BaseTicketFormSet,
-                                      extra=1, can_order=False,
+                                      can_order=False,
                                       can_delete=True)
 
 DayFunctionFormSet = inlineformset_factory(PlayTheater,
@@ -115,9 +125,56 @@ DayFunctionFormSet = inlineformset_factory(PlayTheater,
                                            fk_name='play_theater',
                                            form=DayFunctionForm,
                                            formset=BaseDayFuntionFormSet,
-                                           extra=1,
                                            can_order=False,
                                            can_delete=True)
+
+
+class ProfileCreateForm(forms.ModelForm):
+    photo = forms.ImageField(label="Foto de perfil")
+
+    class Meta:
+        fields = ("user", "name", "surname", "facebook", "twitter", "photo")
+        widgets = {'user': forms.HiddenInput(),
+                   'facebook': forms.TextInput(attrs={'placeholder': "my.facebook"}),
+                   'twitter': forms.TextInput(attrs={'placeholder': "@mytwitter"}),
+                   'name': forms.TextInput(attrs={'placeholder': "Mi nombre"}),
+                   'surname': forms.TextInput(attrs={'placeholder': "Mi apellido"}),
+                   }
+        labels = {'name': 'Nombre', 'surname': 'Apellido'}
+
+    def __init__(self, *args, **kwargs):
+        super(ProfileCreateForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+    def clean_twitter(self):
+        if self.cleaned_data["twitter"]:
+            self.cleaned_data["twitter"] = regex_account_twitter(self.cleaned_data["twitter"])
+            if self.cleaned_data["twitter"] is None:
+                raise forms.ValidationError('El usuario de twitter no es valido')
+        return self.cleaned_data["twitter"]
+
+    def clean_facebook(self):
+        if self.cleaned_data["facebook"]:
+            self.cleaned_data["facebook"] = regex_url_facebook(self.cleaned_data["facebook"])
+            if self.cleaned_data["facebook"] is None:
+                raise forms.ValidationError('El usuario de facebook no es valido')
+        return self.cleaned_data["facebook"]
+
+
+class ActorCreateForm(ProfileCreateForm):
+    class Meta(ProfileCreateForm.Meta):
+        model = Actor
+
+
+class TheaterCreateForm(ProfileCreateForm):
+    class Meta(ProfileCreateForm.Meta):
+        model = OwnerTheater
+
+
+class SpectatorCreateForm(ProfileCreateForm):
+    class Meta(ProfileCreateForm.Meta):
+        model = Spectators
 
 
 class UserCreateForm(UserCreationForm):

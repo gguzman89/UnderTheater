@@ -11,10 +11,14 @@
         </thead>
         <tbody>
         {% for ticket_form in ticket_form %}
+ 
         <tr id="{{ ticket_form.prefix }}-row" class="form-container">
             <td>{{ ticket_form.ticket_name}}</td>
             <td>{{ticket_form.price}}</td>
         </tr>
+        {% for hidden in ticket_form.hidden_fields %}
+                {{ hidden }}
+        {% endfor %}
         {% endfor %}
         </tbody>
     </table>

@@ -119,6 +119,9 @@ var utApp = utApp  || {};
         init_datefunction_select($("#day_function_form"));
 
         $(theater_select).change(getTheaterRooms);
+
+        $("#id_photo").filestyle({buttonName: "btn-blue", "input":false, "iconName":"fa fa-camera-retro",
+                                    'buttonText':"Elegir foto de perfil"});
        
     };
 

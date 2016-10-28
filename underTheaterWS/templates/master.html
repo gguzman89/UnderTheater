@@ -36,6 +36,16 @@
 {% block main_header %} {% include "main_header.html" %}{% endblock main_header %}
 
 <div class="container">
+    {% if messages %}
+    <div id="contenido">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">  <!-- singular -->
+            <a class="close" data-dismiss="alert">×</a>
+            {{ message|safe }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     {% block content %}
     {% endblock %}
 </div>
