@@ -2,10 +2,11 @@
 import time
 import os
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.contrib.auth.models import User
 from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxWebDriver
 from selenium.webdriver.chrome.webdriver import WebDriver as ChromeWebDriver
 from selenium.webdriver.phantomjs.webdriver import WebDriver as PhatomWebDriver
-from underTheaterApp.factories import PlayTheaterFactory, UserFactory
+from underTheaterApp.factories import PlayTheaterFactory, UserFactory, OwnerTheaterFactory
 from underTheaterApp.models import PlayTheater
 from django.contrib.auth.hashers import make_password
 from django.core.cache import cache
@@ -180,6 +181,9 @@ class LoginAndRegisterViewTestCase(BaseSeleniumTests):
 
         # Y por ultimo s e aceptan los cambios
         register_form.find_element_by_css_selector('button[type="submit"]').click()
+        user = User.objects.get(username=username)
+        OwnerTheaterFactory(user=user)
+        self.open()
 
     def test_a_user_register_in_app(self):
         "Test que registra un usuario en la app"
@@ -262,6 +266,9 @@ class LoginAndRegisterViewTestCase(BaseSeleniumTests):
         login_form.find_element_by_css_selector('button[type="submit"]').click()
 
         time.sleep(1)
+
+        OwnerTheaterFactory(user=user)
+        self.open()
 
         # Entonces se redirige a la pagina principal
         login_menu = self.selenium.find_element_by_css_selector("#login_menu")
