@@ -22,7 +22,7 @@ class Contact(models.Model):
         return u"%s" % self.pk
 
     def __unicode__(self):
-        return u"%s" % self.pk
+        return u"%s" % self.address
 
 
 class Profile(models.Model):

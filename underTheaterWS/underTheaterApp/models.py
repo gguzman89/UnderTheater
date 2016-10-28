@@ -38,6 +38,9 @@ class TheaterRoom(models.Model):
 class Ticketeable(PolymorphicModel):
     topic = models.CharField(max_length=250)
 
+    def __unicode__(self):
+        return u"%s" % self.topic
+
 
 class PlayTheater(Ticketeable):
     play_name = models.CharField(max_length=200)
