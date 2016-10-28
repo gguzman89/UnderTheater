@@ -27,42 +27,22 @@
                     </div>
                 </form>
                 <ul class="nav navbar-nav navbar-right">
-                {% if user.is_authenticated and not user.profile %}
-                    <li>
-                        <a  class="page-scroll" id="select_profile" href="{% url 'select_profile' %}">Completa tu perfil</a>
-                    </li>
-                {% else %}
-                    <li>
-                        <a  class="page-scroll" id="my_profile" href="{% url 'profile_detail' user.profile.pk %}">Perfil</a>
-                    </li>
-                {% endif %}
-
                 {% if user.is_authenticated %}
                     <li>
                         <a  class="page-scroll" id="create_play" href="{% url 'underTheaterApp:create_playtheater' %}">Crear obra</a>
                     </li>
                 {% endif %}
-                    <!--
-                    <li>
-                        <a class="page-scroll" href="#services">Services</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#portfolio">Portfolio</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#about">About</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#team">Team</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#contact">Contact</a>
-                    </li>
-                 -->
+
                 {% if user.is_authenticated %}
+                    {% if user.profile %}
                     <li>
-                    <a class="page-scroll" id="login_menu" href="#contact">{{user.username}}</a>
+                    <a  class="page-scroll" id="login_menu" href="{% url 'profile_detail' user.profile.pk %}">{{user.username}}</a>
                     </li>
+                    {% else %}
+                    <li>
+                        <a  class="page-scroll" id="select_profile" href="{% url 'select_profile' %}">Completa tu perfil</a>
+                    </li>
+                    {% endif %}
                     <li>
                     <a class="page-scroll" id="logout" href="{% url 'logout_user' %}">
                       <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>

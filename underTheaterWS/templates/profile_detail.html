@@ -11,17 +11,20 @@
             </div>
             <div class="btn-group">
                 {% if object.user.email %}
-                <a type="button" href="mailto:{{object.user.email}}"class="btn btn-lg btn-danger">
+                <a type="button" href="mailto:{{object.user.email}}" data-toggle="tooltip" 
+                    title="enviar email al usuario" class="btn btn-lg btn-danger">
                     <i class="fa fa-at" aria-hidden="true"></i>
                 </a>
                 {% endif %}
                 {% if object.twitter %}
-                <a type="button" href="{{object.twitter_url}}" class="btn btn-lg btn-info">
+                <a type="button" href="{{object.twitter_url}}" data-toggle="tooltip" 
+                    title="twitter del usuario" class="btn btn-lg btn-info">
                     <i class="fa fa-twitter" aria-hidden="true"></i>
                 </a>
                 {% endif %}
                 {% if object.facebook %}
-                <a type="button" href="{{object.facebook_url}}" class="btn btn-lg btn-blue">
+                <a type="button" href="{{object.facebook_url}}" data-toggle="tooltip" 
+                    title="facebook del usuario" class="btn btn-lg btn-blue">
                     <i class="fa fa-facebook" aria-hidden="true"></i>
                 </a>
                 {% endif %}

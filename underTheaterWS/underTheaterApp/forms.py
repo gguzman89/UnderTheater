@@ -134,7 +134,12 @@ class ProfileCreateForm(forms.ModelForm):
 
     class Meta:
         fields = ("user", "name", "surname", "facebook", "twitter", "photo")
-        widgets = {'user': forms.HiddenInput()}
+        widgets = {'user': forms.HiddenInput(),
+                   'facebook': forms.TextInput(attrs={'placeholder': "my.facebook"}),
+                   'twitter': forms.TextInput(attrs={'placeholder': "@mytwitter"}),
+                   'name': forms.TextInput(attrs={'placeholder': "Mi nombre"}),
+                   'surname': forms.TextInput(attrs={'placeholder': "Mi apellido"}),
+                   }
         labels = {'name': 'Nombre', 'surname': 'Apellido'}
 
     def __init__(self, *args, **kwargs):
