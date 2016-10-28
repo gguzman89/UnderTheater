@@ -35,11 +35,11 @@ class OwnerTheaterFactory(DjangoModelFactory):
     class Meta:
         model = OwnerTheater
 
+    user = factory.SubFactory(UserFactory)
     name = factory.Sequence(lambda n: 'name%s' % n)
     surname = factory.Sequence(lambda n: 'surname%s' % n)
     twitter = factory.Sequence(lambda n: 'twitter%s' % n)
     facebook = factory.Sequence(lambda n: 'facebook%s' % n)
-    user = factory.SubFactory(UserFactory)
 
 
 class ContactFactory(DjangoModelFactory):
@@ -76,6 +76,8 @@ class ActorFactory(DjangoModelFactory):
         model = models.Actor
 
     name = factory.Sequence(lambda n: 'actor%s' % n)
+    surname = factory.Sequence(lambda n: 'surname%s' % n)
+    user = factory.SubFactory(UserFactory)
 
 
 class DateTimeFunctionFactory(DjangoModelFactory):
