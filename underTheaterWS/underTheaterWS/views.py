@@ -3,10 +3,11 @@ from django.views.generic import TemplateView, ListView, CreateView, DetailView
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from underTheaterApp.models import PlayTheater
-from underTheaterApp.users import Profile
+from underTheaterApp.users import OwnerTheater, Actor, Spectators
 from underTheaterApp.forms import UserCreateForm, TheaterCreateForm, ActorCreateForm, SpectatorCreateForm
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.http import Http404
 
 
 class HomeView(TemplateView):
@@ -80,5 +81,16 @@ class ProfileCreateView(CreateView):
 
 
 class ProfileDetailView(DetailView):
-    model = Profile
     template_name = 'profile_detail.html'
+
+    def get_object(self):
+        klass = [OwnerTheater, Actor, Spectators]
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        obj = None
+        for cl in klass:
+            obj = cl.objects.filter(pk=pk)
+            if obj:
+                break
+        if not obj:
+            raise Http404("El perfil no existe")
+        return obj[0]

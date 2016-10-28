@@ -6,31 +6,45 @@
     <h1>El perfil de {{object.name}}</h1>
     <div class="row">
         <div class="col-md-3">
-            <img src="{{ object.photo_url }}" class="img-thumbnail-custom" style="width: 90%;"/>
+            <div class="form-group">
+                <img src="{{ object.photo_url }}" class="img-thumbnail-custom" style="width: 90%;"/>
+            </div>
+            <div class="btn-group">
+                {% if object.user.email %}
+                <a type="button" href="mailto:{{object.user.email}}"class="btn btn-lg btn-danger">
+                    <i class="fa fa-at" aria-hidden="true"></i>
+                </a>
+                {% endif %}
+                {% if object.twitter %}
+                <a type="button" href="{{object.twitter_url}}" class="btn btn-lg btn-info">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+                {% endif %}
+                {% if object.facebook %}
+                <a type="button" href="{{object.facebook_url}}" class="btn btn-lg btn-blue">
+                    <i class="fa fa-facebook" aria-hidden="true"></i>
+                </a>
+                {% endif %}
+            </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-9">
             <div class="well">
-                <dl class="dl-horizontal">
-                    <dt>Username</dt>
-                    <dd>{{object.user.username}}</dd>
-                    <dt>Nombre</dt>
-                    <dd>{{object.name}}</dd>
-                    <dt>Apellido</dt>
-                    <dd>{{object.surname}}</dd>
-
-                    {% if object.user.email %}
-                    <dt>Email</dt>
-                    <dd>{{object.user.email|urlize}}</dd>
-                    {% endif %}
-                    {% if object.twitter %}
-                    <dt><i class="fa fa-twitter" aria-hidden="true"></i> Twitter</dt>
-                    <dd><a href="{{object.twitter_url}}">{{object.twitter}}</a></dd>
-                    {% endif %}
-                    {% if object.facebook %}
-                    <dt><i class="fa fa-facebook" aria-hidden="true"></i> Facebook</dt>
-                    <dd><a href="{{object.facebook_url}}">{{object.facebook}}</a></dd>
-                    {% endif %}
-                </dl>
+                <h2 class="text-center">Datos personales</h2>
+                <hr style="clear:both;"/> 
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>Nombre</h4>
+                        <p>{{object.name}}</p>
+                        <h4>Apellido</h4>
+                        {{object.surname}}
+                    </div>
+                    <div class="col-sm-6">
+                        <h4>Nombre de usuario</h4>
+                        {{object.user.username}}
+                        <h4>Role</h4>
+                        {{object.get_role}}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
