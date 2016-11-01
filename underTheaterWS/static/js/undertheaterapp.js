@@ -113,7 +113,6 @@ var utApp = utApp  || {};
 
         $("#id_picture").filestyle({buttonName: "btn-blue", "input":false, "iconName":"fa fa-camera-retro",
                                     'buttonText':"Elegir foto"});
-
         
         $("#select_datefunction").change(change_type_date_select);
 

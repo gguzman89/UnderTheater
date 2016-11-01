@@ -343,13 +343,7 @@ class CreatePublicationViewTestsCase(BaseSeleniumTests):
         self.room_theater = RoomTheaterFactory(theater=self.theater)
         self.actor = ActorFactory.create()
 
-    def test_createa_a_new_play_publication(self):
-
-        self.login_user()
-
-        # hace click en el boton para crear obra
-        self.selenium.find_element_by_css_selector("#create_play").click()
-        create_play_form = self.selenium.find_element_by_css_selector("#create_play_form")
+    def _complete_new_publication(self, create_play_form):
 
         # completa con nombre de obra
         title = "Juan baila"
@@ -369,19 +363,6 @@ class CreatePublicationViewTestsCase(BaseSeleniumTests):
         # un actor
         self.click_select_option("#id_actors", self.actor.get_complete_name)
 
-        # un tipo de fecha
-        self.click_select_option("#select_datefunction", u"Fecha única")
-
-        # una hora
-        hour = "12:30"
-        self.click_select_option("#id_hour", hour)
-
-        # una fecha
-        date = "11/03/2016"
-        date_input = create_play_form.find_element_by_css_selector("#id_since")
-        date_input.clear()
-        date_input.send_keys(date)
-
         # un precio
         ticket_name = "Jubilados"
         price_name_input = create_play_form.find_element_by_css_selector("#id_ticket_related-0-ticket_name")
@@ -395,14 +376,9 @@ class CreatePublicationViewTestsCase(BaseSeleniumTests):
 
         self.upload_image("#id_picture")
 
-        # Y por ultimo se aceptan los cambios
-        create_play_form.find_element_by_css_selector('button[type="submit"]').click()
+        return price, ticket_name, title, sinopsis
 
-        time.sleep(1)
-
-        # Entonces se redirige a la pagina de detalles de obra y el objecto obra
-        # se tiene que haber creado
-        play = PlayTheater.objects.get(play_name=title)
+    def _check_play_detail_view(self, play, title, ticket_name, price, since_date, hour):
         detail_title = self.selenium.find_element_by_tag_name("h1")
         ticket = play.tickets()[0]
         play_url = "/play_theater/%s/" % play.id
@@ -417,3 +393,106 @@ class CreatePublicationViewTestsCase(BaseSeleniumTests):
         self.assertEqual(actor.get_complete_name, self.actor.get_complete_name)
         self.assertEqual(day_function.theater.name, self.theater.name)
         self.assertEqual(day_function.room_theater.room_name, self.room_theater.room_name)
+        self.assertEqual(day_function.datetime_function.since.strftime("%d/%m/%Y"), since_date)
+        self.assertTrue(hour in day_function.datetime_function.hours())
+
+    def test_create_a_new_play_publication_with_only_date(self):
+
+        self.login_user()
+
+        # hace click en el boton para crear obra
+        self.selenium.find_element_by_css_selector("#create_play").click()
+        create_play_form = self.selenium.find_element_by_css_selector("#create_play_form")
+        price, ticket_name, title, sinopsis = self._complete_new_publication(create_play_form)
+
+        # un tipo de fecha
+        self.click_select_option("#select_datefunction", u"Fecha única")
+
+        # una hora
+        hour = "12:30"
+        self.click_select_option("#id_hour", hour)
+
+        # una fecha
+        date = "11/03/2016"
+        date_input = create_play_form.find_element_by_css_selector("#id_since")
+        date_input.clear()
+        date_input.send_keys(date)
+
+        # Y por ultimo se aceptan los cambios
+        create_play_form.find_element_by_css_selector('button[type="submit"]').click()
+
+        time.sleep(1)
+
+        # Entonces se redirige a la pagina de detalles de obra y el objecto obra
+        # se tiene que haber creado
+        play = PlayTheater.objects.get(play_name=title)
+
+        self._check_play_detail_view(play, title, ticket_name, price, date, hour)
+
+    def test_create_a_new_play_publication_with_periodic_date(self):
+
+        self.login_user()
+
+        # hace click en el boton para crear obra
+        self.selenium.find_element_by_css_selector("#create_play").click()
+        create_play_form = self.selenium.find_element_by_css_selector("#create_play_form")
+
+        price, ticket_name, title, sinopsis = self._complete_new_publication(create_play_form)
+
+        # un tipo de fecha
+        self.click_select_option("#select_datefunction", u"Fecha periódica")
+
+        # una hora
+        hour = "12:30"
+        self.click_select_option("#id_hour", hour)
+
+        # una fecha
+        since_date = "11/03/2016"
+        date_input = create_play_form.find_element_by_css_selector("#id_since")
+        date_input.clear()
+        date_input.send_keys(since_date)
+
+        # una fecha
+        until_date = "23/03/2016"
+        until_date_input = create_play_form.find_element_by_css_selector("#id_until")
+        until_date_input.clear()
+        until_date_input.send_keys(until_date)
+
+        # dia de la semana
+        periodic = "Lunes"
+        self.click_select_option("#id_periodic_date", periodic)
+
+        # Y por ultimo se aceptan los cambios
+        create_play_form.find_element_by_css_selector('button[type="submit"]').click()
+
+        time.sleep(1)
+
+        # Entonces se redirige a la pagina de detalles de obra y el objecto obra
+        # se tiene que haber creado
+        play = PlayTheater.objects.get(play_name=title)
+        day_function = play.day_functions()[0]
+        self._check_play_detail_view(play, title, ticket_name, price, since_date, hour)
+
+        self.assertEqual(day_function.datetime_function.until.strftime("%d/%m/%Y"), until_date)
+        self.assertTrue(periodic in day_function.datetime_function.periodic_dates())
+
+    def test_fail_create_a_new_play_publication(self):
+
+        self.login_user()
+
+        # hace click en el boton para crear obra
+        self.selenium.find_element_by_css_selector("#create_play").click()
+        create_play_form = self.selenium.find_element_by_css_selector("#create_play_form")
+        # Y por ultimo se aceptan los cambios
+        create_play_form.find_element_by_css_selector('button[type="submit"]').click()
+
+        errors = self.selenium.find_elements_by_css_selector(".alert-danger")
+        errors = filter(lambda x: x.text != "", errors)
+        list_errors = [
+            u"Tiene que haber al menos una entrada",
+            u"This field is required.",
+        ]
+
+        for a in errors:
+            self.assertTrue(a.is_displayed())
+            self.assertTrue(a.text in list_errors)
