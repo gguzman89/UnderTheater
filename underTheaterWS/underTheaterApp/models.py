@@ -65,6 +65,12 @@ class PlayTheater(Ticketeable):
     def tickets(self):
         return self.ticket_related.all()
 
+    def all_actors(self):
+        return self.actors.all()
+
+    def day_functions(self):
+        return self.day_function.all()
+
     def __unicode__(self):
         return u"%s" % self.play_name
 

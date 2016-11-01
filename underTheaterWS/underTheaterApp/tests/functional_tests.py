@@ -1,12 +1,14 @@
 # vim: set fileencoding=utf-8 :
 import time
 import os
+from django.conf import settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.contrib.auth.models import User
 from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxWebDriver
 from selenium.webdriver.chrome.webdriver import WebDriver as ChromeWebDriver
 from selenium.webdriver.phantomjs.webdriver import WebDriver as PhatomWebDriver
-from underTheaterApp.factories import PlayTheaterFactory, UserFactory, OwnerTheaterFactory
+from underTheaterApp.factories import PlayTheaterFactory, UserFactory, OwnerTheaterFactory,\
+    TheaterFactory, RoomTheaterFactory, ActorFactory
 from underTheaterApp.models import PlayTheater
 from django.contrib.auth.hashers import make_password
 from django.core.cache import cache
@@ -22,12 +24,25 @@ class BaseSeleniumTests(StaticLiveServerTestCase):
         super(BaseSeleniumTests, self).setUp()
         self.selenium = self.webs_driver[self.driver_type]()
         self.addCleanup(self.selenium.quit)
-        self.selenium.set_window_size(1024, 768)
+        self.selenium.maximize_window()
         self.selenium.implicitly_wait(10)
 
     def open(self, url=None):
         url = url if url else '/'
         self.selenium.get('%s%s' % (self.live_server_url, url))
+
+    def click_select_option(self, id, option):
+        element = self.selenium.find_element_by_css_selector(id)
+        all_options = element.find_elements_by_tag_name("option")
+        for opt in all_options:
+            if opt.text == option:
+                opt.click()
+
+    def upload_image(self, id):
+        TEST_IMAGE = os.path.join(settings.STATICFILES_DIRS[0], "logo.png")
+        picture_input = self.selenium.find_element_by_css_selector(id)
+        picture_input.clear()
+        picture_input.send_keys(TEST_IMAGE)
 
     def login_user(self, user_login=None, password=None):
 
@@ -322,73 +337,83 @@ class LoginAndRegisterViewTestCase(BaseSeleniumTests):
 class CreatePublicationViewTestsCase(BaseSeleniumTests):
     driver_type = "firefox"
 
-    def _test_createa_a_new_play_publication(self):
+    def setUp(self):
+        super(CreatePublicationViewTestsCase, self).setUp()
+        self.theater = TheaterFactory.create()
+        self.room_theater = RoomTheaterFactory(theater=self.theater)
+        self.actor = ActorFactory.create()
 
-        user = self.login_user()
-        """
-        play_name
-        synopsis
-        picture
-        theater
-        room_theater
-        datetime_show
-        price
-        """
+    def test_createa_a_new_play_publication(self):
+
+        self.login_user()
 
         # hace click en el boton para crear obra
         self.selenium.find_element_by_css_selector("#create_play").click()
         create_play_form = self.selenium.find_element_by_css_selector("#create_play_form")
 
         # completa con nombre de obra
+        title = "Juan baila"
         play_name_input = create_play_form.find_element_by_css_selector("#id_play_name")
         play_name_input.clear()
-        play_name_input.send_keys("Juan baila")
+        play_name_input.send_keys(title)
 
         # una sypnosis
+        sinopsis = "una obra muy entretenida"
         synopsis_input = create_play_form.find_element_by_css_selector("#id_synopsis")
         synopsis_input.clear()
-        synopsis_input.send_keys("Una obra muy entretenida")
+        synopsis_input.send_keys(sinopsis)
 
-        TEST_IMAGE = os.path.join(os.path.dirname("static/"), 'test.png')
-        create_play_form.find_element_by_id("#id_picture").click()
-        input_picture = self.selenium.find_element_by_css_selector('input[type="file"]').clear()
-        input_picture.send_keys(TEST_IMAGE)
+        # un teatro
+        self.click_select_option("#id_dayfunction_related-0-theater", self.theater.name)
 
-        # seleccionar una teatro
-        """
-        element = driver.find_element_by_xpath("//select[@name='name']")
-        all_options = element.find_elements_by_tag_name("option")
-        for option in all_options:
-            print("Value is: %s" % option.get_attribute("value"))
-            option.click()
-        """
+        # un actor
+        self.click_select_option("#id_actors", self.actor.get_complete_name)
 
-        # seleccionar una sala
-        """
+        # un tipo de fecha
+        self.click_select_option("#select_datefunction", u"Fecha única")
 
-        element = driver.find_element_by_xpath("//select[@name='name']")
-        all_options = element.find_elements_by_tag_name("option")
-        for option in all_options:
-            print("Value is: %s" % option.get_attribute("value"))
-            option.click()
-        """
-        # seleccionar una dia
-        """
+        # una hora
+        hour = "12:30"
+        self.click_select_option("#id_hour", hour)
 
-        element = driver.find_element_by_xpath("//select[@name='name']")
-        all_options = element.find_elements_by_tag_name("option")
-        for option in all_options:
-            print("Value is: %s" % option.get_attribute("value"))
-            option.click()
-        """
-        # selecciona una dia
-        price_name_input = create_play_form.find_element_by_css_selector("#id_price_name")
+        # una fecha
+        date = "11/03/2016"
+        date_input = create_play_form.find_element_by_css_selector("#id_since")
+        date_input.clear()
+        date_input.send_keys(date)
+
+        # un precio
+        ticket_name = "Jubilados"
+        price_name_input = create_play_form.find_element_by_css_selector("#id_ticket_related-0-ticket_name")
         price_name_input.clear()
-        price_name_input.send_keys("Jubilados")
+        price_name_input.send_keys(ticket_name)
 
-        price_input = create_play_form.find_element_by_css_selector("#id_price")
+        price = "200"
+        price_input = create_play_form.find_element_by_css_selector("#id_ticket_related-0-price")
         price_input.clear()
-        price_input.send_keys("200")
+        price_input.send_keys(price)
 
-        # Y por ultimo s e aceptan los cambios
+        self.upload_image("#id_picture")
+
+        # Y por ultimo se aceptan los cambios
         create_play_form.find_element_by_css_selector('button[type="submit"]').click()
+
+        time.sleep(1)
+
+        # Entonces se redirige a la pagina de detalles de obra y el objecto obra
+        # se tiene que haber creado
+        play = PlayTheater.objects.get(play_name=title)
+        detail_title = self.selenium.find_element_by_tag_name("h1")
+        ticket = play.tickets()[0]
+        play_url = "/play_theater/%s/" % play.id
+        actor = play.all_actors()[0]
+        day_function = play.day_functions()[0]
+
+        self.assertEqual(title.upper(), detail_title.text)
+        self.assertTrue(play_url in self.selenium.current_url)
+        self.assertEqual(play.play_name, title)
+        self.assertEqual(ticket.ticket_name, ticket_name)
+        self.assertEqual(ticket.price, price)
+        self.assertEqual(actor.get_complete_name, self.actor.get_complete_name)
+        self.assertEqual(day_function.theater.name, self.theater.name)
+        self.assertEqual(day_function.room_theater.room_name, self.room_theater.room_name)

@@ -46,8 +46,12 @@ class Profile(models.Model):
     def twitter_url(self):
         return "//twitter.com/%s" % self.twitter
 
-    def __unicode__(self):
+    @property
+    def get_complete_name(self):
         return u"%s %s" % (self.name, self.surname)
+
+    def __unicode__(self):
+        return self.get_complete_name
 
 
 class Actor(Profile):
