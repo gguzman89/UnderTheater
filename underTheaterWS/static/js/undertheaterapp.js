@@ -51,10 +51,10 @@ var utApp = utApp  || {};
 
         $(".datetime_form .hour").removeClass("hidden");
 
-        if (date_option =="only"){
+        if (date_option =="only_date"){
             $(since).removeClass("hidden");
             $(until).addClass("hidden").removeProp("required").val("");
-            $(periodic).addClass("hidden").removeProp("required").select2("val", "");
+            $(periodic).addClass("hidden").removeProp("required");
         }else{
             $(since).removeClass("hidden").prop('required', true);
             $(until).removeClass("hidden").prop('required', true);
@@ -65,7 +65,8 @@ var utApp = utApp  || {};
     function init_datefunction_select(form){
         var errors = $(form).find(".alert-danger"),
             val = $("#select_date_value").val();
-        if (errors.length > 0){
+
+        if (errors.length > 0 && val){
             $("#select_datefunction").select2("val", [val]);
         }
     }
