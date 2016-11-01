@@ -4,6 +4,7 @@ from django.db import models
 from address.models import Address
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.urls import reverse
 
 
 class Contact(models.Model):
@@ -49,6 +50,9 @@ class Profile(models.Model):
     @property
     def get_complete_name(self):
         return u"%s %s" % (self.name, self.surname)
+
+    def get_absolute_url(self):
+        return reverse("profile_detail", kwargs={"pk": self.pk})
 
     def __unicode__(self):
         return self.get_complete_name

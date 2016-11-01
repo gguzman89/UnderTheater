@@ -6,7 +6,7 @@
     <h1>Completa tu perfil</h1>
     <div class="row">
         <div class="col-md-4">
-            <div class="thumbnail-custom background-green">
+            <div class="thumbnail-custom background-green" id="select_spectator">
                 <a href="{% url "create_profile"%}?profile=spectator">
                     <img src="{% static 'img/espectador.png' %}" class="img-thumbnail-custom background-green"/>
                 </a>
@@ -18,7 +18,7 @@
         </div>
         <div class="col-md-4">
             <div class="thumbnail-custom background-sky">
-                <a href="{% url "create_profile"%}?profile=actor">
+                <a href="{% url "create_profile"%}?profile=actor" id="select_actor">
                     <img src="{% static 'img/Actor.png'%}" class="img-thumbnail-custom background-sky"/>
                 </a>
                 <div class="caption text-center">
@@ -29,7 +29,7 @@
         </div>
         <div class="col-md-4">
             <div class="thumbnail-custom background-red">
-                <a href="{% url "create_profile"%}?profile=theater">
+                <a href="{% url "create_profile"%}?profile=theater" id="select_theater">
                     <img src="{% static 'img/teatro.png'%}" class="img-thumbnail-custom background-red"/>
                 </a>
                 <div class="caption text-center">

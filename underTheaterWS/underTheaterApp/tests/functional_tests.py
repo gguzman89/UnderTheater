@@ -9,6 +9,7 @@ from selenium.webdriver.chrome.webdriver import WebDriver as ChromeWebDriver
 from selenium.webdriver.phantomjs.webdriver import WebDriver as PhatomWebDriver
 from underTheaterApp.factories import PlayTheaterFactory, UserFactory, OwnerTheaterFactory,\
     TheaterFactory, RoomTheaterFactory, ActorFactory
+from underTheaterApp.users import OwnerTheater, Actor, Spectators
 from underTheaterApp.models import PlayTheater
 from django.contrib.auth.hashers import make_password
 from django.core.cache import cache
@@ -496,3 +497,96 @@ class CreatePublicationViewTestsCase(BaseSeleniumTests):
         for a in errors:
             self.assertTrue(a.is_displayed())
             self.assertTrue(a.text in list_errors)
+
+
+class CreateProfileTestCase(BaseSeleniumTests):
+    driver_type = "firefox"
+
+    def _complete_profil_as(self, profile):
+        profile_dict = {"owner_theater": "#select_theater",
+                        "actor": "#select_actor", "spectator": "#select_spectator"}
+
+        # hace click en el boton para crear perfil
+        self.selenium.find_element_by_css_selector("#select_profile").click()
+
+        self.selenium.find_element_by_css_selector(profile_dict.get(profile)).click()
+        profile_form = self.selenium.find_element_by_css_selector("#create_profile_form")
+
+        # completa con nombre de perfil
+        name = "Juan"
+        name_input = profile_form.find_element_by_css_selector("#id_name")
+        name_input.clear()
+        name_input.send_keys(name)
+
+        # Apellido
+        surname = "Topo"
+        surname_input = profile_form.find_element_by_css_selector("#id_surname")
+        surname_input.clear()
+        surname_input.send_keys(surname)
+
+        # facebook
+        facebook = "Juan.Topo"
+        facebook_input = profile_form.find_element_by_css_selector("#id_facebook")
+        facebook_input.clear()
+        facebook_input.send_keys(facebook)
+
+        # twitter
+        twitter = "Topo"
+        twitter_input = profile_form.find_element_by_css_selector("#id_twitter")
+        twitter_input.clear()
+        twitter_input.send_keys(twitter)
+
+        # Y una foto de perfil
+        self.upload_image("#id_photo")
+        # se aceptan los cambios
+        profile_form.find_element_by_css_selector('button[type="submit"]').click()
+
+        return name, surname, facebook, twitter
+
+    def test_create_profile_as_owner_theater(self):
+
+        user = self.login_user()
+        name, surname, facebook, twitter = self._complete_profil_as("owner_theater")
+
+        # Nos redirige a la pagina del perfil y se crear un perfil para el
+        # usuario
+        profile = OwnerTheater.objects.get(user=user)
+
+        profile_url = "/profile/%s" % profile.id
+        self.assertTrue(profile_url in self.selenium.current_url)
+        self.assertEqual(profile.name, name)
+        self.assertEqual(profile.surname, surname)
+        self.assertEqual(profile.twitter, twitter)
+        self.assertEqual(profile.facebook, facebook)
+
+    def test_create_profile_as_actor(self):
+
+        user = self.login_user()
+        name, surname, facebook, twitter = self._complete_profil_as("actor")
+
+        # Nos redirige a la pagina del perfil y se crear un perfil para el
+        # usuario
+        profile = Actor.objects.get(user=user)
+
+        profile_url = "/profile/%s" % profile.id
+        self.assertTrue(profile_url in self.selenium.current_url)
+        self.assertEqual(profile.name, name)
+        self.assertEqual(profile.surname, surname)
+        self.assertEqual(profile.twitter, twitter)
+        self.assertEqual(profile.facebook, facebook)
+
+    def test_create_profile_as_spectator(self):
+
+        user = self.login_user()
+        name, surname, facebook, twitter = self._complete_profil_as("spectator")
+
+        # Nos redirige a la pagina del perfil y se crear un perfil para el
+        # usuario
+        profile = Spectators.objects.get(user=user)
+
+        profile_url = "/profile/%s" % profile.id
+        self.assertTrue(profile_url in self.selenium.current_url)
+        self.assertEqual(profile.name, name)
+        self.assertEqual(profile.surname, surname)
+        self.assertEqual(profile.twitter, twitter)
+        self.assertEqual(profile.facebook, facebook)

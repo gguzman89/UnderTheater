@@ -4,7 +4,7 @@
 {% block content %}
 <div id="contenido">
     <h1>Completa tu perfil como {{profile}}</h1>
-    <form enctype="multipart/form-data" method="post" id="create_play_form" novalidate>
+    <form enctype="multipart/form-data" method="post" id="create_profile_form" novalidate>
         {% csrf_token %}
         <div class="row">
             {{ form.non_field_errors }} 
@@ -42,10 +42,9 @@
             </div>
             <input type="hidden" name="user" value="{{user.id}}" id="id_user">
         </div>
-        </div>
         <div class="form-group">
             <button type="submit" class="btn btn-xl btn-block"/> Guardar</button>
-        </div> 
-    </div>
+        </div>
+    </form>
 </div>
 {% endblock %}

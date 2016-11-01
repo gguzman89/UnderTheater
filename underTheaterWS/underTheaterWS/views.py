@@ -59,7 +59,6 @@ class ProfileCreateView(CreateView):
     "Creates a new profile"
 
     template_name = "profile_create.html"
-    success_url = '/'
     model_dict = {"actor": ActorCreateForm, "spectator": SpectatorCreateForm, "theater": TheaterCreateForm}
     name_dict = {"actor": u"actor", "spectator": u"espectador", "theater": u"dueño de teatro"}
 
