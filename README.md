@@ -1,4 +1,4 @@
-[ ![Codeship Status for javierperini/UnderTheater](https://codeship.com/projects/bce799c0-5c51-0134-262f-7200b3d29332/status?branch=master)](https://codeship.com/projects/173663) 
+[ ![Codeship Status for javierperini/UnderTheater](https://codeship.com/projects/bce799c0-5c51-0134-262f-7200b3d29332/status)](https://codeship.com/projects/173663) 
 
 
 
