@@ -14,6 +14,11 @@
                 <div class="caption">
                     <h4 class="thumbnail-title" name="{{play.pk}}">{{ play.play_name }}</h4>
                     <p class="thumbnail-text">{{ play.synopsis }}</p>
+                    <div class="addthis_inline_share_toolbox" 
+                        data-title="{{play.play_name}}"
+                        data-url="{{ request.get_host }}{% url 'underTheaterApp:playtheater_detail' pk=play.pk %}"
+                        data-description="{{play.synopsis}}">
+                    </div>
                 </div>
             </div>
         </div>

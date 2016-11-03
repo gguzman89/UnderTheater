@@ -79,14 +79,14 @@ WSGI_APPLICATION = 'underTheaterWS.wsgi.application'
 
 DATABASES = {
     'default': {
-            'ENGINE': '',
-            'NAME': '',
-            'USER': '',
-            'PASSWORD': '',
-            'HOST': '',
-            'PORT': '',
-            'OPTIONS': {}
-        }
+        'ENGINE': '',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+        'OPTIONS': {},
+    }
 }
 
 # Password validation
