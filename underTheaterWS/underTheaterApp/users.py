@@ -25,6 +25,9 @@ class Contact(models.Model):
     def __unicode__(self):
         return u"%s" % self.address
 
+    def get_address(self):
+        return self.address.raw
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, related_name='profile')

@@ -71,6 +71,10 @@ class PlayTheater(Ticketeable):
     def day_functions(self):
         return self.day_function.all()
 
+    def get_address(self, theater_name):
+        theater = self.objects.filter(day_function__theater__name=theater_name)[0]
+        return theater.contact.raw
+
     def __unicode__(self):
         return u"%s" % self.play_name
 

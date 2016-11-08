@@ -8,7 +8,7 @@ from selenium.webdriver.firefox.webdriver import WebDriver as FirefoxWebDriver
 from selenium.webdriver.chrome.webdriver import WebDriver as ChromeWebDriver
 from selenium.webdriver.phantomjs.webdriver import WebDriver as PhatomWebDriver
 from underTheaterApp.factories import PlayTheaterFactory, UserFactory, OwnerTheaterFactory,\
-    TheaterFactory, RoomTheaterFactory, ActorFactory
+    TheaterFactory, RoomTheaterFactory, ActorFactory, DayFunctionFactory, DateTimeFunctionFactory
 from underTheaterApp.users import OwnerTheater, Actor, Spectators
 from underTheaterApp.models import PlayTheater
 from django.contrib.auth.hashers import make_password
@@ -159,6 +159,35 @@ class SearchViewTestsCase(BaseSeleniumTests):
 
         # y la tercer obra no aparece en los resultados
         self.assertEqual(len(search_result_3), 0)
+
+    def test_search_play_theater_by_zone(self):
+        """
+        Test que prueba la busqueda de obras de teatro cuando no hay ninguna
+        obra para devolver
+        """
+        # Creo una obra de teatro
+        play_theater = PlayTheaterFactory.create()
+        date = DateTimeFunctionFactory.create()
+        day_function = DayFunctionFactory(play_theater=play_theater, datetime_function=date)
+
+        # Entro a la app
+        self.open()
+
+        self.click_select_option("#search_type", "Zona")
+
+        # Lleno el buscador con el nombre de la obra a buscar
+        search_form = self.selenium.find_element_by_css_selector("#search_form")
+        search_input = search_form.find_element_by_css_selector(".search_term")
+        search_input.clear()
+        search_input.send_keys(day_function.theater.contact.get_address())
+        search_form.find_element_by_css_selector('button[type="submit"]').click()
+
+        # Se redirige a otra pagina con los resultados de la busquesda
+        search_result_1 = self.selenium.find_element_by_name(play_theater.pk)
+
+        # Entonces deberia las 2 obras en pantalla
+        self.assertTrue(search_result_1.is_displayed())
+        self.assertEqual(search_result_1.text, play_theater.play_name.upper())
 
     def tearDown(self):
         "Borro las imagenes despues de los test"
