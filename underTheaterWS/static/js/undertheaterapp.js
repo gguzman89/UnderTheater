@@ -28,8 +28,18 @@ var utApp = utApp  || {};
             prefix: prefix, 
             formCssClass: 'dynamic-contact-form',
             addCssClass: 'glyphicon glyphicon-plus add-row  btn btn-success ',
-            deleteCssClass: 'glyphicon glyphicon-remove del-row btn btn-danger ',
+            deleteCssClass: 'glyphicon glyphicon-minus del-row btn btn-danger ',
             addText: '',
+            deleteText: '',
+        });
+    }
+
+    ns.init_actor_formset = function init_actor_formset(prefix){
+        $('#actor_formset').formset({
+            prefix: prefix, 
+            addCssClass: 'glyphicon glyphicon-plus btn btn-success ',
+            deleteCssClass: 'glyphicon glyphicon-minus del-row-2 btn btn-danger ',
+            addText: 'Actor',
             deleteText: '',
         });
     }

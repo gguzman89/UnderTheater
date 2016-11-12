@@ -21,7 +21,6 @@
                                 {{play.play_name}}
                         </a></h3>
                         {% for day_function in play.day_function.all %}
-                        <div class="addthis_inline_share_toolbox"></div>
                         <h4>Fecha: {{day_function.datetime_function.since|date:"j/n/Y"}}</h4>
                         <h5>Horario: {{day_function.datetime_function.hours}}</h5>
                         {% endfor%}

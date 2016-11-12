@@ -395,12 +395,12 @@ class CreatePublicationViewTestsCase(BaseSeleniumTests):
 
         # un precio
         ticket_name = "Jubilados"
-        price_name_input = create_play_form.find_element_by_css_selector("#id_ticket_related-0-ticket_name")
+        price_name_input = create_play_form.find_element_by_css_selector("#id_ticket_prefix-0-ticket_name")
         price_name_input.clear()
         price_name_input.send_keys(ticket_name)
 
         price = "200"
-        price_input = create_play_form.find_element_by_css_selector("#id_ticket_related-0-price")
+        price_input = create_play_form.find_element_by_css_selector("#id_ticket_prefix-0-price")
         price_input.clear()
         price_input.send_keys(price)
 
@@ -520,6 +520,7 @@ class CreatePublicationViewTestsCase(BaseSeleniumTests):
         errors = filter(lambda x: x.text != "", errors)
         list_errors = [
             u"Tiene que haber al menos una entrada",
+            u"La obra tiene que tener un actor",
             u"This field is required.",
         ]
 

@@ -16,9 +16,16 @@ class PlayTheaterCreateView(CreateView):
     model = PlayTheater
     form_class = PlayTheaterForm
 
+    def _save_actors_formset(self, forms):
+        instances = []
+        for form in forms:
+            instances.append(form.save())
+        return instances
+
     @transaction.atomic
     def post(self, request, *args, **kwargs):
-        return super(PlayTheaterCreateView, self).post(request, *args, **kwargs)
+        play_theater = super(PlayTheaterCreateView, self).post(request, *args, **kwargs)
+        return play_theater
 
 
 class PlayTheaterUpdateView(UpdateView):

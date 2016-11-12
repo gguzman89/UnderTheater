@@ -1,0 +1,51 @@
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="add_actors_modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content background-black">
+            <div class="modal-header background-black">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Agregar Actores</h4>
+            </div>
+            <div class="modal-body background-black">
+{{ actors_form.management_form}}
+{% for form in actors_form %}
+{{form.id}}
+<div class="errors">{{form.non_field_errors}}</div>
+<div class="{{ actors_form.prefix }}" id="actor_formset">
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="form-group">
+                {{form.name.label_tag}}
+                {{form.name}}
+                <div class="help-block">{{form.name.help_text}}</div>
+                {% if form.name.errors %}<div class="alert alert-danger">{{form.name.errors}}</div>{% endif %}
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="form-group">
+                {{form.surname.label_tag}}
+                {{form.surname}}
+                <div class="help-block">{{form.surname.help_text}}</div>
+                {% if form.surname.errors %}<div class="alert alert-danger">{{form.surname.errors}}</div>{% endif %}
+            </div>
+        </div>
+        <div class="col-xs-5">
+            <div class="form-group">
+                {{form.photo.label_tag}}
+                {{form.photo}}
+                {% if form.photo.errors %}<div class="alert alert-danger">{{form.photo.errors}}</div>{% endif %}
+            </div>
+        </div>
+    </div>
+</div> 
+{% for hidden in form.hidden_fields %}
+{{ hidden }}
+{% endfor %} 
+{% endfor %}
+
+            </div>
+            <div class="modal-footer background-black">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>

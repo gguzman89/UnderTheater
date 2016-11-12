@@ -4,7 +4,7 @@
 {{form.id}}
 <div class="errors">{{form.non_field_errors}}</div>
 <div class="{{ day_function_form.prefix }}" id="day_function_form">
-    <div class="row">
+    <div class="row"style="margin-left: 1px;">
         <div class="col-md-4">
             <div class="form-group">
                 {{ form.theater.label_tag }}
@@ -35,7 +35,7 @@
         </div> 
     </div>
     <div class="datetime_form">
-        <div class="row">
+        <div class="row" style="margin-left: 1px;">
             <div class="col-xs-6">
                 <div class="form-group hour hidden">
                     {{ form.datetime_form.hour.label_tag }}
@@ -53,7 +53,7 @@
                 </div>
             </div> 
         </div> 
-        <div class="row">
+        <div class="row" style="margin-left: 1px;">
             {% with datetime_form=form.datetime_form %}
             <div class="col-xs-6">
                 <div class="form-group perdiodic_date hidden">

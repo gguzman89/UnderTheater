@@ -1,0 +1,38 @@
+<div id="add_actors">
+    {{ actors_form.management_form}}
+    {% for form in actors_form %}
+    {{form.id}}
+    <div class="errors">{{form.non_field_errors}}</div>
+    <div class="{{ actors_form.prefix }}" id="actor_formset">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    {{form.photo.label_tag}}
+                    {{form.photo}}
+                    <div class="help-block">{{form.photo.help_text}}</div>
+                    {% if form.photo.errors %}<div class="alert alert-danger">{{form.photo.errors}}</div>{% endif %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    {{form.name.label_tag}}
+                    {{form.name}}
+                    <div class="help-block">{{form.name.help_text}}</div>
+                    {% if form.name.errors %}<div class="alert alert-danger">{{form.name.errors}}</div>{% endif %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    {{form.surname.label_tag}}
+                    {{form.surname}}
+                    <div class="help-block">{{form.surname.help_text}}</div>
+                    {% if form.surname.errors %}<div class="alert alert-danger">{{form.surname.errors}}</div>{% endif %}
+                </div>
+            </div>
+        </div>
+    </div> 
+    {% for hidden in form.hidden_fields %}
+    {{ hidden }}
+    {% endfor %} 
+    {% endfor %}
+</div> 

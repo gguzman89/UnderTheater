@@ -1,7 +1,7 @@
 # vim: set fileencoding=utf-8 :
 from django import forms
 from django.utils import timezone
-from django.forms.models import inlineformset_factory
+from django.forms.models import inlineformset_factory, formset_factory
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from underTheaterApp.models import PlayTheater, DayFunction, Ticket,\
@@ -37,6 +37,30 @@ class BaseDayFuntionFormSet(forms.models.BaseInlineFormSet):
 
         if duplicate:
             raise forms.ValidationError('No se agregar funciones repetidas')
+
+
+class BaseActorFormSet(forms.BaseFormSet):
+
+    def __init__(self, *args, **kwargs):
+        super(BaseActorFormSet, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        """
+         Validaciones del form set de DayFunction
+        """
+        duplicate = False
+        actors = []
+
+        for form in self.forms:
+            if form.cleaned_data:
+                name = form.cleaned_data['name']
+                surname = form.cleaned_data['surname']
+                actors_dict = {"name": name, "surname": surname}
+                duplicate = duplicate or actors_dict in actors
+                actors.append(actors_dict)
+
+        if duplicate:
+            raise forms.ValidationError('No se pueden agregar actores repetidos')
 
 
 class BaseTicketFormSet(forms.models.BaseInlineFormSet):
@@ -230,6 +254,26 @@ class DateTimeFunctionForm(forms.ModelForm):
         return super(DateTimeFunctionForm, self).is_valid()
 
 
+class ActorWithoutUserForm(forms.ModelForm):
+    photo = forms.ImageField(label="Foto de perfil")
+
+    class Meta:
+        model = Actor
+        fields = ("name", "surname")
+        widgets = {'name': forms.TextInput(attrs={'class': 'form-control',
+                                                  'placeholder': "Mi nombre"}),
+                   'surname': forms.TextInput(attrs={'class': 'form-control-actors',
+                                                     'placeholder': "Mi apellido"})
+                   }
+        labels = {'name': 'Nombre', 'surname': 'Apellido'}
+
+    def __init__(self, *args, **kwargs):
+        super(ActorWithoutUserForm, self).__init__(*args, **kwargs)
+
+
+ActorFormSet = formset_factory(ActorWithoutUserForm,formset=BaseActorFormSet, extra=1, can_order=False, can_delete=True)
+
+
 class PlayTheaterForm(forms.ModelForm):
     picture = forms.ImageField(label="Foto de la obra")
 
@@ -253,17 +297,28 @@ class PlayTheaterForm(forms.ModelForm):
         self.day_function = DayFunctionFormSet(data=kwargs.get('data', None),
                                                instance=self.instance)
         self.ticket = TicketFormSet(data=kwargs.get('data', None),
-                                    instance=self.instance)
+                                    instance=self.instance, prefix="ticket_prefix")
+        self.create_actors = ActorFormSet(data=kwargs.get('data', None), prefix="actors_prefix")
+        self.fields['actors'].required = False
 
     def is_valid(self):
+        self.create_actors.files = self.files
         return super(PlayTheaterForm, self).is_valid()\
-            and self.ticket.is_valid() and self.day_function.is_valid()
+            and self.ticket.is_valid() and self.day_function.is_valid()\
+            and self.create_actors.is_valid()
 
     def get_errors(self):
         return self.form_errors
 
     def _check_error(self):
         self.form_errors = self.ticket.non_form_errors()
+        self.form_errors += self.create_actors.non_form_errors()
+
+    def clean(self):
+        if not self.cleaned_data.get("actors") and len(self.create_actors.forms) == 0:
+            raise forms.ValidationError('La obra tiene que tener un actor')
+
+        return super(PlayTheaterForm, self).clean()
 
     def has_errors(self):
         self._check_error()
@@ -275,11 +330,17 @@ class PlayTheaterForm(forms.ModelForm):
             topic = "%s-%s" % (self.instance.play_name[:100], self.instance.__class__.__name__)
         self.instance.topic = topic
 
+    def _save_actors_formset(self, new_play):
+        for form in self.create_actors.forms:
+            instance = form.save()
+            instance.playtheater_set.add(new_play)
+
     def save_formsets(self, new_play):
         self.ticket.instance = new_play
         self.day_function.instance = new_play
         self.ticket.save()
         self.day_function.save()
+        self._save_actors_formset(new_play)
 
     def save(self, *args, **kwargs):
         self.set_topic()
