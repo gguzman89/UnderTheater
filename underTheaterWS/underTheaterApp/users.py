@@ -27,7 +27,7 @@ class Contact(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, related_name='profile')
+    user = models.OneToOneField(User, related_name='profile', blank=True, null=True)
     name = models.CharField(max_length=200)
     surname = models.CharField(max_length=200)
     facebook = models.CharField(max_length=128, blank=True,
