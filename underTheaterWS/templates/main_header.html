@@ -1,64 +1,63 @@
-    <nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header page-scroll">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
-                </button>
+<nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+            </button>
             <a class="navbar-brand page-scroll" href="{% url 'home' %}">
                 UnderTheater
             </a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <form class="nav navbar-nav navbar-form navbar-left" role="search" id="search_form" method="get" action="/search">
-                    <div class="input-group hidden-xs" >
-                        <select class="form-control" name="type">
-                            <option value="play">Obras</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" class="form-control search_term"name="search_term" 
-                        value="{% if search %}{{search}}{% endif %}">
-                        <span class="input-group-btn">
-                            <button type="submit" class="btn btn-default"> <span class="glyphicon glyphicon-search"></span></button>
-                        </span>
-                    </div>
-                </form>
-                <ul class="nav navbar-nav navbar-right">
-                {% if user.is_authenticated %}
-                    <li>
-                        <a  class="page-scroll" id="create_play" href="{% url 'underTheaterApp:create_playtheater' %}">Crear obra</a>
-                    </li>
-                {% endif %}
-
-                {% if user.is_authenticated %}
-                    {% if user.profile %}
-                    <li>
-                    <a  class="page-scroll" id="login_menu" href="{% url 'profile_detail' user.profile.pk %}">{{user.username}}</a>
-                    </li>
-                    {% else %}
-                    <li>
-                        <a  class="page-scroll" id="select_profile" href="{% url 'select_profile' %}">Completa tu perfil</a>
-                    </li>
-                    {% endif %}
-                    <li>
-                    <a class="page-scroll" id="logout" href="{% url 'logout_user' %}">
-                      <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
-                    </a>
-                    </li>
-                {% else %}
-                    <li>
-                    <a class="page-scroll" id="login" href="{% url 'login_user' %}">Log in</a>
-                    </li>
-                    <li>
-                    <a class="page-scroll" id="register" href="{% url 'register_user' %}">Registrarse</a>
-                    </li>
-                {% endif %}
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
         </div>
-        <!-- /.container-fluid -->
-    </nav>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <form class="nav navbar-nav navbar-form navbar-left" role="search" id="search_form" method="get" action="/search">
+                <div class="input-group hidden-xs" >
+                    <select class="form-control" name="type" id="search_type">
+                        <option value="title" {% if "title" == type %} selected{% endif %}>Título</option>
+                        <option value="zone"{% if "zone" == type %} selected{% endif %}>Zona</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <input type="text" class="form-control search_term"name="search_term" 
+                    value="{% if search %}{{search}}{% endif %}">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default"> <span class="glyphicon glyphicon-search"></span></button>
+                    </span>
+                </div>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                <li>
+                <a  class="page-scroll" id="create_play" href="{% url 'underTheaterApp:create_playtheater' %}">Crear obra</a>
+                </li>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                {% if user.profile %}
+                <li>
+                <a  class="page-scroll" id="login_menu" href="{% url 'profile_detail' user.profile.pk %}">{{user.username}}</a>
+                </li>
+                {% else %}
+                <li>
+                <a  class="page-scroll" id="select_profile" href="{% url 'select_profile' %}">Completa tu perfil</a>
+                </li>
+                {% endif %}
+                <li>
+                <a class="page-scroll" id="logout" href="{% url 'logout_user' %}">
+                    <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+                </a>
+                </li>
+                {% else %}
+                <li>
+                <a class="page-scroll" id="login" href="{% url 'login_user' %}">Log in</a>
+                </li>
+                <li>
+                <a class="page-scroll" id="register" href="{% url 'register_user' %}">Registrarse</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

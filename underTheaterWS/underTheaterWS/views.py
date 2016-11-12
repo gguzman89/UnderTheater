@@ -32,12 +32,18 @@ class SelectProfileView(TemplateView):
 class SearchView(ListView):
     model = PlayTheater
     template_name = 'search.html'
+    search_dict = {"zone": "dayfunction_related__theater__contact__address__raw__icontains",
+                   "title": "play_name__icontains"}
 
     def get_context_data(self, **kwargs):
+        filter_parms = {}
         search = self.request.GET.get("search_term", None)
-        self.object_list = PlayTheater.objects.filter(play_name__icontains=search)
+        type_search = self.request.GET.get("type", None)
+        filter_parms[self.search_dict[type_search]] = search
+        self.object_list = PlayTheater.objects.filter(**filter_parms)
         context = super(SearchView, self).get_context_data(**kwargs)
         context["search"] = search
+        context["type"] = type_search
         return context
 
 
