@@ -1,9 +1,10 @@
 # vim: set fileencoding=utf-8 :
 from django.test import TestCase
+from django.db import IntegrityError
 from datetime import date, time, timedelta
 from underTheaterApp.factories import TheaterFactory, RoomTheaterFactory,\
-    PlayTheaterFactory, TicketFactory, DateTimeFunctionFactory, DayFunctionFactory
-from underTheaterApp.models import DayFunction, DateTimeFunction, PlayTheater
+    PlayTheaterFactory, TicketFactory, DateTimeFunctionFactory, DayFunctionFactory, SpectorsFactory
+from underTheaterApp.models import DayFunction, DateTimeFunction, PlayTheater, Rate
 
 
 class PlayTheaterTestCase(TestCase):
@@ -31,6 +32,24 @@ class PlayTheaterTestCase(TestCase):
         for play in list_plays:
             self.assertTrue(play in next_releases_play)
         self.assertFalse(old_plays in next_releases_play)
+
+    def test_rate_a_play(self):
+        profile = SpectorsFactory()
+        play_theater = PlayTheaterFactory.create()
+        rate = 5.0
+        play_rate = Rate(user_profile_rate=profile, play_theater=play_theater, rate=rate, comment="Factastic")
+        play_rate.save()
+        play_theater = PlayTheater.objects.get(id=play_theater.id)
+        self.assertEqual(play_theater.rating(), rate)
+
+    def test_same_user_not_twice_rate_a_play(self):
+        profile = SpectorsFactory()
+        play_theater = PlayTheaterFactory.create()
+        rate = 5.0
+        play_rate = Rate(user_profile_rate=profile, play_theater=play_theater, rate=rate, comment="Factastic")
+        play_rate.save()
+        play_rate = Rate(user_profile_rate=profile, play_theater=play_theater, rate=rate, comment="Factastic")
+        self.assertRaises(IntegrityError, play_rate.save)
 
 
 class DayFunctionTest(TestCase):
