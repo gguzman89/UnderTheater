@@ -14,8 +14,8 @@ class PlayTheaterDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(PlayTheaterDetailView, self).get_context_data(**kwargs)
-        context["can_rate"] = self.request.user.is_authenticated() and\
-            self.request.user.profile.can_rate_play(self.object.id)
+        context["can_rate"] = self.request.user.is_authenticated() and hasattr(self.request.user, "profile")\
+            and self.request.user.profile.can_rate_play(self.object.id)
         return context
 
 
