@@ -59,6 +59,6 @@ def rate_play(self, pk):
         comments = self.POST.get("comments")
         play_rate = Rate(user_profile_rate=self.user.profile, play_theater=play, rate=rate, comment=comments)
         play_rate.save()
-        return HttpResponse(json.dumps({'success': True, 'cause': "ok"}), content_type="application/json")
+        return HttpResponse(json.dumps({'success': True, 'cause': "ok", "rating": play.rating()}), content_type="application/json")
     else:
         return HttpResponseForbidden()

@@ -138,8 +138,10 @@ var utApp = utApp  || {};
             add_csrf_token();
             $.post(url, {"rate":rate, "comments": comments})
             .done(function(e,d) {
+                debugger
                 $("#rate_modal").modal("hide");
                 $("#button-rate-modal").hide();
+                add_rate(rate, comment, d)
                 toastr.success("Calificaste", "La calificacion fue un exito", {timeOut: 1000})
             })
             .fail(function(e,d) {
