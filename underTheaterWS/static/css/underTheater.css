@@ -236,3 +236,59 @@ header .title-text{
 .btn{
     font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif
 }
+
+.rate{
+    margin-bottom: 10px;
+}
+
+.custom-star {
+    font-size: 2.5em;
+    color: gold;
+}
+
+.custom-empty-star {
+    font-size: 2.5em;
+    color: black;
+}
+
+.custom-star-comment {
+    font-size: 1.8em;
+    color: gold;
+}
+
+.custom-empty-star-comment {
+    font-size: 1.8em;
+    color: black;
+}
+
+.btn-yellow{
+    color: white;
+    background-color: #fed136;
+    border-color: #fed136;
+    text-transform: uppercase;
+    border-radius: 3px;
+}
+
+.nav-tabs>li>a:hover {
+    border-color: #fed136 #fed136 #fed136;
+}
+
+.nav>li>a:focus, .nav>li>a:hover {
+    text-decoration: none;
+    background-color: #262b30;
+}
+.nav-tabs>li>a {
+    margin-right: 2px;
+    line-height: 1.42857143;
+    border: 1px solid #444;
+    background-color: rgba(0,0,0,.5);
+    border-radius: 4px 4px 0 0;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    color: #555;
+    cursor: default;
+    background-color: #fed136;
+    border: 1px solid #333;
+    border-bottom-color: transparent;
+}

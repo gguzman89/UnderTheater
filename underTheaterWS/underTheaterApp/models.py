@@ -4,7 +4,7 @@ from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
-from users import Actor, Contact, OwnerTheater
+from users import Actor, Contact, OwnerTheater, Profile
 from underTheaterApp.validators import periodic_date_validator, min_words_validator
 from underTheaterApp.utils import convert_list_string
 from underTheaterApp.managers import PlayTheaterManager
@@ -75,6 +75,15 @@ class PlayTheater(Ticketeable):
         theater = self.objects.filter(day_function__theater__name=theater_name)[0]
         return theater.contact.raw
 
+    def rating(self):
+        rate = 0
+        all_rate = self.rate.all()
+        total = all_rate.count()
+        for r in all_rate:
+            rate += r.rate
+        result = rate / (1 if total < 1 else total)
+        return min(result, 5)
+
     def __unicode__(self):
         return u"%s" % self.play_name
 
@@ -136,3 +145,13 @@ class Ticket(models.Model):
 
     def __unicode__(self):
         return u"%s" % self.ticket_name
+
+
+class Rate(models.Model):
+    user_profile_rate = models.ForeignKey(Profile, related_name='user_rate')
+    play_theater = models.ForeignKey(PlayTheater, related_name='rate')
+    rate = models.FloatField(default=0.0)
+    comment = models.CharField(max_length=200, blank=True, null=True)
+
+    class Meta:
+        unique_together = ('user_profile_rate', 'play_theater')

@@ -1,0 +1,28 @@
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="rate_modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content background-black">
+            <div class="modal-header background-black">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Calificar obra</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="hidden" class="rating-tooltip-manual rating" id="input_play_rate" 
+                    data-filled="fa fa-star custom-star fa-3x" data-empty="fa fa-star-o fa-3x custom-star"
+                    data-fractions="2"/>
+                </div>
+                <div class="form-group">
+                    <label for="id_comments">Comentario:</label>
+                    <textarea class="form-control" col="2" cols="40" 
+                        id="id_comments" maxlength="1000" name="comment" placeholder="Deja un comentario para la obra" 
+                        rows="5" required=""></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" data-url="{% url 'underTheaterApp:rate_play' pk=play.pk %}"
+                    id="modal_rate_save">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

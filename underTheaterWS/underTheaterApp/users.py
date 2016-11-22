@@ -57,6 +57,9 @@ class Profile(models.Model):
     def get_absolute_url(self):
         return reverse("profile_detail", kwargs={"pk": self.pk})
 
+    def can_rate_play(self, id_play):
+        return not self.user_rate.filter(play_theater__id=id_play).exists()
+
     def __unicode__(self):
         return self.get_complete_name
 

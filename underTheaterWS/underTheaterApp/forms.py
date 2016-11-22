@@ -271,7 +271,7 @@ class ActorWithoutUserForm(forms.ModelForm):
         super(ActorWithoutUserForm, self).__init__(*args, **kwargs)
 
 
-ActorFormSet = formset_factory(ActorWithoutUserForm,formset=BaseActorFormSet, extra=1, can_order=False, can_delete=True)
+ActorFormSet = formset_factory(ActorWithoutUserForm, formset=BaseActorFormSet, extra=1, can_order=False, can_delete=True)
 
 
 class PlayTheaterForm(forms.ModelForm):
