@@ -2,6 +2,41 @@ var utApp = utApp  || {};
 
 (function (ns) {
     "use strict";
+    function getCookie(name) {
+        var cookieValue = null, cookies, cookie, i;
+        if (document.cookie && document.cookie !== '') {
+            cookies = document.cookie.split(';');
+            for (i = 0; i < cookies.length; i += 1) {
+                cookie = $.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    ns.getCookie = getCookie;
+
+
+    function csrfSafeMethod(method) {
+
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+
+    function add_csrf_token() {
+
+        $.ajaxSetup({
+            crossDomain: false,         
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type)) {
+                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                }
+            }
+        });
+    }
+    ns.add_csrf_token = add_csrf_token
 
     function getTheaterRooms(e){
         var theater_pk = $("#id_dayfunction_related-0-theater").val(),
@@ -94,6 +129,24 @@ var utApp = utApp  || {};
                                      paginationSpeed : 400});
     }
 
+    function open_rate_modal(){
+        $("#rate_modal").modal("show");
+        $("#modal_rate_save").click(function(){
+            var rate =$('.rating').rating('rate'),
+                comments = $("#id_comments").val(),
+                url = $("#modal_rate_save").attr("data-url"); 
+            add_csrf_token();
+            $.post(url, {"rate":rate, "comments": comments})
+            .done(function(e,d) {
+                $("#rate_modal").modal("hide");
+                $("#button-rate-modal").hide();
+            })
+            .fail(function(e,d) {
+                $("#rate_modal").modal("hide");
+            }); 
+        });
+    }
+
     ns.on_dom_ready = function on_dom_ready() {
 
         var theater_select = $("#id_dayfunction_related-0-theater"),
@@ -132,6 +185,7 @@ var utApp = utApp  || {};
 
         $("#id_photo").filestyle({buttonName: "btn-blue", "input":false, "iconName":"fa fa-camera-retro",
                                     'buttonText':"Elegir foto de perfil"});
+        $("#button-rate-modal").click(open_rate_modal)
        
     };
 

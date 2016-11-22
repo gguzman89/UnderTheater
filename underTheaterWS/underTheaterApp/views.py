@@ -1,15 +1,22 @@
 # vim: set fileencoding=utf-8 :
+import json
 from django.views.generic import DetailView, CreateView, UpdateView
-from underTheaterApp.models import PlayTheater, Theater
+from underTheaterApp.models import PlayTheater, Theater, Rate
 from underTheaterApp.forms import PlayTheaterForm
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 
 
 class PlayTheaterDetailView(DetailView):
     model = PlayTheater
+
+    def get_context_data(self, **kwargs):
+        context = super(PlayTheaterDetailView, self).get_context_data(**kwargs)
+        context["can_rate"] = self.request.user.is_authenticated() and\
+            self.request.user.profile.can_rate_play(self.object.id)
+        return context
 
 
 class PlayTheaterCreateView(CreateView):
@@ -43,3 +50,15 @@ def all_room_theaters(self, pk):
     rooms = theater.theater_room.all()
     data = serializers.serialize('json', rooms)
     return HttpResponse(data, content_type="application/json")
+
+
+def rate_play(self, pk):
+    if self.POST and self.user.profile.can_rate_play(pk):
+        play = get_object_or_404(PlayTheater, pk=pk)
+        rate = self.POST.get("rate")
+        comments = self.POST.get("comments")
+        play_rate = Rate(user_profile_rate=self.user.profile, play_theater=play, rate=rate, comment=comments)
+        play_rate.save()
+        return HttpResponse(json.dumps({'success': True, 'cause': "ok"}), content_type="application/json")
+    else:
+        return HttpResponseForbidden()

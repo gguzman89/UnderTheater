@@ -12,4 +12,6 @@ urlpatterns = [
         login_required(views.PlayTheaterUpdateView.as_view()), name='playtheater_update'),
     url(r'^theater/(?P<pk>\d+)/all_room_theater/$',
         login_required(views.all_room_theaters), name='all_room_theater'),
+    url(r'^play_theater/(?P<pk>\d+)/rate/$',
+        login_required(views.rate_play), name='rate_play'),
 ]
