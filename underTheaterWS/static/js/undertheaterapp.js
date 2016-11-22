@@ -140,9 +140,11 @@ var utApp = utApp  || {};
             .done(function(e,d) {
                 $("#rate_modal").modal("hide");
                 $("#button-rate-modal").hide();
+                toastr.success("Calificaste", "La calificacion fue un exito", {timeOut: 1000})
             })
             .fail(function(e,d) {
                 $("#rate_modal").modal("hide");
+                toastr.danger("Error", "Hubo un error en la calificacion intente mas tarde", {timeOut: 1000})
             }); 
         });
     }

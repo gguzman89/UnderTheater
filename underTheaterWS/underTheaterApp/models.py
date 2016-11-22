@@ -80,7 +80,8 @@ class PlayTheater(Ticketeable):
         all_rate = self.rate.all()
         for r in all_rate:
             rate += r.rate
-        return rate / all_rate.count()
+        result = rate / all_rate.count()
+        return min(result, 5)
 
     def __unicode__(self):
         return u"%s" % self.play_name
