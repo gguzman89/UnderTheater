@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.urlresolvers import reverse
 from users import Actor, Contact, OwnerTheater, Profile
 from underTheaterApp.validators import periodic_date_validator, min_words_validator
@@ -115,6 +116,31 @@ class DateTimeFunction(models.Model):
 
     def __unicode__(self):
         return u"%s %s" % (self.id, self.since.strftime("%d-%m-%Y"))
+
+
+class ClassTheater(models.Model):
+    class_name = models.CharField(max_length=200)
+    description = models.TextField(max_length=1000,
+                                verbose_name="Descripcion de la clase",
+                                validators=[min_words_validator])
+    picture = models.FileField(upload_to="static/class_theater")
+    theater = models.ForeignKey(Theater, verbose_name=u'teatro',
+                                related_name=u'theater')
+    room_theater = models.ForeignKey(TheaterRoom,
+                                     verbose_name=u'sala de la clase',
+                                     related_name='room')
+    datetime_function = models.OneToOneField(DateTimeFunction,
+                                             verbose_name=u'dia y horario de la clase')
+    with_interview = models.BooleanField(default=True,
+                                          verbose_name=u"Con entrevista previa")
+    price = models.IntegerField(default=0)
+    duration = models.IntegerField(default=0, validators=[MaxValueValidator(300), MinValueValidator(15)])
+
+    def __unicode__(self):
+        return u"%s %s" % (self.class_name, self.theater)
+
+    def get_absolute_url(self):
+        return reverse('underTheaterApp:class_theater_detail', args=[self.pk])
 
 
 class DayFunction(Ticketeable):

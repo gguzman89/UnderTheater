@@ -5,8 +5,8 @@ from django.forms.models import inlineformset_factory, formset_factory
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from underTheaterApp.models import PlayTheater, DayFunction, Ticket,\
-    Ticketeable, DateTimeFunction
-from underTheaterApp.constant import DayOfWeek, Hour
+    Ticketeable, DateTimeFunction, ClassTheater
+from underTheaterApp.constant import DayOfWeek, Hour, Durations
 from underTheaterApp.users import Actor, OwnerTheater, Spectators
 from underTheaterWS.utils import regex_account_twitter, regex_url_facebook
 
@@ -237,7 +237,7 @@ class DateTimeFunctionForm(forms.ModelForm):
         model = DateTimeFunction
         fields = ("hour", "until", "since", "periodic_date")
         labels = {'hour': 'Horas', 'until': 'Hasta', 'since': 'Desde',
-                  'periodic_date': 'Dias de la semana'}
+                  'periodic_date': 'Dias de la semana', 'duration': "duracion aproximada"}
         widgets = {"periodic_date": forms.SelectMultiple(attrs={'class': 'form-control',
                                                                 'style': 'width: 100%;'},
                                                          choices=DayOfWeek),
@@ -347,3 +347,48 @@ class PlayTheaterForm(forms.ModelForm):
         new_play = super(PlayTheaterForm, self).save(*args, **kwargs)
         self.save_formsets(new_play)
         return new_play
+
+
+class ClassTheaterForm(forms.ModelForm):
+    picture = forms.ImageField(label="Foto de la clase")
+
+    class Meta:
+        model = ClassTheater
+        description_placeholder = "Breve descripcion de la clase"
+        fields = ("class_name", "description", "picture", "theater", "room_theater",
+                  "duration", "price", "with_interview")
+        labels = {'class_name': 'Nombre de la clase', 'description': 'De que trata la clase',
+                  'picture': 'Foto de la clase', 'with_interview': 'Con entrevista previa',
+                  'duration': "Duracion de la clase", "price": "Precio de la clase"}
+        widgets = {'class_name': forms.TextInput(attrs={'class': 'form-control',
+                                                  'placeholder': "Nombre de la clase"}),
+                   'description': forms.Textarea(attrs={'class': 'form-control',
+                                                        'rows': 5, 'col': 2,
+                                                        'placeholder': description_placeholder}),
+                   'theater': forms.Select(attrs={'class': 'form-control',
+                                                  'style': 'width: 100%;'}),
+                   'room_theater': forms.Select(attrs={'class': 'form-control',
+                                                       'style': 'width: 100%;'}),
+                   'duration': forms.Select(attrs={'class': 'form-control',
+                                                       'style': 'width: 100%;'},
+                                            choices=Durations),
+                   'price': forms.NumberInput(attrs={'class': 'form-control', 'min': 0})}
+
+    def __init__(self, *args, **kwargs):
+        super(ClassTheaterForm, self).__init__(*args, **kwargs)
+        self.datetime_form = DateTimeFunctionForm(data=kwargs.get('data', None))
+
+    def is_valid(self):
+        return super(ClassTheaterForm, self).is_valid()\
+            and self.datetime_form.is_valid()
+
+    def clean(self):
+        if not self.data.get("until", None):
+            raise forms.ValidationError('Tiene que haber fecha de fin')
+        if not self.data.get("periodic_date", None):
+            raise forms.ValidationError('Tiene que haber dias de la semana')
+        return super(ClassTheaterForm, self).clean()
+
+    def save(self, *args, **kwargs):
+        self.instance.datetime_function = self.datetime_form.save()
+        return super(ClassTheaterForm, self).save(*args, **kwargs)
