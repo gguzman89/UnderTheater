@@ -130,6 +130,21 @@ var utApp = utApp  || {};
         $("#owl-demo").owlCarousel({ items:"4", navigation : true, autoPlay: true, slideSpeed : 300, center: true, 
                                      paginationSpeed : 400});
     }
+    function create_rate_and_comment(comment, rate, url_profile, username){
+        var text_html = "<div class='col-sm-6'><p class='comment_rate'>"+comment+"- <small>",
+            empty_comment = $(".empty-comment");
+        if(empty_comment.length >0)
+            $(empty_comment).remove();
+           
+        text_html += "<a href="+ url_profile +">"+ username + "</a></small></p></div>";
+        text_html += "<div class='col-sm-6'><div class='aling-right'>";
+        text_html += "<input type='hidden' class='rating-tooltip-manual rate-comment last_rate' disabled='disabled'";
+        text_html += " data-filled='fa fa-star custom-star-comment fa-3x' data-empty='fa fa-star-o fa-3x custom-star-comment' ";
+        text_html += "value="+ rate +"/></div></div>";
+        $("#comment").append("<div class='row new'></div>");
+        $("#comment .new").html(text_html);
+        $("#comment .last_rate").rating("rate", rate);
+    }
 
     function open_rate_modal(){
         $("#rate_modal").modal("show");
@@ -139,10 +154,12 @@ var utApp = utApp  || {};
                 url = $("#modal_rate_save").attr("data-url"); 
             add_csrf_token();
             $.post(url, {"rate":rate, "comments": comments})
-            .done(function(e,d) {
+            .done(function(data) {
                 $("#rate_modal").modal("hide");
                 $("#button-rate-modal").hide();
-                toastr.success("Calificaste", "La calificacion fue un exito", {timeOut: 1000})
+                create_rate_and_comment(comments, rate, data.url_profile, data.username);
+                $('#show_rate').rating("rate", data.rating)
+                toastr.success("Calificaste", "La calificacion fue un exito", {timeOut: 2000});
             })
             .fail(function(e,d) {
                 $("#rate_modal").modal("hide");
