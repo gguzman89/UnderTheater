@@ -119,6 +119,9 @@ class DateTimeFunction(models.Model):
     def __unicode__(self):
         return u"%s %s" % (self.id, self.since.strftime("%d-%m-%Y"))
 
+    def is_periodic_date(self):
+        return self.periodic_date and self.until
+
 
 class ClassTheater(models.Model):
     class_name = models.CharField(max_length=200)

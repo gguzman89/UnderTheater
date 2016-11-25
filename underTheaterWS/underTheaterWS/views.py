@@ -1,5 +1,5 @@
 # vim: set fileencoding=utf-8 :
-from django.views.generic import TemplateView, ListView, CreateView, DetailView
+from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from underTheaterApp.models import PlayTheater

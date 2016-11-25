@@ -34,6 +34,10 @@
             </div> 
         </div> 
     </div>
+    {% if form.datetime_form.data.select_date_function or form.datetime_form.instance %}
+        <input type="hidden" id="select_date_value" value="{{datetime_form.data.select_date_function}}">
+        <input type="hidden" id="is_periodic_date" value="{{datetime_form.instance.is_periodic_date |yesno:'periodic,only_date'}}">
+    {% endif %}
     <div class="datetime_form">
         <div class="row" style="margin-left: 1px;">
             <div class="col-xs-6">
@@ -73,9 +77,7 @@
                 </div>
             </div>
         </div>
-        {% if datetime_form.data.select_date_function %}
-        <input type="hidden" id="select_date_value" value="{{datetime_form.data.select_date_function}}">
-        {% endif %}
+
         {% if datetime_form.non_field_errors %}
         <div class="row">
             <div class="alert alert-danger">{{datetime_form.non_field_errors}}</div>

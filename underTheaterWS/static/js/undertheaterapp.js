@@ -113,7 +113,9 @@ var utApp = utApp  || {};
         var errors = $(form).find(".alert-danger"),
             val = $("#select_date_value").val();
 
-        if (errors.length > 0 && val){
+        val = val ? val : $("#is_periodic_date").val();
+
+        if (val && (location.href.indexOf("/update/")> -1 || errors.length > 0)) {
             $("#select_datefunction").select2("val", [val]);
         }
     }

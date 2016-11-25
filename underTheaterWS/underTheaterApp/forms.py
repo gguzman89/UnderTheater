@@ -121,11 +121,14 @@ class DayFunctionForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(DayFunctionForm, self).__init__(*args, **kwargs)
+        datetime_function = None
+        if hasattr(self.instance, "datetime_function"):
+            datetime_function = self.instance.datetime_function
+        self.datetime_form = DateTimeFunctionForm(data=kwargs.get('data', None), instance=datetime_function)
         """
         self.ticket = TicketFormSet(data=kwargs.get('data', None),
                                           instance=self.instance)
         """
-        self.datetime_form = DateTimeFunctionForm(data=kwargs.get('data', None))
 
     def is_valid(self):
         return super(DayFunctionForm, self).is_valid()\
@@ -231,7 +234,7 @@ class UserCreateForm(UserCreationForm):
 class Select2Widget(forms.SelectMultiple):
 
     def render(self, name, value, attrs=None):
-        if isinstance(value, basestring):
+        if value and isinstance(value, basestring):
             value = ast.literal_eval(value)
         return super(Select2Widget, self).render(name, value, attrs)
 
