@@ -109,6 +109,7 @@ class PlayTheaterFactory(DjangoModelFactory):
     synopsis = "This isn't a synopsis"
     actors = factory.RelatedFactory(ActorFactory)
     picture = File(open(TEST_IMAGE))
+    owner = factory.SubFactory(UserFactory)
 
 
 class DayFunctionFactory(DjangoModelFactory):

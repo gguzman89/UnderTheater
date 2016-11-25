@@ -8,6 +8,9 @@ DayOfWeek = (
     ('Domingo', 'Domingo'),
 )
 
+
 Hour = tuple([("%d:%s" % (x / 60, "00" if x % 60 == 0 else x % 60),
                "%d:%s" % (x / 60, "00" if x % 60 == 0 else x % 60))
               for x in range(0, 96 * 15, 15)])
+Durations = tuple([(x, "%d:%s" % (x / 60, "00" if x % 60 == 0 else x % 60))for x in range(0, 21 * 15, 15)])
+Durations = Durations[1:len(Durations)]
