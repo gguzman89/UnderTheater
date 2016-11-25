@@ -1,8 +1,8 @@
 # vim: set fileencoding=utf-8 :
 import json
 from django.views.generic import DetailView, CreateView, UpdateView
-from underTheaterApp.models import PlayTheater, Theater, Rate
-from underTheaterApp.forms import PlayTheaterForm
+from underTheaterApp.models import PlayTheater, Theater, Rate, ClassTheater
+from underTheaterApp.forms import PlayTheaterForm, ClassTheaterForm
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.core import serializers
@@ -62,3 +62,32 @@ def rate_play(self, pk):
         return HttpResponse(json.dumps({'success': True, 'cause': "ok", "rating": play.rating()}), content_type="application/json")
     else:
         return HttpResponseForbidden()
+
+
+class ClassTheaterCreateView(CreateView):
+    model = ClassTheater
+    form_class = ClassTheaterForm
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        play_theater = super(ClassTheaterCreateView, self).post(request, *args, **kwargs)
+        return play_theater
+
+
+class ClassTheaterDetailView(DetailView):
+    model = ClassTheater
+
+
+class ClassTheaterUpdateView(UpdateView):
+    model = ClassTheater
+    form_class = ClassTheaterForm
+    template_name = "underTheaterApp/classtheater_form.html"
+
+    def dispatch(self, *args, **kwargs):
+        if self.request.user != self.get_object().owner:
+            return HttpResponseForbidden()
+        return super(ClassTheaterUpdateView, self).dispatch(*args, **kwargs)
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        return super(ClassTheaterUpdateView, self).post(request, *args, **kwargs)

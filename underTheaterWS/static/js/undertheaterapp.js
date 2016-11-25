@@ -39,9 +39,11 @@ var utApp = utApp  || {};
     ns.add_csrf_token = add_csrf_token
 
     function getTheaterRooms(e){
-        var theater_pk = $("#id_dayfunction_related-0-theater").val(),
+        var theater = $("#id_dayfunction_related-0-theater"),
+            theater_pk = theater.length == 0 ? $("#id_theater").val() : theater.val(),
         url = "/theater/"+ theater_pk +"/all_room_theater",
-        rooms_select= $("#id_dayfunction_related-0-room_theater");
+        room = $("#id_dayfunction_related-0-room_theater"), 
+        rooms_select = room.length == 0 ? $("#id_room_theater") : room;
 
         if(theater_pk){
             $.get(url, function(data){
@@ -138,10 +140,8 @@ var utApp = utApp  || {};
             add_csrf_token();
             $.post(url, {"rate":rate, "comments": comments})
             .done(function(e,d) {
-                debugger
                 $("#rate_modal").modal("hide");
                 $("#button-rate-modal").hide();
-                add_rate(rate, comment, d)
                 toastr.success("Calificaste", "La calificacion fue un exito", {timeOut: 1000})
             })
             .fail(function(e,d) {
@@ -158,16 +158,31 @@ var utApp = utApp  || {};
             hour_select = $("#id_hour"),
             actors_select = $("#id_actors"),
             periodic_select = $("#id_periodic_date"),
-            date_select = $("#select_datefunction");
+            date_select = $("#select_datefunction"),
+            duration_select = $("#id_duration"),
+            with_interview_checkbox = $("#id_with_interview"),
+            teacher_select = $("#id_teacher");
 
         init_home();
+        
+        if (theater_select.length == 0){
+            theater_select = $("#id_theater");
+        }
+
+        if (rooms_select.length == 0){
+            rooms_select = $("#id_room_theater");
+        }
+
 
         $(rooms_select).empty();
+        $(with_interview_checkbox).checkboxradio();
         set_select2(rooms_select, {placeholder: "selecciona la sala", allowClear: false});
         set_select2(theater_select, {placeholder: "Selecciona el teatro", allowClear: false});
         set_select2(actors_select, {placeholder: "Ingrese los nombres de los actores"});
         set_select2(periodic_select, {placeholder: "Lunes Martes"});
+        set_select2(teacher_select, {placeholder: "Profesor que da la clase"});
         set_select2(hour_select, {placeholder: "hh:mm"});
+        set_select2(duration_select, {placeholder: "hh:mm", minimumResultsForSearch: -1});
         set_select2(date_select, {placeholder: "Selecciona el tipo de fecha", minimumResultsForSearch: -1, 
                                   allowClear: false});
         set_datepicker();

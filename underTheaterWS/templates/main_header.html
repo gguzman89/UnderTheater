@@ -32,6 +32,9 @@
                 <li>
                 <a  class="page-scroll" id="create_play" href="{% url 'underTheaterApp:create_playtheater' %}">Crear obra</a>
                 </li>
+                <li>
+                <a  class="page-scroll" id="create_class" href="{% url 'underTheaterApp:create_classtheater' %}">Crear clase</a>
+                </li>
                 {% endif %}
 
                 {% if user.is_authenticated %}
