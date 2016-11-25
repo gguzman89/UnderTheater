@@ -45,32 +45,6 @@
                 </tbody>
             </table>
             <h2><i class="fa fa-users" aria-hidden="true"></i> Actores</h2>
-            {% comment "Optional note" %}
-            <table style="width:auto;" class="table well">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Nombre</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for actor in object.actors.all %}
-                <tr>
-                    <td>
-                        <a href="{{ actor.get_absolute_url }}">
-                            <img src="{{ actor.photo_url }}" class="img-thumbnail-custom" style="width: 10%; height: 10%;"/>
-                        </a>
-                    </td>
-                    <td>
-                        <a href="{{ actor.get_absolute_url }}">
-                            <span class="badge">{{actor.get_complete_name}}</span>
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            {% endcomment %}
             {% for actor in object.actors.all %}
             <div class="form-group">
                 <a href="{{ actor.get_absolute_url }}">
