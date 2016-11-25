@@ -68,3 +68,11 @@ class DayFunctionAdmin(admin.ModelAdmin):
     list_display = ('play_theater', 'theater', 'room_theater', 'datetime_function')
     ordering = ('play_theater', 'theater')
     search_fields = ('play_theater', 'theater')
+
+
+@admin.register(models.ClassTheater)
+class PlayTheaterAdmin(admin.ModelAdmin):
+    list_display = ('class_name', 'description', )
+    ordering = ('class_name', )
+    search_fields = ('class_name', 'owner')
+
