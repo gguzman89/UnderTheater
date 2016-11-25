@@ -44,6 +44,8 @@
         <div class="row">
             {% include "underTheaterApp/ticket_formset.html" with ticket_form=form.ticket %}
         </div>
+
+        <input type="hidden" name="data" value="{{form.create_actors.is_data| yesno:"true,false"}}" id="is_data">
         {% if form.has_errors %}
         <div class="row">
             <div class="alert alert-danger">{{form.get_errors}}</div>
@@ -66,6 +68,8 @@
 <script type="text/javascript">
     utApp.init_actor_formset("{{ form.create_actors.prefix }}");
     utApp.init_ticket_formset("{{ form.ticket.prefix }}");
-    $(".del-row-2").click();
+    if($("#is_data").val()!= "true"){
+        $(".del-row-2").click();
+    }
 </script>
 {% endblock %}

@@ -298,7 +298,11 @@ class PlayTheaterForm(forms.ModelForm):
                                                instance=self.instance)
         self.ticket = TicketFormSet(data=kwargs.get('data', None),
                                     instance=self.instance, prefix="ticket_prefix")
+        self.init_actor_form(kwargs)
+
+    def init_actor_form(self, kwargs):
         self.create_actors = ActorFormSet(data=kwargs.get('data', None), prefix="actors_prefix")
+        self.create_actors.is_data = len(kwargs.get('data', {})) > 0
         self.fields['actors'].required = False
 
     def is_valid(self):
