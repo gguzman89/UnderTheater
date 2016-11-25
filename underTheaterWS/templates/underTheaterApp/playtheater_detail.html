@@ -45,11 +45,42 @@
                 </tbody>
             </table>
             <h2><i class="fa fa-users" aria-hidden="true"></i> Actores</h2>
-            <ul class="list-inline">
+            {% comment "Optional note" %}
+            <table style="width:auto;" class="table well">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Nombre</th>
+                    </tr>
+                </thead>
+                <tbody>
                 {% for actor in object.actors.all %}
-                <li><span class="badge">{{actor.name}}</span></li>
+                <tr>
+                    <td>
+                        <a href="{{ actor.get_absolute_url }}">
+                            <img src="{{ actor.photo_url }}" class="img-thumbnail-custom" style="width: 10%; height: 10%;"/>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ actor.get_absolute_url }}">
+                            <span class="badge">{{actor.get_complete_name}}</span>
+                        </a>
+                    </td>
+                </tr>
                 {% endfor %}
-            </ul>
+                </tbody>
+            </table>
+            {% endcomment %}
+            {% for actor in object.actors.all %}
+            <div class="form-group">
+                <a href="{{ actor.get_absolute_url }}">
+                    <img class="img-circle img-aling-left" src="{{actor.photo_url}}"/>
+                </a>
+                <div class="content-heading fix-text-img">
+                    &nbsp<a href="{{ actor.get_absolute_url }}"><span class="badge">{{actor.get_complete_name}}</span></a>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
     <div class="col-md-8">
