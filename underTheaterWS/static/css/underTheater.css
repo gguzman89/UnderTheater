@@ -292,3 +292,14 @@ header .title-text{
     border: 1px solid #333;
     border-bottom-color: transparent;
 }
+
+.fix-text-img{
+    padding-top: 12px;
+}
+
+.img-aling-left{
+    float:left; 
+    width: 10% !important; 
+    height: 10% !important;  
+    background-color: white !important;
+}
