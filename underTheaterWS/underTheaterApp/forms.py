@@ -292,10 +292,11 @@ class PlayTheaterForm(forms.ModelForm):
         model = PlayTheater
         synopsis_placeholder = "Una breve descripcion de lo que va a tratar la obra"
         play_name_placeholder = "Nombre de la obra"
-        fields = ("play_name", "synopsis", "picture", "actors")
+        fields = ("play_name", "synopsis", "picture", "actors", "owner")
         labels = {'play_name': 'Nombre de la obra', 'synopsis': 'Sinopsis',
                   'actors': "Actores", 'picture': 'Foto de la obra'}
-        widgets = {'synopsis': forms.Textarea(attrs={'class': 'form-control',
+        widgets = {'owner': forms.HiddenInput(),
+                   'synopsis': forms.Textarea(attrs={'class': 'form-control',
                                                      'rows': 5, 'col': 2,
                                                      'placeholder': synopsis_placeholder}),
                    'play_name': forms.TextInput(attrs={'size': 25,

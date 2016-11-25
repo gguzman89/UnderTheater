@@ -34,6 +34,7 @@
                     {% if form.synopsis.errors %}<div class="alert alert-danger">{{form.synopsis.errors}}</div>{% endif %}
                 </div>
             </div>
+            <input type="hidden" name="owner" value="{{user.id}}" id="id_owner">
         </div>
         <div class="row" style="margin-left: 1px;">
             {% include "underTheaterApp/actors_formset.html" with actors_form=form.create_actors %}

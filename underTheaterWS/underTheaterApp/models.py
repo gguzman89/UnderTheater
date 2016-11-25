@@ -51,6 +51,7 @@ class PlayTheater(Ticketeable):
                                 validators=[min_words_validator])
     actors = models.ManyToManyField(Actor, verbose_name=u'actors')
     picture = models.FileField(upload_to="static/playImages")
+    owner = models.ForeignKey(User, verbose_name=u'dueño de la publicacion')
     objects = PlayTheaterManager()
 
     @property

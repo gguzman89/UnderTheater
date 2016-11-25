@@ -83,6 +83,11 @@ class ClassTheaterUpdateView(UpdateView):
     form_class = ClassTheaterForm
     template_name = "underTheaterApp/classtheater_form.html"
 
+    def dispatch(self, *args, **kwargs):
+        if self.request.user != self.get_object().owner:
+            return HttpResponseForbidden()
+        return super(ClassTheaterUpdateView, self).dispatch(*args, **kwargs)
+
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         return super(ClassTheaterUpdateView, self).post(request, *args, **kwargs)
