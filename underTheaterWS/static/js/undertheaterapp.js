@@ -160,7 +160,8 @@ var utApp = utApp  || {};
             periodic_select = $("#id_periodic_date"),
             date_select = $("#select_datefunction"),
             duration_select = $("#id_duration"),
-            with_interview_checkbox = $("#id_with_interview");
+            with_interview_checkbox = $("#id_with_interview"),
+            teacher_select = $("#id_teacher");
 
         init_home();
         
@@ -179,6 +180,7 @@ var utApp = utApp  || {};
         set_select2(theater_select, {placeholder: "Selecciona el teatro", allowClear: false});
         set_select2(actors_select, {placeholder: "Ingrese los nombres de los actores"});
         set_select2(periodic_select, {placeholder: "Lunes Martes"});
+        set_select2(teacher_select, {placeholder: "Profesor que da la clase"});
         set_select2(hour_select, {placeholder: "hh:mm"});
         set_select2(duration_select, {placeholder: "hh:mm", minimumResultsForSearch: -1});
         set_select2(date_select, {placeholder: "Selecciona el tipo de fecha", minimumResultsForSearch: -1, 

@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.urlresolvers import reverse
@@ -135,12 +136,18 @@ class ClassTheater(models.Model):
                                           verbose_name=u"Con entrevista previa")
     price = models.IntegerField(default=0)
     duration = models.IntegerField(default=0, validators=[MaxValueValidator(300), MinValueValidator(15)])
+    teacher = models.ForeignKey(Actor, verbose_name=u'teacher')
+    owner = models.ForeignKey(User, verbose_name=u'dueño de la publicacion')
 
     def __unicode__(self):
         return u"%s %s" % (self.class_name, self.theater)
 
     def get_absolute_url(self):
         return reverse('underTheaterApp:class_theater_detail', args=[self.pk])
+
+    @property
+    def picture_url(self):
+        return "%s%s" % (settings.MEDIA_URL, self.picture)
 
 
 class DayFunction(Ticketeable):

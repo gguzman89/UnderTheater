@@ -327,3 +327,22 @@ header .title-text{
     border-bottom-right-radius: 3px;
     font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
+.badge-custom {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #337ab7;
+    border-radius: 10px;
+}
+
+.aling-center{
+    text-align: center;
+}

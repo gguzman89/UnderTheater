@@ -1,4 +1,5 @@
 # vim: set fileencoding=utf-8 :
+import ast
 from django import forms
 from django.utils import timezone
 from django.forms.models import inlineformset_factory, formset_factory
@@ -227,21 +228,31 @@ class UserCreateForm(UserCreationForm):
         return user
 
 
+class Select2Widget(forms.SelectMultiple):
+
+    def render(self, name, value, attrs=None):
+        if isinstance(value, basestring):
+            value = ast.literal_eval(value)
+        return super(Select2Widget, self).render(name, value, attrs)
+
+
 class DateTimeFunctionForm(forms.ModelForm):
     date_format = '%d/%m/%Y'
     since = forms.DateField(initial=timezone.now().date().strftime(date_format),
-                            input_formats=[date_format], label="Desde")
-    until = forms.DateField(input_formats=[date_format], required=False, label="Hasta")
+                            input_formats=[date_format], label="Desde",
+                            widget=forms.widgets.DateInput(format=date_format))
+    until = forms.DateField(input_formats=[date_format], required=False, label="Hasta",
+                            widget=forms.widgets.DateInput(format=date_format))
 
     class Meta:
         model = DateTimeFunction
         fields = ("hour", "until", "since", "periodic_date")
         labels = {'hour': 'Horas', 'until': 'Hasta', 'since': 'Desde',
                   'periodic_date': 'Dias de la semana', 'duration': "duracion aproximada"}
-        widgets = {"periodic_date": forms.SelectMultiple(attrs={'class': 'form-control',
+        widgets = {"periodic_date": Select2Widget(attrs={'class': 'form-control',
                                                                 'style': 'width: 100%;'},
                                                          choices=DayOfWeek),
-                   "hour": forms.SelectMultiple(attrs={'class': 'form-control',
+                   "hour": Select2Widget(attrs={'class': 'form-control',
                                                        'style': 'width: 100%;'},
                                                 choices=Hour)}
 
@@ -356,11 +367,13 @@ class ClassTheaterForm(forms.ModelForm):
         model = ClassTheater
         description_placeholder = "Breve descripcion de la clase"
         fields = ("class_name", "description", "picture", "theater", "room_theater",
-                  "duration", "price", "with_interview")
+                  "duration", "price", "with_interview", "owner", "teacher")
         labels = {'class_name': 'Nombre de la clase', 'description': 'De que trata la clase',
                   'picture': 'Foto de la clase', 'with_interview': 'Con entrevista previa',
-                  'duration': "Duracion de la clase", "price": "Precio de la clase"}
-        widgets = {'class_name': forms.TextInput(attrs={'class': 'form-control',
+                  'duration': "Duracion de la clase", "price": "Precio de la clase",
+                  "teacher": 'profesor'}
+        widgets = {'owner': forms.HiddenInput(),
+                   'class_name': forms.TextInput(attrs={'class': 'form-control',
                                                   'placeholder': "Nombre de la clase"}),
                    'description': forms.Textarea(attrs={'class': 'form-control',
                                                         'rows': 5, 'col': 2,
@@ -372,11 +385,15 @@ class ClassTheaterForm(forms.ModelForm):
                    'duration': forms.Select(attrs={'class': 'form-control',
                                                        'style': 'width: 100%;'},
                                             choices=Durations),
-                   'price': forms.NumberInput(attrs={'class': 'form-control', 'min': 0})}
+                   'price': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+                   'teacher': forms.Select(attrs={'class': 'form-control'})}
 
     def __init__(self, *args, **kwargs):
         super(ClassTheaterForm, self).__init__(*args, **kwargs)
-        self.datetime_form = DateTimeFunctionForm(data=kwargs.get('data', None))
+        datetime_function = None
+        if hasattr(self.instance, "datetime_function"):
+            datetime_function = self.instance.datetime_function
+        self.datetime_form = DateTimeFunctionForm(data=kwargs.get('data', None), instance=datetime_function)
 
     def is_valid(self):
         return super(ClassTheaterForm, self).is_valid()\

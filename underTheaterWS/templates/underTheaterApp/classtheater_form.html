@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
                     {{form.price.label_tag}}
                     {{form.price}}
@@ -44,12 +44,20 @@
                     {% if form.price.errors %}<div class="alert alert-danger">{{form.price.errors}}</div>{% endif %}
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
                     {{form.duration.label_tag}}
                     {{form.duration}}
                     <div class="help-block">{{form.duration.help_text}}</div>
                     {% if form.duration.errors %}<div class="alert alert-danger">{{form.duration.errors}}</div>{% endif %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    {{form.teacher.label_tag}}
+                    {{form.teacher}}
+                    <div class="help-block">{{form.teacher.help_text}}</div>
+                    {% if form.teacher.errors %}<div class="alert alert-danger">{{form.teacher.errors}}</div>{% endif %}
                 </div>
             </div>
         </div>
@@ -123,6 +131,7 @@
             </div>
             {% endif %}
             {% endwith %}
+            <input type="hidden" name="owner" value="{{user.id}}" id="id_owner">
         </div> 
         {% if form.has_errors %}
         <div class="row">

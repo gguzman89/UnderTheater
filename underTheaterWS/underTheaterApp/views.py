@@ -76,3 +76,13 @@ class ClassTheaterCreateView(CreateView):
 
 class ClassTheaterDetailView(DetailView):
     model = ClassTheater
+
+
+class ClassTheaterUpdateView(UpdateView):
+    model = ClassTheater
+    form_class = ClassTheaterForm
+    template_name = "underTheaterApp/classtheater_form.html"
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        return super(ClassTheaterUpdateView, self).post(request, *args, **kwargs)
