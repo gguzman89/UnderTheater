@@ -273,7 +273,7 @@ class ActorWithoutUserForm(forms.ModelForm):
 
     class Meta:
         model = Actor
-        fields = ("name", "surname")
+        fields = ("name", "surname", "photo")
         widgets = {'name': forms.TextInput(attrs={'class': 'form-control',
                                                   'placeholder': "Mi nombre"}),
                    'surname': forms.TextInput(attrs={'class': 'form-control-actors',
