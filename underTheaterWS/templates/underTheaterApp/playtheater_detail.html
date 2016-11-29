@@ -4,7 +4,11 @@
 {% block content %}
 <div id="contenido">
     <div data-alerts="alerts" id="alerts"></div>
-    <h1>{{object.play_name}}</h1>
+    <h1>{{object.play_name}}
+    {% if can_edit %}
+    <a href="{%url 'underTheaterApp:playtheater_update' pk=object.pk%}"class="btn btn-lg aling-right"> Editar <span class="glyphicon glyphicon-pencil"></span></a>
+    {% endif %}
+    </h1>
     <div class="col-md-4">
         <div class="row">
             <a href="#">
@@ -15,7 +19,6 @@
                 data-description="{{object.synopsis}}">
             </div>
         </div>
-
         <div class="row">
             <input type="hidden" class="rating-tooltip-manual"disabled="disabled" 
             data-filled="fa fa-star custom-star fa-3x" data-empty="fa fa-star-o fa-3x custom-star"
@@ -44,17 +47,23 @@
                 {% endfor %}
                 </tbody>
             </table>
+        </div>
+        <div class="row">
             <h2><i class="fa fa-users" aria-hidden="true"></i> Actores</h2>
-            {% for actor in object.actors.all %}
-            <div class="form-group">
-                <a href="{{ actor.get_absolute_url }}">
-                    <img class="img-circle img-aling-left" src="{{actor.photo_url}}"/>
-                </a>
-                <div class="content-heading fix-text-img">
-                    &nbsp<a href="{{ actor.get_absolute_url }}"><span class="badge">{{actor.get_complete_name}}</span></a>
+            <div class="pre-scrollable">
+                {% for actor in object.actors.all %}
+                <div class="container">
+                <div class="form-group">
+                    <a href="{{ actor.get_absolute_url }}">
+                        <img class="img-circle img-aling-left" src="{{actor.photo_url}}"/>
+                    </a>
+                    <div class="content-heading fix-text-img">
+                        <a href="{{ actor.get_absolute_url }}"><span class="badge-actors">{{actor.get_complete_name}}</span></a>
+                    </div>
                 </div>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
     <div class="col-md-8">
@@ -71,49 +80,7 @@
                 <div class="tab-content">
                     <div id="contact" class="tab-pane fade in active">
                         {% for day_function in object.day_function.all %}
-                        <h3 class="aling-left">{{day_function.theater.name}}</h3>
-                        <hr style="clear:both;"/> 
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <h4 class="thumbnail-title"><i class="fa fa-suitcase" aria-hidden="true"></i> Teatro</h4>
-                                <p>
-                                <strong>Teatro:</strong> {{day_function.theater.name}},
-                                </p>
-                                <p>
-                                <strong>Nombre de la sala:</strong> {{day_function.room_theater.room_name}},
-                                </p>
-                                <p>
-                                <strong>Capacidad:</strong> {{day_function.room_theater.capacity}}
-                                </p>
-                            </div>
-                            <div class="col-sm-4">
-                                <h4 class="thumbnail-title"> <i class="fa fa-phone-square" aria-hidden="true"></i> Contacto</h4>
-                                <p>
-                                <strong>Direccion:</strong> {{day_function.theater.contact.address.raw}}, 
-                                </p>
-                                <p>
-                                <strong>Telefono:</strong> {{day_function.theater.contact.number_phone}} 
-                                </p>
-                                <p>
-                                <strong>Email:</strong> {{day_function.theater.contact.email|urlize}} 
-                                </p>
-
-                            </div>
-                            <div class="col-sm-4">
-                                {% with datetime_function=day_function.datetime_function %}
-                                <h4 class="thumbnail-title"><i class="fa fa-calendar" aria-hidden="true"></i> Dias y horarios</h4>
-                                <p><strong>Estreno:</strong> {{datetime_function.since|date:"j/n/Y"}}</p>
-                                {% if datetime_function.periodic_date %}
-                                <p> <strong>Dias:</strong>{{datetime_function.periodic_dates}}</p>
-                                {% endif %}
-                                <p> <strong>Horarios:</strong> {{datetime_function.hours}}</p>
-                                {% if datetime_function.until %}
-                                <p><strong>Desde:</strong> {{datetime_function.since|date:"j/n/Y"}} </p>
-                                <p><strong>Hasta:</strong> {{datetime_function.until|date:"j/n/Y"}}</p>
-                                {% endif %}
-                                {% endwith %}
-                            </div>
-                        </div>
+                            {% include "underTheaterApp/day_function_detail.html" with day_function=day_function %}
                         {% endfor %}
                     </div>
                     <div id="comment" class="tab-pane fade">

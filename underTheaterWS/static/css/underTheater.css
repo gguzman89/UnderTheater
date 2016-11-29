@@ -295,12 +295,13 @@ header .title-text{
 
 .fix-text-img{
     padding-top: 12px;
+    padding-left: 30%;
 }
 
 .img-aling-left{
     float:left; 
-    width: 10% !important; 
-    height: 10% !important;  
+    width: 70px !important; 
+    height: 70px !important;  
     background-color: white !important;
 }
 
@@ -358,3 +359,21 @@ header .title-text{
     text-align: center;
 }
 
+.pre-scrollable {
+    max-height: 80px;
+    overflow-y: scroll;
+}
+.badge-actors {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #337ab7;
+    border-radius: 10px;
+}
