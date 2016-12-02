@@ -33,6 +33,8 @@ urlpatterns = [
         name='create_profile'),
     url(r'^profile/(?P<pk>\d+)/$', views.ProfileDetailView.as_view(),
         name='profile_detail'),
+    url(r'^profile/(?P<pk>\d+)/update/$', views.ProfileUpdateView.as_view(),
+        name='profile_update'),
     url(r'', include(urls)),
     url(r'^accounts/login/$', auth_views.login,
         {'template_name': 'auth/login.html'}, name="login_user"),

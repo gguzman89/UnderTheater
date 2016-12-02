@@ -20,7 +20,7 @@
                     {% if form.picture.errors %}<div class="alert alert-danger">{{form.picture.errors}}</div>{% endif %}
                 </div>
                 <div class="form-group">
-                    {{form.with_interview.label_tag}}
+                    <label for="id_with_interview" style="width: 100%;">Con entrevista previa:</label>
                     {{form.with_interview}}
                     <div class="help-block">{{form.with_interview.help_text}}</div>
                     {% if form.with_interview.errors %}<div class="alert alert-danger">{{form.with_interview.errors}}</div>{% endif %}
@@ -151,4 +151,3 @@
     </form> 
 </div>
 {% endblock %}
-

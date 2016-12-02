@@ -23,7 +23,7 @@
             <h2><i class="fa fa-usd" aria-hidden="true"></i> Precio</h2>
             <div><span class="badge-custom">$ {{object.price}}</span></div>
             <h2><i class="fa fa-microphone" aria-hidden="true"></i> Entrevista</h2>
-            <div><span class="badge-custom">{{object.with_interview |yesno:"Si, No"}}</span></div>
+            <input type="checkbox" disabled {% if object.with_interview %}checked{% endif %} data-group-cls="btn-group-lg">
         </div>
     </div>
     <div class="col-md-8">
@@ -38,4 +38,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block main_scripts %}
+<script type="text/javascript">
+$(':checkbox').checkboxpicker({"onActiveCls": 'btn-info'});
+</script>
 {% endblock %}

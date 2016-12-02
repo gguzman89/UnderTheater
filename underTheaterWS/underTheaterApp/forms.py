@@ -394,7 +394,9 @@ class ClassTheaterForm(forms.ModelForm):
                                                        'style': 'width: 100%;'},
                                             choices=Durations),
                    'price': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
-                   'teacher': forms.Select(attrs={'class': 'form-control'})}
+                   'teacher': forms.Select(attrs={'class': 'form-control'}),
+                   'with_interview': forms.CheckboxInput(attrs={'class': 'form-control',
+                                                                'style': 'width: 100%;'})}
 
     def __init__(self, *args, **kwargs):
         super(ClassTheaterForm, self).__init__(*args, **kwargs)

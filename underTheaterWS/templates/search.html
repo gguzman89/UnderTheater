@@ -28,6 +28,27 @@
         </div>
         {% endfor %}
     </div>
+    {% if object_list.has_other_pages %}
+    <ul class="pagination">
+        {% if users.has_previous %}
+        <li><a href="?page={{ object_list.previous_page_number }}&type={{type}}&search_term={{search}}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in object_list.paginator.page_range %}
+        {% if object_list.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+        {% else %}
+        <li><a href="?page={{ i }}&type={{type}}&search_term={{search}}">{{ i }}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if object_list.has_next %}
+        <li><a href="?page={{ object_list.next_page_number }}&type={{type}}&search_term={{search}}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><span>&raquo;</span></li>
+        {% endif %}
+    </ul>
+    {% endif %}
 </div>
 {% endblock %}
 

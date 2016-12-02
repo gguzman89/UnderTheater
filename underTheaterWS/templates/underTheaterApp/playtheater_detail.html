@@ -6,102 +6,103 @@
     <div data-alerts="alerts" id="alerts"></div>
     <h1>{{object.play_name}}
     {% if can_edit %}
-    <a href="{%url 'underTheaterApp:playtheater_update' pk=object.pk%}"class="btn btn-lg aling-right"> Editar <span class="glyphicon glyphicon-pencil"></span></a>
+    <a href="{% url 'underTheaterApp:playtheater_update' pk=object.pk %}"class="btn btn-lg aling-right"> Editar <span class="glyphicon glyphicon-pencil"></span></a>
     {% endif %}
     </h1>
-    <div class="col-md-4">
-        <div class="row">
-            <a href="#">
-                <img src="{{ object.picture_url }}" class="img-thumbnail-custom" style="width: 90%;"/>
-            </a>
-            <div class="addthis_inline_share_toolbox" 
-                data-title="{{object.play_name}}"
-                data-description="{{object.synopsis}}">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="row">
+                <a href="#">
+                    <img src="{{ object.picture_url }}" class="img-thumbnail-custom" style="width: 90%;"/>
+                </a>
+                <div class="addthis_inline_share_toolbox" 
+                    data-title="{{object.play_name}}"
+                    data-description="{{object.synopsis}}">
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <input type="hidden" class="rating-tooltip-manual"disabled="disabled" 
-            data-filled="fa fa-star custom-star fa-3x" data-empty="fa fa-star-o fa-3x custom-star"
-            id="show_rate"/>
-        </div>
-        {% if can_rate %}
-        <div class="row">
-            <button type="button" class="btn btn-primary" id="button-rate-modal">Calificar obra <span class="fa fa-star"></span></button>
-        </div>
-        {% endif %}
-        <div class="row">
-            <h2><i class="fa fa-ticket" aria-hidden="true"></i> Entradas</h2>
-            <table style="width:auto;" class="table well">
-                <thead>
+            <div class="row">
+                <input type="hidden" class="rating-tooltip-manual"disabled="disabled" 
+                data-filled="fa fa-star custom-star fa-3x" data-empty="fa fa-star-o fa-3x custom-star"
+                id="show_rate"/>
+            </div>
+            {% if can_rate %}
+            <div class="row">
+                <button type="button" class="btn btn-primary" id="button-rate-modal">Calificar obra <span class="fa fa-star"></span></button>
+            </div>
+            {% endif %}
+            <div class="row">
+                <h2><i class="fa fa-ticket" aria-hidden="true"></i> Entradas</h2>
+                <table style="width:90%;" class="table well">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for ticket in object.tickets %}
                     <tr>
-                        <th>Nombre</th>
-                        <th>Precio</th>
+                        <td>{{ticket.ticket_name}}</td>
+                        <td>{{ticket.price}}</td>
                     </tr>
-                </thead>
-                <tbody>
-                {% for ticket in object.tickets %}
-                <tr>
-                    <td>{{ticket.ticket_name}}</td>
-                    <td>{{ticket.price}}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div class="row">
-            <h2><i class="fa fa-users" aria-hidden="true"></i> Actores</h2>
-            <div class="pre-scrollable">
-                {% for actor in object.actors.all %}
-                <div class="container">
-                <div class="form-group">
-                    <a href="{{ actor.get_absolute_url }}">
-                        <img class="img-circle img-aling-left" src="{{actor.photo_url}}"/>
-                    </a>
-                    <div class="content-heading fix-text-img">
-                        <a href="{{ actor.get_absolute_url }}"><span class="badge-actors">{{actor.get_complete_name}}</span></a>
-                    </div>
-                </div>
-                </div>
-                {% endfor %}
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
-        </div>
-    </div>
-    <div class="col-md-8">
-        <div class="row">
-            <h2>Sinopsis</h2>
-            <p>{{object.synopsis}}</p> 
-        </div>
-        <div class="row">
-            <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" href="#contact">Contacto</a></li>
-                <li><a data-toggle="tab" href="#comment">Comentarios</a></li>
-            </ul>
-            <div class="well">
-                <div class="tab-content">
-                    <div id="contact" class="tab-pane fade in active">
-                        {% for day_function in object.day_function.all %}
-                            {% include "underTheaterApp/day_function_detail.html" with day_function=day_function %}
-                        {% endfor %}
-                    </div>
-                    <div id="comment" class="tab-pane fade">
-                        <h3>Comentarios</h3>
-                        <hr style="clear:both;"/> 
-                        {% for rate in object.rate.all  %}
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <p class="comment_rate">{{rate.comment}} - <small><a href="{{rate.user_profile_rate.get_absolute_url}}">{{rate.user_profile_rate.user.username}}</a></small></p>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="aling-right">
-                                    <input type="hidden" class="rating-tooltip-manual rate-comment"disabled="disabled" 
-                                    data-filled="fa fa-star custom-star-comment fa-3x" data-empty="fa fa-star-o fa-3x custom-star-comment"
-                                    value="{{rate.rate}}"/>
-                                </div>
+            <div class="row">
+                <h2><i class="fa fa-users" aria-hidden="true"></i> Actores</h2>
+                <div class="pre-scrollable">
+                    {% for actor in object.actors.all %}
+                        <div class="form-group" style="background-color:black;">
+                            <a href="{{ actor.get_absolute_url }}">
+                                <img class="img-circle img-aling-left" src="{{actor.photo_url}}"/>
+                            </a>
+                            <div class="content-heading fix-text-img">
+                                <a href="{{ actor.get_absolute_url }}"><span class="badge-actors">{{actor.get_complete_name}}</span></a>
                             </div>
                         </div>
-                        {% empty%}
-                        <p class="empty-comment">No hay comentarios</p>
-                        {% endfor %}
+                    <hr style="clear:both;"/> 
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <h2>Sinopsis</h2>
+                <p>{{object.synopsis}}</p> 
+            </div>
+            <div class="row">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#contact">Contacto</a></li>
+                    <li><a data-toggle="tab" href="#comment">Comentarios</a></li>
+                </ul>
+                <div class="well">
+                    <div class="tab-content">
+                        <div id="contact" class="tab-pane fade in active">
+                            {% for day_function in object.day_function.all %}
+                                {% include "underTheaterApp/day_function_detail.html" with day_function=day_function %}
+                            {% endfor %}
+                        </div>
+                        <div id="comment" class="tab-pane fade">
+                            <h3>Comentarios</h3>
+                            <hr style="clear:both;"/> 
+                            {% for rate in object.rate.all  %}
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <p class="comment_rate">{{rate.comment}} - <small><a href="{{rate.user_profile_rate.get_absolute_url}}">{{rate.user_profile_rate.user.username}}</a></small></p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="aling-right">
+                                        <input type="hidden" class="rating-tooltip-manual rate-comment"disabled="disabled" 
+                                        data-filled="fa fa-star custom-star-comment fa-3x" data-empty="fa fa-star-o fa-3x custom-star-comment"
+                                        value="{{rate.rate}}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            {% empty%}
+                            <p class="empty-comment">No hay comentarios</p>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>

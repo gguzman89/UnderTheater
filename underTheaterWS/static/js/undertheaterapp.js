@@ -132,6 +132,7 @@ var utApp = utApp  || {};
         $("#owl-demo").owlCarousel({ items:"4", navigation : true, autoPlay: true, slideSpeed : 300, center: true, 
                                      paginationSpeed : 400});
     }
+
     function create_rate_and_comment(comment, rate, url_profile, username){
         var text_html = "<div class='col-sm-6'><p class='comment_rate'>"+comment+"- <small>",
             empty_comment = $(".empty-comment");
@@ -165,7 +166,7 @@ var utApp = utApp  || {};
             })
             .fail(function(e,d) {
                 $("#rate_modal").modal("hide");
-                toastr.danger("Error", "Hubo un error en la calificacion intente mas tarde", {timeOut: 1000})
+                toastr.error("Error", "Hubo un error en la calificacion intente mas tarde", {timeOut: 1000})
             }); 
         });
     }
@@ -194,7 +195,7 @@ var utApp = utApp  || {};
 
 
         $(rooms_select).empty();
-        $(with_interview_checkbox).checkboxradio();
+        $(with_interview_checkbox).checkboxpicker({"onActiveCls": 'btn-info'});
         set_select2(rooms_select, {placeholder: "selecciona la sala", allowClear: false});
         set_select2(theater_select, {placeholder: "Selecciona el teatro", allowClear: false});
         set_select2(actors_select, {placeholder: "Ingrese los nombres de los actores"});
@@ -221,6 +222,7 @@ var utApp = utApp  || {};
 
         $("#id_photo").filestyle({buttonName: "btn-blue", "input":false, "iconName":"fa fa-camera-retro",
                                     'buttonText':"Elegir foto de perfil"});
+
         $("#button-rate-modal").click(open_rate_modal)
 
         init_datefunction_select($("#day_function_form"));

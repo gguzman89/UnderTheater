@@ -7,7 +7,8 @@ from underTheaterApp.users import OwnerTheater, Actor, Spectators
 from underTheaterApp.forms import UserCreateForm, TheaterCreateForm, ActorCreateForm, SpectatorCreateForm
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.http import Http404
+from django.http import Http404, HttpResponseForbidden
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 class HomeView(TemplateView):
@@ -40,7 +41,17 @@ class SearchView(ListView):
         search = self.request.GET.get("search_term", None)
         type_search = self.request.GET.get("type", None)
         filter_parms[self.search_dict[type_search]] = search
-        self.object_list = PlayTheater.objects.filter(**filter_parms)
+        paginator = Paginator(PlayTheater.objects.filter(**filter_parms), 8)
+
+        page = self.request.GET.get('page')
+        try:
+            objects = paginator.page(page)
+        except PageNotAnInteger:
+            objects = paginator.page(1)
+        except EmptyPage:
+            objects = paginator.page(paginator.num_pages)
+
+        self.object_list = objects
         context = super(SearchView, self).get_context_data(**kwargs)
         context["search"] = search
         context["type"] = type_search
@@ -95,6 +106,34 @@ class ProfileDetailView(DetailView):
         for cl in klass:
             obj = cl.objects.filter(pk=pk)
             if obj:
+                break
+        if not obj:
+            raise Http404("El perfil no existe")
+        return obj[0]
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ProfileDetailView, self).get_context_data(*args, **kwargs)
+        context["can_edit"] = self.request.user == self.get_object().user
+        return context
+
+
+class ProfileUpdateView(UpdateView):
+    template_name = "profile_create.html"
+    model_dict = {"actor": ActorCreateForm, "spectator": SpectatorCreateForm, "theater": TheaterCreateForm}
+
+    def dispatch(self, *args, **kwargs):
+        if self.request.user != self.get_object().user:
+            return HttpResponseForbidden()
+        return super(ProfileUpdateView, self).dispatch(*args, **kwargs)
+
+    def get_object(self):
+        klass = [(OwnerTheater, TheaterCreateForm), (Actor, ActorCreateForm), (Spectators, SpectatorCreateForm)]
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        obj = None
+        for cl in klass:
+            obj = cl[0].objects.filter(pk=pk)
+            if obj:
+                self.form_class = cl[1]
                 break
         if not obj:
             raise Http404("El perfil no existe")
