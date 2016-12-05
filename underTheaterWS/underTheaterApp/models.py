@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from users import Actor, Contact, OwnerTheater, Profile
 from underTheaterApp.validators import periodic_date_validator, min_words_validator
 from underTheaterApp.utils import convert_list_string
-from underTheaterApp.managers import PlayTheaterManager
+from underTheaterApp.managers import PlayTheaterManager, ClassTheaterManager
 from polymorphic.models import PolymorphicModel
 
 
@@ -142,6 +142,7 @@ class ClassTheater(models.Model):
     duration = models.IntegerField(default=0, validators=[MaxValueValidator(300), MinValueValidator(15)])
     teacher = models.ForeignKey(Actor, verbose_name=u'teacher')
     owner = models.ForeignKey(User, verbose_name=u'dueño de la publicacion')
+    objects = ClassTheaterManager()
 
     def __unicode__(self):
         return u"%s %s" % (self.class_name, self.theater)

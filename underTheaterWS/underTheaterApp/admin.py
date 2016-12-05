@@ -71,8 +71,14 @@ class DayFunctionAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.ClassTheater)
-class PlayTheaterAdmin(admin.ModelAdmin):
+class ClassTheaterAdmin(admin.ModelAdmin):
     list_display = ('class_name', 'description', )
     ordering = ('class_name', )
     search_fields = ('class_name', 'owner')
 
+
+@admin.register(models.Rate)
+class RateAdmin(admin.ModelAdmin):
+    list_display = ('play_theater', 'rate', 'comment', 'user_profile_rate')
+    ordering = ('play_theater', )
+    search_fields = ('play_theater', 'rate')

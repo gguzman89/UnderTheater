@@ -2,7 +2,7 @@
 from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView
 from django.contrib.auth.models import User
 from django.contrib.auth import login
-from underTheaterApp.models import PlayTheater
+from underTheaterApp.models import PlayTheater, ClassTheater
 from underTheaterApp.users import OwnerTheater, Actor, Spectators
 from underTheaterApp.forms import UserCreateForm, TheaterCreateForm, ActorCreateForm, SpectatorCreateForm
 from django.contrib import messages
@@ -17,6 +17,7 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         context["plays"] = PlayTheater.objects.next_releases()
+        context["class"] = ClassTheater.objects.next_releases()
         return context
 
 

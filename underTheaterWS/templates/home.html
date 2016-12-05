@@ -9,8 +9,9 @@
             <div class="intro-heading">Under Theater</div>
         </div>
         <div class="intro-text hidden" id="premier">
+            <div class="row">
             <div class="intro-heading">Estrenos</div>
-            <div id="owl-demo">
+            <div id="play-owl">
                 {% for play in plays %}
                 <div class="owl-item owl-card">
                     <div class="item text-center">
@@ -39,6 +40,38 @@
                     </div>
                 </div>
                 {% endfor%}
+            </div>
+            </div>
+            <div class="row">
+            <div class="intro-heading">Clases</div>
+            <div id="class-owl">
+                {% for class_theater in class %}
+                <div class="owl-item owl-card">
+                    <div class="item text-center">
+                        <a href="{% url 'underTheaterApp:class_theater_detail' pk=class_theater.pk %}">
+                            <img src="{{ class_theater.picture_url }}" alt="Touch">
+                        </a>
+                        <h3><a href="{% url 'underTheaterApp:class_theater_detail' pk=class_theater.pk %}">
+                                {{class_theater.class_name}}
+                        </a></h3>
+                        <h4>Fecha: {{class_theater.datetime_function.since|date:"j/n/Y"}}</h4>
+                        <h5>Horario: {{class_theater.datetime_function.hours}}</h5>
+                        <div class="addthis_inline_share_toolbox" 
+                            data-title="{{class_theater.class_name}}"
+                            data-url="{{ request.get_host }}{% url 'underTheaterApp:class_theater_detail' pk=class_theater.pk %}"
+                            data-description="{{class_theater.synopsis}}">
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="owl-item owl-card">
+                    <div class="item text-center">
+                        <img src="{% static 'img/underlogo.png' %}" class="background-white"alt="Touch">
+                        <h3>No hay clases esta semana</h3>
+                    </div>
+                </div>
+                {% endfor%}
+            </div>
             </div>
         </div>
     </div>

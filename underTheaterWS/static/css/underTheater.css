@@ -169,16 +169,28 @@ td, th {
     color: #f5f5f5;
 }
 
-#owl-demo .item{
+#class-owl .item{
   margin: 10px;
 }
 
-#owl-demo .item img{
+#class-owl .item img{
     display: block;
     width: 200px;
     height: 200px;
     margin: auto;
 }
+
+#play-owl .item{
+  margin: 10px;
+}
+
+#play-owl .item img{
+    display: block;
+    width: 200px;
+    height: 200px;
+    margin: auto;
+}
+
 
 .owl-card{
     background: black;

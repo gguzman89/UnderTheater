@@ -129,8 +129,11 @@ var utApp = utApp  || {};
                  })
         });  
 
-        $("#owl-demo").owlCarousel({ items:"4", navigation : true, autoPlay: true, slideSpeed : 300, center: true, 
+        $("#play-owl").owlCarousel({ items:"4", navigation : true, autoPlay: true, slideSpeed : 300, center: true, 
                                      paginationSpeed : 400});
+        $("#class-owl").owlCarousel({ items:"4", navigation : true, autoPlay: true, slideSpeed : 300, center: true, 
+                                     paginationSpeed : 400});
+
     }
 
     function create_rate_and_comment(comment, rate, url_profile, username){
