@@ -295,7 +295,7 @@ header .title-text{
 
 .fix-text-img{
     padding-top: 20px;
-    padding-left: 12%;
+    padding-left: 30%;
 }
 
 .img-aling-left{
@@ -364,7 +364,9 @@ header .title-text{
     overflow-y: scroll;
     overflow-x: hidden;
     width:90%;
+    background-color:rgba(0, 0, 0, 0.72);
 }
+
 .badge-actors {
     display: inline-block;
     min-width: 10px;
@@ -403,35 +405,4 @@ header .title-text{
 }
 *::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.47);
-}
-
-.chatlist .chat, .textsize-xxlarge .chatlist .chat, .textsize-xlarge .chatlist .chat, .textsize-large .chatlist .chat {
-    height: 72px;
-}
-
-.chat {
-    position: relative;
-    cursor: pointer;
-    background-color: #fff;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: row;
-    flex-direction: row;
-}
-
-.avatar-image.is-loaded {
-    opacity: 1;
-}
-
-.avatar-image {
-    border-radius: 50%;
-    overflow: hidden;
-    width: 100%;
-    opacity: 0;
-    -webkit-transition: opacity .18s ease-out;
-    transition: opacity .18s ease-out;
-    display: block;
 }

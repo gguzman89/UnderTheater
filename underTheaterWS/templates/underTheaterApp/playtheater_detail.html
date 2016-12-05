@@ -53,7 +53,7 @@
                 <h2><i class="fa fa-users" aria-hidden="true"></i> Actores</h2>
                 <div class="pre-scrollable">
                     {% for actor in object.actors.all %}
-                        <div class="form-group" style="background-color:black;">
+                        <div class="form-group">
                             <a href="{{ actor.get_absolute_url }}">
                                 <img class="img-circle img-aling-left" src="{{actor.photo_url}}"/>
                             </a>

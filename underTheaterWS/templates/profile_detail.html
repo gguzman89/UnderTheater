@@ -46,9 +46,11 @@
                         {{object.surname}}
                     </div>
                     <div class="col-sm-6">
+                        {% if object.user.username %}
                         <h4>Nombre de usuario</h4>
                         {{object.user.username}}
-                        <h4>Role</h4>
+                        {% endif %}
+                        <h4>Rol</h4>
                         {{object.get_role}}
                     </div>
                 </div>
