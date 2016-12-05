@@ -414,8 +414,9 @@ class CreatePublicationViewTestsCase(BaseSeleniumTests):
         play_url = "/play_theater/%s/" % play.id
         actor = play.all_actors()[0]
         day_function = play.day_functions()[0]
+        text = detail_title.text.replace("\nEDITAR", "")
 
-        self.assertEqual(title.upper(), detail_title.text)
+        self.assertEqual(title.upper(), text)
         self.assertTrue(play_url in self.selenium.current_url)
         self.assertEqual(play.play_name, title)
         self.assertEqual(ticket.ticket_name, ticket_name)
